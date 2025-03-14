@@ -1,0 +1,120 @@
+@startuml Diagramme de cas d'utilisation
+left to right direction
+
+
+package Gestionnaire {
+   :Gestionnaire: as G
+   usecase "Modifier EDT" as editedt
+   usecase "S'authentifier" as authentifierg
+   usecase "Consulter les EDT" as consulterg
+
+
+
+   G -- consulterg
+   consulterg ..> authentifierg : "<includes>"
+   consulterg <..  editedt : "<extends>"
+
+    
+}
+
+
+package Prof {
+   :Prof: as P
+
+   usecase "Consulter" as consulterp
+   usecase "S'authentifier" as authentifierp
+
+   usecase "Gérer notes" as notesp
+   usecase "Gérer retards/absences" as trucsp
+
+   P -down- consulterp
+
+   consulterp ..> authentifierp : "<includes>"
+   consulterp <.. trucsp : "<extends>"
+   consulterp <.. notesp : "<extends>"
+
+
+   :Responsable: as R
+	R -left-|> P
+	usecase "Demander modif EDT" as askmodif
+	R -down- askmodif
+
+
+}
+
+
+
+
+package Etudiant {
+   :Etudiant: as E
+
+   usecase "Consulter son EDT" as consultere
+   usecase "S'authentifier" as authentifiere
+   usecase "Consulter notes" as seenotese
+   usecase "Gérer retards/absences" as trucse
+
+
+   E - consultere
+   consultere ..> authentifiere : "<includes>"
+   consultere <.. seenotese : "<extends>"
+   consultere <.. trucse : "<extends>"
+  
+}
+
+
+package Secrétariat {
+   :Secrétariat: as S
+
+   usecase "Consulter" as Consulters
+   usecase "S'authentifier" as authentifiers
+   usecase "Consulter EDT qqn" as consultqqns
+   usecase "Consulter notes" as seenotess
+   usecase "Gérer retards/absences" as trucss
+
+   S -down- Consulters
+   Consulters ..> authentifiers : "<includes>"
+   Consulters <|-- consultqqns
+   Consulters <|-- seenotess
+   Consulters <.. trucss : "<extends>"
+
+}
+
+
+@enduml
+
+
+
+
+' Scenario nominal / User Stories
+
+' USE CASE : Authentification
+' 	L'utilisateur selectionne se connecter
+' 	L'utilisateur s'authentifie
+' 	Le systeme valide l'authentification
+
+' USE CASE : Consultation edt (etudiant)
+' 	UC Authentification
+' 	L'étudiant selectionne emploi du temps
+' 	Le système affiche l'emploi du temps de la promo de l'étudiant
+
+' USE CASE : Consultation edt (gestionnaire)
+' 	UC Authentification
+' 	Le gestionnaire selectionne une promo parmi la liste des promos
+' 	Le système affiche l'emploi du temps de la promo choisie
+
+' USE CASE : Mettre a jour l'emploi du temps
+' 	UC Consultation edt (gestionnaire)
+' 	Le gestionnaire selectionne modification d'emploi du temps
+' 	Le systeme passe en mode editeur d'emploi du temps
+' 	ALTERNATIVE 1:
+'         	Le gestionnaire modifie les propriétés du cours (heure, date, salle, prof)
+' 	ALTERNATIVE 2:
+'         	Le gestionnaire créer un cours dans un créneau disponible
+' 	Le système valide la mise à jour
+
+' USE CASE : Consultation notes
+' 	UC Authentification
+' 	L'étudiant selectionne notes
+' 	Le système affiche les notes de l'eleve
+	
+
