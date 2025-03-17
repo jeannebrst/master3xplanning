@@ -13,32 +13,44 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
 
 public class PageLogin extends Application {
 	@Override 
 	public void start (Stage primaryStage){
 
 		TextField champLogin = new TextField();
-		champLogin.setPromptText("utilisateur");
+		champLogin.setPromptText("Utilisateur");
 		champLogin.setStyle("-fx-border-color: blue; -fx-font-size: 14px;");
+		champLogin.setMaxWidth(200);
+		champLogin.setMaxHeight(25);
 		TextField champMdp = new TextField();
-		champMdp.setPromptText("mot de passe");
+		champMdp.setPromptText("Mot de passe");
+		champMdp.setMaxWidth(200);
+		champMdp.setMaxHeight(25);
 		// Création d'un bouton
-		Button bouton = new Button("Valider");
+		Button bouton = new Button("Se connecter");
 		bouton.setOnAction(e -> System.out.println("login : "+champLogin.getText()+"\nmdp : "+champMdp.getText()));
 		
-		// Ajout du bouton dans une StackPane (layout)
-		// StackPane root = new StackPane(button);
+		Image fond = new Image("file:src/main/resources/fond.jpg");
+		ImageView imageview = new ImageView(fond);
+		imageview.setFitWidth(800);
+		imageview.setFitHeight(600);
+
+		StackPane conteneurFond = new StackPane();
+		conteneurFond.getChildren().add(imageview);
+
 		VBox root = new VBox(10);
+		root.setAlignment(Pos.CENTER);
 		root.getChildren().addAll(champLogin,champMdp, bouton);
-		Scene scene = new Scene(root, 400, 300);
-		
+		Scene scene = new Scene(conteneurFond, 800, 600);
+		conteneurFond.getChildren().add(root);
 		// Configuration de la fenêtre
 		primaryStage.setTitle("Page de login");
 		primaryStage.setScene(scene);
 		// primaryStage.setWidth(1920);
 		// primaryStage.setHeight(1080);
-		primaryStage.setMaximized(true);
+		primaryStage.setMaximized(false);
 		primaryStage.show();
 	}
 
