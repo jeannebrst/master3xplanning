@@ -14,6 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import javafx.scene.control.TextField;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.Label;
 import javafx.geometry.Pos;
 import javafx.scene.paint.Color;
@@ -24,17 +25,26 @@ public class PageLogin extends Application {
 	@Override 
 	public void start (Stage primaryStage){
 
+		StackPane root = new StackPane();
+
+
+		Label erreur = new Label("L'utilisateur ou le mot de passe n'est pas reconnu");
+		erreur.setFont(Font.font("Arial",FontWeight.BOLD,25));
+		erreur.setTextFill(Color.RED);
+
+		erreur.setVisible(false);
+
 		//Création des labels 
 		Label titre = new Label("Bienvenue sur MasterPlanning !");
+
 		Label service = new Label("Service d'authentification");
 		titre.setFont(Font.font("Arial",FontWeight.BOLD,30));
+		titre.setTextFill(Color.WHITE);
 		service.setFont(Font.font("Arial",FontWeight.BOLD,25));
+		service.setTextFill(Color.WHITE);
+		//Conteneur de l'app
+		StackPane conteneurFond = new StackPane();
 
-		VBox conteneurTitre = new VBox();
-		//conteneurTitre.setAlignment(Pos.TOP_CENTER);
-		conteneurTitre.getChildren().add(titre);
-		conteneurTitre.setLayoutX(200);
-		conteneurTitre.setLayoutY(50);
 		//Création du champ login
 		TextField champLogin = new TextField();
 		champLogin.setPromptText("Utilisateur");
@@ -43,7 +53,7 @@ public class PageLogin extends Application {
 		champLogin.setMaxHeight(25);
 
 		//Création du champ mdp
-		TextField champMdp = new TextField();
+		PasswordField champMdp = new PasswordField();
 		champMdp.setPromptText("Mot de passe");
 		champMdp.setMaxWidth(300);
 		champMdp.setMaxHeight(25);
@@ -51,41 +61,45 @@ public class PageLogin extends Application {
 		// Création d'un bouton
 		Button bouton = new Button("Se connecter");
 		bouton.setOnAction(e -> {
-			System.out.println("login : "+champLogin.getText()+"\nmdp : "+champMdp.getText());
-			champLogin.clear();
-			champMdp.clear();
+			//System.out.println("login : "+champLogin.getText()+"\nmdp : "+champMdp.getText());
+			titre.setVisible(false);
+			erreur.setVisible(true);
+			//champLogin.clear();
+			//champMdp.clear();
 		}
 	);
 		
 		//Création de l'image en fond
-		Image fond = new Image("file:src/main/resources/fond.jpg");
+		Image fond = new Image("file:src/main/resources/fond2.jpg");
 		ImageView imageview = new ImageView(fond);
 		imageview.setFitWidth(800);
 		imageview.setFitHeight(600);
 
-		//Conteneur de l'app
-		StackPane conteneurFond = new StackPane();
+		
 		
 
 		//Vbox pour les elements
 		VBox boite = new VBox(20);
 		boite.setAlignment(Pos.CENTER);
-		boite.getChildren().addAll(service,champLogin,champMdp, bouton);
+		boite.getChildren().addAll(titre,erreur,service,champLogin,champMdp, bouton);
 		conteneurFond.getChildren().addAll(imageview,boite);
 
 
-		Pane root = new Pane();
-		//root.getChildren().addAll(conteneurTitre,conteneurFond);
-		root.getChildren().add(conteneurFond);
-		root.getChildren().add(conteneurTitre);
 		
-		Scene scene = new Scene(root, 800, 600);
+		//root.getChildren().addAll(conteneurTitre,conteneurFond);
+
+		root.getChildren().add(conteneurFond);
+		
+		
+		
+		
+		Scene scene1 = new Scene(root, 800, 600);
 		
 		
 
 		// Configuration de la fenêtre
 		primaryStage.setTitle("Page de login");
-		primaryStage.setScene(scene);
+		primaryStage.setScene(scene1);
 
 
 		// primaryStage.setWidth(1920);
