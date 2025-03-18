@@ -1,67 +1,69 @@
-package java.fr.utln.gp2;
+package fr.utln.gp2;
 
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import java.util.ArrayList;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Label;
 import javafx.geometry.Pos;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
+import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
+import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
 
 public class PageEDT extends Application {
-    
+
+
     @Override
     public void start(Stage primaryStage) {
-        // Création d'une grille d'emploi du temps
+
+		String[] jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
+		String[] horaires = {"8h","9h","10h","11h","12h","13h","14h","15h","16h","17h","18h"};
+        // Création d'une grille 6x6
         GridPane grid = new GridPane();
-        grid.setVgap(10); // Espacement vertical
-        grid.setHgap(10); // Espacement horizontal
-
-        // Jours de la semaine
-        String[] jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
+        grid.setGridLinesVisible(true);  // Affiche les lignes de la grille
         
-        // Horaires de l'emploi du temps
-        String[] horaires = {"8h-10h", "10h-12h", "12h-14h", "14h-16h", "16h-18h"};
+        // Définir les contraintes de ligne et de colonne pour avoir la même taille
+        for (int i = 0; i < 12; i++) {
+            RowConstraints row = new RowConstraints();
+            row.setPercentHeight(100 / 10);  // 100% divisé par 6 pour avoir une taille égale
+            grid.getRowConstraints().add(row);
 
-        // Ajouter les jours en haut (en-tête des colonnes)
-        for (int i = 0; i < jours.length; i++) {
-            Label jourLabel = new Label(jours[i]);
-            jourLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-            jourLabel.setAlignment(Pos.CENTER);
-            grid.add(jourLabel, i + 1, 0); // Ajout dans la première ligne, colonne i+1
+
         }
+		for (int i =0; i <6; i++){
+			ColumnConstraints column = new ColumnConstraints();
+            column.setPercentWidth(100 / 6.0);  // 100% divisé par 6 pour avoir une taille égale
+            grid.getColumnConstraints().add(column);
+		}
 
-        // Ajouter les horaires sur la première colonne
-        for (int i = 0; i < horaires.length; i++) {
-            Label horaireLabel = new Label(horaires[i]);
-            horaireLabel.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-            horaireLabel.setAlignment(Pos.CENTER);
-            grid.add(horaireLabel, 0, i + 1); // Ajout dans la première colonne, ligne i+1
-        }
+        // Ajouter des labels dans chaque cellule de la grille
+        for (int i = 0; i < 5; i++) {
+			Label jour = new Label(jours[i]);
+			
+			//Label horaire = new Label(horaires[i]);
+			
+			GridPane.setHalignment(jour, HPos.CENTER);
+			GridPane.setValignment(jour, VPos.CENTER);
+			//GridPane.setHalignment(horaire, HPos.CENTER);  
+			//GridPane.setValignment(horaire, VPos.CENTER);
+            grid.add(jour, i+1, 0);  // Ajoute la cellule à la position (i, j)
+			//grid.add(horaire, 0, i+1);
+		}
+		for (int i=0; i<horaires.length;i++){
+			Label horaire = new Label(horaires[i]);
 
-        // Ajouter des créneaux vides dans le reste de la grille
-        for (int i = 0; i < horaires.length; i++) {
-            for (int j = 0; j < jours.length; j++) {
-                Label cellule = new Label("Libre");
-                cellule.setStyle("-fx-border-color: black; -fx-padding: 10px; -fx-alignment: center;");
-                grid.add(cellule, j + 1, i + 1); // Remplir la grille à partir de la cellule (1,1)
-            }
-        }
+			GridPane.setHalignment(horaire, HPos.CENTER);  
+			GridPane.setValignment(horaire, VPos.CENTER);
+			grid.add(horaire, 0, i+1);
+		}
+        
 
-        // Création de la scène et ajout du GridPane
-        Scene scene = new Scene(grid, 600, 400);
-        primaryStage.setTitle("Emploi du Temps");
+        // Création de la scène
+        Scene scene = new Scene(grid, 600, 600);  
+        primaryStage.setTitle("Page d'acceuil");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
