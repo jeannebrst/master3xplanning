@@ -13,5 +13,4 @@ public class PersonneRepository implements PanacheRepository<Personne>{
     public Personne findByLogin(String login) {
         return find("login", login).firstResult();
     }
-
 }
