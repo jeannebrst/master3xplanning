@@ -21,21 +21,21 @@ public class PageEDT extends Application {
 
 		String[] jours = {"Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"};
 		String[] horaires = {"8h","9h","10h","11h","12h","13h","14h","15h","16h","17h","18h"};
-        // Création d'une grille 6x6
+       
         GridPane grid = new GridPane();
         grid.setGridLinesVisible(true);  // Affiche les lignes de la grille
         
         // Définir les contraintes de ligne et de colonne pour avoir la même taille
         for (int i = 0; i < 12; i++) {
             RowConstraints row = new RowConstraints();
-            row.setPercentHeight(100 / 10);  // 100% divisé par 6 pour avoir une taille égale
+            row.setPercentHeight(100 / 10);  
             grid.getRowConstraints().add(row);
 
 
         }
 		for (int i =0; i <6; i++){
 			ColumnConstraints column = new ColumnConstraints();
-            column.setPercentWidth(100 / 6.0);  // 100% divisé par 6 pour avoir une taille égale
+            column.setPercentWidth(100 / 6.0);  
             grid.getColumnConstraints().add(column);
 		}
 
@@ -43,15 +43,13 @@ public class PageEDT extends Application {
         for (int i = 0; i < 5; i++) {
 			Label jour = new Label(jours[i]);
 			
-			//Label horaire = new Label(horaires[i]);
-			
 			GridPane.setHalignment(jour, HPos.CENTER);
 			GridPane.setValignment(jour, VPos.CENTER);
-			//GridPane.setHalignment(horaire, HPos.CENTER);  
-			//GridPane.setValignment(horaire, VPos.CENTER);
-            grid.add(jour, i+1, 0);  // Ajoute la cellule à la position (i, j)
-			//grid.add(horaire, 0, i+1);
+
+            grid.add(jour, i+1, 0);  
+			
 		}
+
 		for (int i=0; i<horaires.length;i++){
 			Label horaire = new Label(horaires[i]);
 
