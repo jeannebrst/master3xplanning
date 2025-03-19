@@ -70,10 +70,10 @@ public class PageEDT extends Application {
 		}
         
 
-        ajouterCours("Maths",1,1,3,Color.PINK);
-        ajouterCours("Maths",2,1,3,Color.PINK);
-        ajouterCours("Maths",3,4,3,Color.PINK);
-        ajouterCours("Maths",4,2,3,Color.BLUE);
+        ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK);
+        ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK);
+        ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK);
+        ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE);
 
         
         // Création de la scène
@@ -87,26 +87,26 @@ public class PageEDT extends Application {
         launch(args);
     }
 
-    public void ajouterCours(String name, int jour, int heure, int duree, Color couleur){
+    public void ajouterCours(String name,String Salle,String Prof, int jour, int heure, int duree, Color couleur){
 
-        Label nom = new Label(name);
+        Label nom = new Label(name+"\n"+Prof+"\n"+Salle);
         nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
         nom.setTextFill(Color.WHITE);
-        nom.setBackground(new Background(new BackgroundFill(couleur, new CornerRadii(5), new Insets(1))));
+        
 
         // Crée un StackPane pour centrer le label dans la cellule
         StackPane cell = new StackPane();
         cell.getChildren().add(nom);
-        cell.setAlignment(Pos.CENTER);  // Centre le contenu du StackPane
-        cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  // Remplir la cellule
-
+        cell.setAlignment(Pos.CENTER);  
+        cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
+        cell.setBackground(new Background(new BackgroundFill(couleur, new CornerRadii(0), new Insets(1))));
         // Ajouter la cellule dans la grille
         grid.add(cell, jour, heure);
         GridPane.setRowSpan(cell, duree);
-        GridPane.setColumnSpan(cell, 1);  // Par défaut, occupe 1 colonne
+        GridPane.setColumnSpan(cell, 1);  
 
         // Centrer le StackPane dans la cellule de la grille
-        GridPane.setHalignment(cell, HPos.CENTER);  // Centre horizontalement
-        GridPane.setValignment(cell, VPos.CENTER);  // Centre verticalement
+        GridPane.setHalignment(cell, HPos.CENTER);  
+        GridPane.setValignment(cell, VPos.CENTER);  
     }
 }

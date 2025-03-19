@@ -61,11 +61,17 @@ public class PageLogin extends Application {
 		// Création d'un bouton
 		Button bouton = new Button("Se connecter");
 		bouton.setOnAction(e -> {
-			//System.out.println("login : "+champLogin.getText()+"\nmdp : "+champMdp.getText());
+			if (champMdp.getText().equals("123")){
+				openPageAccueil(primaryStage);
+			}
+			else {
 			titre.setVisible(false);
 			erreur.setVisible(true);
-			//champLogin.clear();
-			//champMdp.clear();
+			champLogin.clear();
+			champMdp.clear();
+		}
+
+
 		}
 	);
 		
@@ -112,5 +118,12 @@ public class PageLogin extends Application {
 	public static void main(String[] args) {
 		launch(args);
 		
+	}
+
+	public void openPageAccueil(Stage stage) {
+		// Lancer la page d'accueil
+		stage.close();
+		PageEDT page = new PageEDT();
+		page.start(new Stage()); 
 	}
 }
