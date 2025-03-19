@@ -1,4 +1,4 @@
-# master3xplanning-quarkus
+# master3xplanning
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
