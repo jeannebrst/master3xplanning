@@ -10,9 +10,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
+import java.util.logging.Logger;
 
 
 public class Main extends Application {
+    
+    Logger logger = Logger.getLogger(getClass().getName());
+    
     @Override
     public void start(Stage primaryStage) {
         // Charger une image depuis un fichier local
@@ -28,7 +32,7 @@ public class Main extends Application {
 
         // Création d'un bouton
         Button button = new Button("Galu !");
-        button.setOnAction(e -> System.out.println("sinsky !"));
+        // button.setOnAction(e -> System.out.println("sinsky !"));
 
         // Ajout du bouton dans une StackPane (layout)
         // StackPane root = new StackPane(button);
