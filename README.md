@@ -7,7 +7,7 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 ## Start docker postgres
 
 ```shell script
-docker run --name my-postgres -e POSTGRES_USER=quarkus -e POSTGRES_PASSWORD=quarkus -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
+docker run --name my-postgres -e POSTGRES_USER=quarkus -e POSTGRES_PASSWORD=quarkus -e POSTGRES_DB=mydb -v db-data:/var/lib/postgresql/data -p 5432:5432 -d postgres
 ```
 
 ## Running the application in dev mode
