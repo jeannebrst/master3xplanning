@@ -20,7 +20,9 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 
-
+import java.util.Map;
+import java.util.HashMap;
+import java.lang.Integer;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
@@ -35,6 +37,7 @@ public class PageDate extends Application {
 	LocalDate lundi;
 	Label semaine;
 	int numSemaine;
+	private Map<Integer, StackPane> coursMap = new HashMap<>();
 
 	public static void main(String[] args) {
 		launch(args);
@@ -48,10 +51,11 @@ public class PageDate extends Application {
 
 		genereEDT();
 
-		ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK);
-		ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK);
-		ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK);
-		ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE);
+		ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK,1);
+		ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK,2);
+		ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK,3);
+		ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE,4);
+		supprimerCours(2);
 
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
@@ -135,7 +139,7 @@ public class PageDate extends Application {
 		}
 	}
 
-	public void ajouterCours(String name,String Salle,String Prof, int jour, int heure, int duree, Color couleur){
+	public void ajouterCours(String name,String Salle,String Prof, int jour, int heure, int duree, Color couleur,int id){
 
 		Label nom = new Label(name+"\n"+Prof+"\n"+Salle);
 		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -156,10 +160,18 @@ public class PageDate extends Application {
 		// Centrer le StackPane dans la cellule de la grille
 		GridPane.setHalignment(cell, HPos.CENTER);  
 		GridPane.setValignment(cell, VPos.CENTER);  
+		coursMap.put(id,cell);
 	}
 
 	private void modifLabelSemaine(){
 		numSemaine = lundi.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 		semaine.setText("Semaine n°" + numSemaine);
 	}
+	public void supprimerCours(Integer id) {
+		StackPane cours = coursMap.get(id);  
+		if (cours != null) {
+			grilleEdt.getChildren().remove(cours);  
+			coursMap.remove(id); 
+		}
+}
 }

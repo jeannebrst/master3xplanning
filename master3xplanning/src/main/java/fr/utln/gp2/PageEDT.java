@@ -18,11 +18,14 @@ import javafx.scene.layout.CornerRadii;
 import javafx.geometry.Insets;
 import javafx.scene.paint.Color;
 import javafx.scene.layout.StackPane;
-
+import java.util.Map;
+import java.util.HashMap;
+import java.lang.Integer;
 
 public class PageEDT extends Application {
 
     public GridPane grid = new GridPane();
+    private Map<Integer, StackPane> coursMap = new HashMap<>();
 
     @Override
     public void start(Stage primaryStage) {
@@ -108,5 +111,8 @@ public class PageEDT extends Application {
         // Centrer le StackPane dans la cellule de la grille
         GridPane.setHalignment(cell, HPos.CENTER);  
         GridPane.setValignment(cell, VPos.CENTER);  
+        //coursMap.put(id,cell);
     }
+
+
 }

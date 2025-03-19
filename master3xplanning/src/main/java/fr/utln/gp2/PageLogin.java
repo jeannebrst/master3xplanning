@@ -123,7 +123,7 @@ public class PageLogin extends Application {
 	public void openPageAccueil(Stage stage) {
 		// Lancer la page d'accueil
 		stage.close();
-		PageEDT page = new PageEDT();
+		PageDate page = new PageDate();
 		page.start(new Stage()); 
 	}
 }
