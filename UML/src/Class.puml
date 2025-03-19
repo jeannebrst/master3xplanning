@@ -1,0 +1,68 @@
+@startuml
+class Personnel {
+   Id : long
+   login : String
+   hash_map : String
+   nom : String
+   prenom : String
+   mail : String
+   role : enum{"Etudiant", "Professeur", "Gestionnaire", "Secretaire"}
+   bureau : Salle {FK}
+}
+
+class Promotion {
+   Nom :  String 
+   ListeCours : 
+   Responsable : Personnel {FK}
+}
+
+class Retard {
+   unCours : Cours {FK}
+   unEtudiant : Personnel {FK}
+   Type : enum{"Retard","Absence"}
+   Durée : int
+   Justifié : boolean 
+}
+
+class UE {
+   Id : int
+   ListeProf : List<Personnel>
+   NbHeure : int
+}
+
+class Cours {
+   ID : UUID
+   uneUE : UE {FK}
+   unePromotion : Promo {FK}
+   Prof : list<Personnel>
+   Salle : Salle
+   Horaire : Date
+   Jour : Date
+   Type : enum{"CM","TD","TP"}
+}
+
+class Salle {
+   Code : String
+   Capacite : int
+   Descriptif : String
+}
+
+class Notes {
+   unEleve : Personne
+   uneUE : UE
+   notes : int 
+}
+
+
+Personnel "0..*" -- "1..*" Promotion : appartient à
+Promotion "1" -- "0..*" Cours : est programmé pour
+Cours "0..n" -- "1" Salle : a lieu
+UE "1" -- "0..n" Cours : appartient à
+Personnel "0..n" -- "O..n" UE : participe à
+Personnel "1" -- "1" UE : responsable
+Personnel "0..n" -- "1" Notes : est noté
+Notes "0..n" -- "0..n" UE : pour  
+Personnel "0..n" -- "0..n" Retard : est absent à
+Retard "0..n" -- "0..n" Cours : est absent à
+
+@enduml
