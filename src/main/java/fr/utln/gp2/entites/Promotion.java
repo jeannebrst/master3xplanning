@@ -14,8 +14,13 @@ public class Promotion {
 	@Id
 	private String nom;
 
-	@ManyToMany
-	private List<Cours> cours;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(
+			name = "promotion_cours",
+			joinColumns = @JoinColumn(name = "promotion_id"),
+			inverseJoinColumns = @JoinColumn(name = "cours_id")
+	)
+	public List<Cours> cours;
 
 	@OneToOne
 	@JoinColumn(name = "responsable_id")

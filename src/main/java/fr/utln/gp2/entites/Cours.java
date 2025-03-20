@@ -15,8 +15,8 @@ public class Cours {
 	private UUID id;
 
 	//private UE ue;
-	
-	@ManyToMany(mappedBy = "cours")
+
+	@ManyToMany(mappedBy = "cours", fetch = FetchType.LAZY)
 	private List<Promotion> promos;
 
 	@ManyToMany

@@ -1,12 +1,11 @@
 package fr.utln.gp2.ressources;
 
-import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.repositories.PromotionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.Produces;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 
 import java.util.ArrayList;
@@ -17,11 +16,23 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class PromotionRessource {
-	private static List<Promotion> promotions = new ArrayList<>();
+
+	@Inject
+	PromotionRepository promotionRepository;
 
 	@GET
 	public List<Promotion> getAllPromotions() {
-		return promotions;
+		return promotionRepository.listAll();
+	}
+
+	@GET
+	@Path("/{id}/cours")
+	public List<Cours> getCoursByPromotion(@PathParam("id") Long id) {
+		Promotion promotion = promotionRepository.findByIdWithCours(id);
+		if (promotion == null) {
+			throw new NotFoundException("Promotion non trouvée");
+		}
+		return promotion.cours;
 	}
 }
 

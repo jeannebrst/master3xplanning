@@ -40,7 +40,7 @@ public class PersonneRessource {
 
 	@DELETE
 	@Path("/{login}")
-	@Transactional  // Nécessaire pour modifier la base
+	@Transactional
 	public Response removePersonne(@PathParam("login") String login) {
 		boolean deleted = personneRepository.deleteByLogin(login);
 		if (!deleted) {
