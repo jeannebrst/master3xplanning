@@ -12,7 +12,9 @@ import java.util.*;
 @Entity
 public class Personne {
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
+	private Long id;
 
 	@Column(name = "login", nullable = false)
 	private String login;
