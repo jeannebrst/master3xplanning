@@ -19,6 +19,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.layout.HBox;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -69,12 +70,25 @@ public class PageEDT extends Application {
 			majEDT();
 		});
 
+		StackPane cellule_bouton = new StackPane();
+		cellule_bouton.setAlignment(Pos.CENTER);  
+		cellule_bouton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
+		
+		HBox boite = new HBox(10);
+		boite.setAlignment(Pos.CENTER);  // Aligner le contenu de la HBox au centre
+		boite.getChildren().addAll(btnPreviousWeek, semaine, btnNextWeek);
+		cellule_bouton.getChildren().add(boite);
+		
+		// Ajouter la cellule dans la grille
+		grilleEdt.add(cellule_bouton, 0, 0);
+		
+		// Centrer la cellule dans la grille
+		GridPane.setHalignment(cellule_bouton, HPos.CENTER);
+		GridPane.setValignment(cellule_bouton, VPos.CENTER);
+
 		// Créer un layout pour les boutons et la grille
-		GridPane root = new GridPane();
-		root.add(btnPreviousWeek, 0, 1);
-		root.add(semaine,1,1);
-		root.add(btnNextWeek, 2, 1);
-		root.add(grilleEdt, 0, 2, 3, 1);
+		StackPane root = new StackPane();
+		root.getChildren().add(grilleEdt);
 		
 		// Création de la scène
 		Scene scene = new Scene(root, 1200, 800);
