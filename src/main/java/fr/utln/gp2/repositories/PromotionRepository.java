@@ -15,4 +15,6 @@ public class PromotionRepository implements PanacheRepository<Promotion> {
 	public Promotion findByIdWithCours(Long id) {
 		return find("SELECT p FROM Promotion p LEFT JOIN FETCH p.cours WHERE p.id = ?1", id).firstResult();
 	}
+
+
 }
