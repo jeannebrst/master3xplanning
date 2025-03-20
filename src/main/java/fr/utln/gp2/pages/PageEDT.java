@@ -22,13 +22,12 @@ import javafx.geometry.VPos;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Locale;
 import java.lang.Integer;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
-import java.util.Locale;
-
 
 
 public class PageEDT extends Application {
@@ -167,11 +166,12 @@ public class PageEDT extends Application {
 		numSemaine = lundi.get(IsoFields.WEEK_OF_WEEK_BASED_YEAR);
 		semaine.setText("Semaine n°" + numSemaine);
 	}
+	
 	public void supprimerCours(Integer id) {
 		StackPane cours = coursMap.get(id);  
 		if (cours != null) {
 			grilleEdt.getChildren().remove(cours);  
 			coursMap.remove(id); 
 		}
-}
+	}
 }

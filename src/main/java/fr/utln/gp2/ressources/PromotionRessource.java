@@ -17,11 +17,11 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class PromotionRessource {
-    private static List<Promotion> promotions = new ArrayList<>();
+	private static List<Promotion> promotions = new ArrayList<>();
 
-    @GET
-    public List<Promotion> getAllPromotions() {
-        return promotions;
-    }
+	@GET
+	public List<Promotion> getAllPromotions() {
+		return promotions;
+	}
 }
 

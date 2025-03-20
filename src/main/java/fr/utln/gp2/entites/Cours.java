@@ -11,29 +11,29 @@ import java.util.*;
 @AllArgsConstructor
 @Entity
 public class Cours {
-    @Id
-    private UUID id;
+	@Id
+	private UUID id;
 
-    //private UE ue;
+	//private UE ue;
+	
+	@ManyToMany(mappedBy = "cours")
+	private List<Promotion> promos;
 
-    @ManyToMany(mappedBy = "cours")
-    private List<Promotion> promos;
+	@ManyToMany
+	private List<Personne> intervenants;
 
-    @ManyToMany
-    private List<Personne> intervenants;
+	//private Salle salle;
 
-    //private Salle salle;
+	private float heureDebut;
 
-    private float heureDebut;
+	private float duree;
 
-    private float duree;
+	private Date jour;
 
-    private Date jour;
-
-    private enum Type {
-        CM,
-        TD,
-        TP
-    }
-    private Type type;
+	private enum Type {
+		CM,
+		TD,
+		TP
+	}
+	private Type type;
 }

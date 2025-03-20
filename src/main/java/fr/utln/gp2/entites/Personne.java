@@ -11,26 +11,26 @@ import java.util.*;
 @Builder
 @Entity
 public class Personne {
-    @Id
-    private UUID id;
+	@Id
+	private UUID id;
 
-    @Column(name = "login", nullable = false)
-    private String login;
+	@Column(name = "login", nullable = false)
+	private String login;
 
-    @Column(name = "mdp", nullable = false)
-    private String hashMdp;
+	@Column(name = "mdp", nullable = false)
+	private String hashMdp;
 
-    private String nom;
+	private String nom;
 
-    private String prenom;
+	private String prenom;
 
-    private String mail;
+	private String mail;
 
-    private enum Role {
-        PROFESSEUR,
-        ETUDIANT,
-        SECRETARIAT ,
-        GESTIONNAIRE
-    }
-    private Role role;
+	private enum Role {
+		PROFESSEUR,
+		ETUDIANT,
+		SECRETARIAT ,
+		GESTIONNAIRE
+	}
+	private Role role;
 }

@@ -7,7 +7,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public class PersonneRepository implements PanacheRepository<Personne>{
 
-    public Personne findByLogin(String login) {
-        return find("login", login).firstResult();
-    }
+	public Personne findByLogin(String login) {
+		return find("login", login).firstResult();
+	}
 }

@@ -6,7 +6,7 @@ import io.quarkus.hibernate.orm.panache.PanacheRepository;
 
 public class PromotionRepository implements PanacheRepository<Promotion> {
 
-    public Promotion findByResponsable(Personne responsable) {
-        return find("responsable", responsable).firstResult();
-    }
+	public Promotion findByResponsable(Personne responsable) {
+		return find("responsable", responsable).firstResult();
+	}
 }
