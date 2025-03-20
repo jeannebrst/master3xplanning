@@ -29,7 +29,7 @@ public class PromotionRessource {
 	}
 
 	@GET
-	@Path("/{id}/cours")
+	@Path("/{id}/promotion/cours")
 	public List<Cours> getCoursByPromotion(@PathParam("id") Long id) {
 		Promotion promotion = promotionRepository.findByIdWithCours(id);
 		if (promotion == null) {

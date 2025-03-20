@@ -11,15 +11,28 @@ import java.util.*;
 @Entity
 @Builder
 public class Promotion {
-	@Id
-	private String nom;
+	private enum Type {
+		LICENCE,
+		MASTER,
+		IUT,
+		LICENCE_PROFESSIONNELLE,
+		DOCTORAT
+	}
+	private Type type;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	private String categorie;
+
+	@Id
+	private String nom = type+categorie;
+
+	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 	@JoinTable(
 			name = "promotion_cours",
 			joinColumns = @JoinColumn(name = "promotion_id"),
 			inverseJoinColumns = @JoinColumn(name = "cours_id")
 	)
+
+	@Column(name = "cours")
 	public List<Cours> cours;
 
 	@OneToOne
