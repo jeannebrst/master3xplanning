@@ -35,7 +35,7 @@ public class Promotion {
 	@Column(name = "cours")
 	public List<Cours> cours;
 
-	@OneToOne
+
 	@JoinColumn(name = "responsable_id")
-	private Personne responsable;
+	private  Long responsable;
 }

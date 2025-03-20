@@ -16,5 +16,9 @@ public class PromotionRepository implements PanacheRepository<Promotion> {
 		return find("SELECT p FROM Promotion p LEFT JOIN FETCH p.cours WHERE p.id = ?1", id).firstResult();
 	}
 
+	public boolean deleteByNom(String nom) {
+		return delete("nom", nom) > 0;
+	}
+
 
 }
