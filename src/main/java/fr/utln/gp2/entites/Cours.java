@@ -12,15 +12,16 @@ import java.util.*;
 @Entity
 public class Cours {
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "promotion_seq", sequenceName = "promotion_id_seq", allocationSize = 10)
+	private Long id;
 
 	//private UE ue;
 
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.LAZY)
 	private List<Promotion> promos;
 
-	@ManyToMany
-	private List<Personne> intervenants;
+	private Long intervenant_id;
 
 	//private Salle salle;
 
