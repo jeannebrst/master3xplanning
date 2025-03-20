@@ -20,6 +20,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -49,6 +51,10 @@ public class PageEDT extends Application {
 		semaine = new Label("");
 		modifLabelSemaine();
 
+		VBox pageComplete = new VBox(10);
+
+		HBox boiteBtn = new HBox(10);
+
 		genereEDT();
 
 		ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK,1);
@@ -59,6 +65,8 @@ public class PageEDT extends Application {
 
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
+		Button cours = new Button("Cours");
+		Button infos = new Button("Informations Personelles");
 
 		btnPreviousWeek.setOnAction(e -> {
 			lundi = lundi.minusWeeks(1);
@@ -69,6 +77,8 @@ public class PageEDT extends Application {
 			lundi = lundi.plusWeeks(1);
 			majEDT();
 		});
+		
+		boiteBtn.getChildren().addAll(cours,infos);
 
 		StackPane cellule_bouton = new StackPane();
 		cellule_bouton.setAlignment(Pos.CENTER);  
@@ -86,9 +96,12 @@ public class PageEDT extends Application {
 		GridPane.setHalignment(cellule_bouton, HPos.CENTER);
 		GridPane.setValignment(cellule_bouton, VPos.CENTER);
 
+		pageComplete.getChildren().addAll(boiteBtn,grilleEdt);
+		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
+
 		// Créer un layout pour les boutons et la grille
 		StackPane root = new StackPane();
-		root.getChildren().add(grilleEdt);
+		root.getChildren().add(pageComplete);
 		
 		// Création de la scène
 		Scene scene = new Scene(root, 1200, 800);
