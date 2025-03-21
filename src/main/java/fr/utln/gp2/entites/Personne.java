@@ -26,7 +26,9 @@ public class Personne {
     private static final HttpClient client = HttpClient.newHttpClient();
 
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@SequenceGenerator(name = "personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
+	private Long id;
 
 	@Column(name = "login", nullable = false)
 	private String login;
