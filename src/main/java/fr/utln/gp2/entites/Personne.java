@@ -66,11 +66,10 @@ public class Personne {
 	private List<Promotion> promos = new ArrayList<>();
 
 
-	public Personne(String hashMdp, String nom, String prenom, String mail, Role role){
+	public Personne(String hashMdp, String nom, String prenom, Role role){
 		this.hashMdp = hashMdp;
 		this.nom = nom;
 		this.prenom = prenom;
-		this.mail = mail;
 		this.role = role;
 	}
 
@@ -84,9 +83,9 @@ public class Personne {
 				.build();
 
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			logger.info("Réponse : " + response.body());
+			System.out.println("Réponse : " + response.body());
 		}catch(IOException | InterruptedException e){
-			logger.info("Erreur creation personne");
+			System.out.println("Erreur creation personne");
 		}
 	}
 
@@ -95,11 +94,10 @@ public class Personne {
 		return super.toString();
 	}
 
-	public Personne(String hashMdp, String nom, String prenom, String mail, Role role, List<Promotion> promos) {
+	public Personne(String hashMdp, String nom, String prenom, Role role, List<Promotion> promos) {
 		this.hashMdp = hashMdp;
 		this.nom = nom;
 		this.prenom = prenom;
-		this.mail = mail;
 		this.role = role;
 		this.promos = promos;
 	}
