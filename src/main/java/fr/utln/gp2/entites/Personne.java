@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
-<<<<<<< HEAD
+
 
 import java.io.IOException;
 import java.net.URI;
@@ -12,12 +12,12 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-=======
+
 import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.*;
->>>>>>> origin/jpa
+
 
 @Getter
 @Setter
@@ -62,7 +62,7 @@ public class Personne {
 		this.prenom = prenom;
 		this.mail = mail;
 		this.role = role;
-		this.login = nom+prenom;
+		//this.login = this.nom+this.prenom;
 	}
 
 	public void creation(){

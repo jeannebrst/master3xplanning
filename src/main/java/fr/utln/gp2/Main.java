@@ -18,13 +18,14 @@ import java.io.IOException;
 public class Main{
 
     public static void main(String[] args) {
-        Application.launch(PageLogin.class, args);
-        
         Personne p1 = new Personne("MDP", "Pelerin", "Shawn", "mail", Role.ETUDIANT);
-		Personne p2 = new Personne("virgule", "Lavit", "Quentin", "mail", Role.ETUDIANT);
+		Personne p2 = new Personne("virgule", "labit", "Quentin", "mail", Role.ETUDIANT);
 
 		p1.creation();
 		p2.creation(); 
+        Application.launch(PageLogin.class, args);
+
+
     }
 
 

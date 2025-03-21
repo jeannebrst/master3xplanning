@@ -39,6 +39,8 @@ public class PersonneRessource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPersonne(Personne personne) {
+		personne.setLogin(personne.getPrenom().charAt(0)+personne.getNom());
+		personne.setMail(personne.getPrenom()+"."+personne.getNom()+"@master.com");
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);
 		personneRepository.persist(personne);
