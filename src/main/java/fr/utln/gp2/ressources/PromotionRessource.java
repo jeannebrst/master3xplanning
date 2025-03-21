@@ -44,5 +44,16 @@ public class PromotionRessource {
 		promotionRepository.persist(promotion);
 		return Response.status(201).entity(promotion).build();
 	}
+
+	@DELETE
+	@Path("/{nom}/promotion")
+	@Transactional
+	public Response removePromotion(@PathParam("nom") String nom) {
+		boolean deleted = promotionRepository.deleteByNom(nom);
+		if (!deleted) {
+			throw new NotFoundException("Promotion non trouvée");
+		}
+		return Response.status(204).build();
+	}
 }
 

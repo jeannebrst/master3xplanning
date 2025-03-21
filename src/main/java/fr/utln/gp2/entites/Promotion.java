@@ -35,4 +35,5 @@ public class Promotion {
 		this.cours = cours;
 		this.responsable_id = responsable_id;
 	}
+
 }
