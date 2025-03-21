@@ -11,34 +11,34 @@ import java.util.Objects;
 @Getter
 @Setter
 public class PromotionId implements Serializable {
-    private enum Type {
-        LICENCE,
-        MASTER,
-        IUT,
-        LICENCE_PROFESSIONNELLE,
-        DOCTORAT
-    }
-    private Type type;
+	private enum Type {
+		LICENCE,
+		MASTER,
+		IUT,
+		LICENCE_PROFESSIONNELLE,
+		DOCTORAT
+	}
+	private Type type;
 
-    private int annee;
+	private int annee;
 
-    private String categorie;
+	private String categorie;
 
-    public PromotionId(Type type, int annee, String categorie) {
-        this.type = type;
-        this.annee = annee;
-        this.categorie = categorie;
-    }
+	public PromotionId(Type type, int annee, String categorie) {
+		this.type = type;
+		this.annee = annee;
+		this.categorie = categorie;
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PromotionId that)) return false;
-        return annee == that.annee && type == that.type && Objects.equals(categorie, that.categorie);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (!(o instanceof PromotionId that)) return false;
+		return annee == that.annee && type == that.type && Objects.equals(categorie, that.categorie);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(type, annee, categorie);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(type, annee, categorie);
+	}
 }

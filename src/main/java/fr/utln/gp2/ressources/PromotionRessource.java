@@ -1,7 +1,6 @@
 package fr.utln.gp2.ressources;
 
 import fr.utln.gp2.entites.Cours;
-import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PromotionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -11,7 +10,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Path("/api/v1/promotions")

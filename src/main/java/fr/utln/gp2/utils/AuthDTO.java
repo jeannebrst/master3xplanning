@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class AuthDTO {
-    public String login;
-    public String mdp;
+	private String login;
+	private String mdp;
 }

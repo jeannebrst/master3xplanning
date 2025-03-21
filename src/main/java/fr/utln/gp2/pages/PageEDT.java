@@ -1,6 +1,5 @@
 package fr.utln.gp2.pages;
 
-import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -13,11 +12,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
-import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,37 +23,30 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;	
+import java.net.http.HttpResponse;
 import java.net.URI;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
-import java.lang.Integer;
-import java.net.URI;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 
-
 public class PageEDT {
+	private static final HttpClient client = HttpClient.newHttpClient();
 
-	GridPane grilleEdt = new GridPane();
-	LocalDate lundi;
-	Label semaine;
-	int numSemaine;
+	private GridPane grilleEdt = new GridPane();
+	private LocalDate lundi;
+	private Label semaine;
+	private int numSemaine;
 	private Map<Integer, StackPane> coursMap = new HashMap<>();
 	private Stage stage;
 
 
 	public PageEDT() {
-        stage = new Stage();
-    }
+		stage = new Stage();
+	}
 
 	
 	public void show(){
@@ -66,7 +55,6 @@ public class PageEDT {
 		modifLabelSemaine();
 
 		VBox pageComplete = new VBox(10);
-
 		HBox boiteBtn = new HBox(10);
 
 		genereEDT();
@@ -100,23 +88,35 @@ public class PageEDT {
 		
 		boiteBtn.getChildren().addAll(cours,infos);
 
-		StackPane cellule_bouton = new StackPane();
-		cellule_bouton.setAlignment(Pos.CENTER);  
-		cellule_bouton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
+		HBox semainesBox = new HBox(5);
+		for (int i = 1; i <= 52; i++) {
+            int semaineNum = i;
+            Button weekButton = new Button(String.valueOf(i));
+            weekButton.setOnAction(event -> {
+				lundi = getLundiSemaine(semaineNum);
+				majEDT();
+            });
+
+            semainesBox.getChildren().add(weekButton);
+        }
+
+		StackPane cellBouton = new StackPane();
+		cellBouton.setAlignment(Pos.CENTER);  
+		cellBouton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
 		
 		HBox boite = new HBox(10);
 		boite.setAlignment(Pos.CENTER);  // Aligner le contenu de la HBox au centre
 		boite.getChildren().addAll(btnPreviousWeek, semaine, btnNextWeek);
-		cellule_bouton.getChildren().add(boite);
+		cellBouton.getChildren().add(boite);
 		
 		// Ajouter la cellule dans la grille
-		grilleEdt.add(cellule_bouton, 0, 0);
+		grilleEdt.add(cellBouton, 0, 0);
 		
 		// Centrer la cellule dans la grille
-		GridPane.setHalignment(cellule_bouton, HPos.CENTER);
-		GridPane.setValignment(cellule_bouton, VPos.CENTER);
+		GridPane.setHalignment(cellBouton, HPos.CENTER);
+		GridPane.setValignment(cellBouton, VPos.CENTER);
 
-		pageComplete.getChildren().addAll(boiteBtn,grilleEdt);
+		pageComplete.getChildren().addAll(boiteBtn,grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
@@ -142,9 +142,6 @@ public class PageEDT {
 		
 		// Définir les contraintes de ligne et de colonne pour avoir la même taille
 		for (int i = 0; i < 12; i++) {
-			if (i ==0){
-
-			}
 			RowConstraints row = new RowConstraints();
 			row.setPercentHeight(100 / 10f);  
 			grilleEdt.getRowConstraints().add(row);
@@ -160,7 +157,7 @@ public class PageEDT {
 		for (int i = 0; i < 5; i++) {
 			LocalDate jourDate = lundi.plusDays(i);
 			String jourNom = jourDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRANCE);
-			String moisNom = lundi.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH);
+			String moisNom = jourDate.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			Label jourLabel = new Label(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
 			
 			GridPane.setHalignment(jourLabel, HPos.CENTER);
@@ -184,18 +181,17 @@ public class PageEDT {
 		for(int i=0; i<5; i++){
 			LocalDate jourDate = lundi.plusDays(i);
 			String jourNom = jourDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRANCE);
-			String moisNom = lundi.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH);
+			String moisNom = jourDate.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			
 			((Label) grilleEdt.getChildren().get(i+1)).setText(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
 		}
 	}
 
-	public void ajouterCours(String name,String Salle,String Prof, int jour, int heure, int duree, Color couleur,int id){
+	public void ajouterCours(String name,String salle,String prof, int jour, int heure, int duree, Color couleur,int id){
 
-		Label nom = new Label(name+"\n"+Prof+"\n"+Salle);
+		Label nom = new Label(name+"\n"+prof+"\n"+salle);
 		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		nom.setTextFill(Color.WHITE);
-		
 
 		// Crée un StackPane pour centrer le label dans la cellule
 		StackPane cell = new StackPane();
@@ -228,7 +224,6 @@ public class PageEDT {
 	}
 
 	public void getPersonneInfo(String login) {
-		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
 			.GET()
@@ -237,13 +232,18 @@ public class PageEDT {
 
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 			.thenApply(HttpResponse::body)
-			.thenAccept(response -> {
-				System.out.println("Réponse : " + response);
-			})
+			.thenAccept(response ->
+				System.out.println("Réponse : " + response)
+			)
 			.exceptionally(e -> {
 				e.printStackTrace();
 				return null;
 			});
-}
+	}
 
+	public LocalDate getLundiSemaine(int semaineNum) {
+        return LocalDate.of(LocalDate.now().getYear(), 1, 1)
+                .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, semaineNum)
+                .with(java.time.DayOfWeek.MONDAY);
+    }
 }

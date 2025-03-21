@@ -3,7 +3,6 @@ package fr.utln.gp2.repositories;
 import fr.utln.gp2.entites.Personne;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Optional;
 
@@ -20,13 +19,11 @@ public class PersonneRepository implements PanacheRepository<Personne>{
 
 	public boolean authentification(String login, String hashMdp) {
 		Optional<Personne> personne = findByLogin(login);
-		if(personne.isEmpty()) {
+		if(!personne.isPresent()){
 			return false;
 		}
 		else{
 			return personne.get().getHashMdp().equals(hashMdp);
-			}
+		}
 	}
-
-
 }

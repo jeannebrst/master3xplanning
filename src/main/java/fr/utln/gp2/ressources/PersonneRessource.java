@@ -11,15 +11,19 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.apache.commons.codec.digest.DigestUtils;
 
-import java.util.ArrayList;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
-import java.util.Map;
 
 @Path("/api/v1/personnes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class PersonneRessource {
+	@SuppressWarnings("unused")
+	private static final Logger logger = LoggerFactory.getLogger(PersonneRessource.class);
+
 	@Inject
 	PersonneRepository personneRepository;
 
@@ -52,10 +56,8 @@ public class PersonneRessource {
 	@Path("/auth")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response authentification(AuthDTO dto) {
-		String hashMdp = DigestUtils.sha256Hex(dto.getMdp());
-
-		if(personneRepository.authentification(dto.getLogin(), hashMdp)) {
+	public Response authentification(AuthDTO dto){
+		if(personneRepository.authentification(dto.getLogin(), dto.getMdp())) {
 			return Response.ok("Authentification réussie").build();
 		} else {
 			return Response.status(Response.Status.UNAUTHORIZED)

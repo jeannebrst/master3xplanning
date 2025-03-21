@@ -1,10 +1,11 @@
 package fr.utln.gp2.entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,7 +14,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.*;
@@ -25,6 +25,7 @@ import java.util.*;
 @Entity
 public class Personne {
     private static final HttpClient client = HttpClient.newHttpClient();
+	private static final Logger logger = LoggerFactory.getLogger(Personne.class);
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personne_seq")
@@ -62,13 +63,11 @@ public class Personne {
 		this.prenom = prenom;
 		this.mail = mail;
 		this.role = role;
-		//this.login = this.nom+this.prenom;
 	}
 
 	public void creation(){
 		try{
 			String s = new ObjectMapper().writeValueAsString(this);
-			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("http://localhost:8080/api/v1/personnes"))
 				.header("Content-Type", "application/json")
@@ -76,9 +75,9 @@ public class Personne {
 				.build();
 
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			//System.out.println("Réponse : " + response.body());
+			logger.info("Réponse : " + response.body());
 		}catch(IOException | InterruptedException e){
-
+			logger.info("Erreur creation personne");
 		}
 	}
 

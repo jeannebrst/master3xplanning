@@ -23,58 +23,58 @@ import java.util.UUID;
 @ApplicationScoped
 public class CoursRessource {
 
-    @Inject
-    CoursRepository coursRepository;
+	@Inject
+	CoursRepository coursRepository;
 
-    @Inject
-    PromotionRepository promotionRepository;
+	@Inject
+	PromotionRepository promotionRepository;
 
-    @GET
-    public List<Cours> getAllCours() {
-        return coursRepository.listAll();
-    }
+	@GET
+	public List<Cours> getAllCours() {
+		return coursRepository.listAll();
+	}
 
-    @GET
-    @Path("/{id}")
-    public Cours getCoursById(@PathParam("id") UUID id) {
-        return coursRepository.findById(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
-    }
+	@GET
+	@Path("/{id}")
+	public Cours getCoursById(@PathParam("id") UUID id) {
+		return coursRepository.findById(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
+	}
 
-    @POST
-    @Transactional
-    public Response createCours(Cours cours) {
-        List<Promotion> managedPromotions = new ArrayList<>();
+	@POST
+	@Transactional
+	public Response createCours(Cours cours) {
+		List<Promotion> managedPromotions = new ArrayList<>();
 
-        for (Promotion promotion : cours.getPromos()) {
-            System.out.println("Promotion: " + promotion + ", promo_id: " + promotion.getPromo_id());
-            Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
-            if (managedPromotion == null) {
-                return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("Promotion with ID " + promotion.getPromo_id() + " does not exist.")
-                        .build();
-            }
-            managedPromotions.add(managedPromotion);
-        }
+		for (Promotion promotion : cours.getPromos()) {
+			System.out.println("Promotion: " + promotion + ", promo_id: " + promotion.getPromo_id());
+			Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
+			if (managedPromotion == null) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("Promotion with ID " + promotion.getPromo_id() + " does not exist.")
+						.build();
+			}
+			managedPromotions.add(managedPromotion);
+		}
 
-        cours.setPromos(managedPromotions);
-        if (coursRepository.isPersistent(cours)) {
-            cours = coursRepository.getEntityManager().merge(cours);
-        } else {
-            coursRepository.persist(cours);
-        }
+		cours.setPromos(managedPromotions);
+		if (coursRepository.isPersistent(cours)) {
+			cours = coursRepository.getEntityManager().merge(cours);
+		} else {
+			coursRepository.persist(cours);
+		}
 
-        return Response.status(201).entity(cours).build();
-    }
+		return Response.status(201).entity(cours).build();
+	}
 
-    @DELETE
-    @Path("/{id}")
-    @Transactional
-    public Response removeCours(@PathParam("id") UUID id) {
-        boolean deleted = coursRepository.deleteById(id);
-        if (!deleted) {
-            throw new NotFoundException("Cours non trouvée");
-        }
-        return Response.status(204).build();
-    }
+	@DELETE
+	@Path("/{id}")
+	@Transactional
+	public Response removeCours(@PathParam("id") UUID id) {
+		boolean deleted = coursRepository.deleteById(id);
+		if (!deleted) {
+			throw new NotFoundException("Cours non trouvée");
+		}
+		return Response.status(204).build();
+	}
 }
 
