@@ -1,20 +1,19 @@
 package fr.utln.gp2.repositories;
 
 import fr.utln.gp2.entites.Cours;
-import fr.utln.gp2.entites.Personne;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @ApplicationScoped
 public class CoursRepository implements PanacheRepository<Cours>{
-    public Optional<Cours> findById(UUID id) {
+
+    public Optional<Cours> findByCoursId(Long id) {
         return find("id", id).firstResultOptional();
     }
 
-    public boolean deleteById(UUID id) {
+    public boolean deleteById(Long id) {
         return delete("id", id) > 0;
     }
 }

@@ -5,7 +5,6 @@ import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
 import fr.utln.gp2.utils.AuthDTO;
-import fr.utln.gp2.utils.PromotionId;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -16,7 +15,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 @Path("/api/v1/personnes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -48,10 +46,10 @@ public class PersonneRessource {
 	public Response createPersonne(Personne personne) {
 		List<Promotion> managedPromotions = new ArrayList<>();
 		for (Promotion promotion : personne.getPromos()) {
-			Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
+			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
 			if (managedPromotion == null) {
 				return Response.status(Response.Status.BAD_REQUEST)
-						.entity("Promotion with ID " + promotion.getPromo_id() + " does not exist.")
+						.entity("Promotion with ID " + promotion.getPromoId() + " does not exist.")
 						.build();
 			}
 			managedPromotions.add(managedPromotion);
@@ -63,8 +61,13 @@ public class PersonneRessource {
 		}
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);
-		String login = personne.getPrenom().toLowerCase().substring(0,1)+personne.getNom().toLowerCase().substring(0,7);
-		personne.setLogin(login);
+		if (personne.getNom().length()<7) {
+			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase();
+			personne.setLogin(login);
+		} else {
+			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase().substring(0,7);
+			personne.setLogin(login);
+		}
 		if (personneRepository.isPersistent(personne)) {
 			personne = personneRepository.getEntityManager().merge(personne);
 		} else {

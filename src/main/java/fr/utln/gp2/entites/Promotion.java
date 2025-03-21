@@ -1,6 +1,5 @@
 package fr.utln.gp2.entites;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.utln.gp2.utils.PromotionId;
@@ -13,10 +12,11 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
-//@Builder
+@AllArgsConstructor
+@Builder
 public class Promotion {
 	@EmbeddedId
-	private PromotionId promo_id;
+	private PromotionId promoId;
 
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
@@ -34,7 +34,7 @@ public class Promotion {
 	@JsonManagedReference
 	public List<Cours> cours;
 
-	private String responsable_login;
+	private String responsableLogin;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
@@ -53,10 +53,10 @@ public class Promotion {
 
 	protected Promotion() {}
 
-	public Promotion(PromotionId id, List<Cours> cours, String responsable_login) {
-		this.promo_id = new PromotionId();
+	public Promotion(List<Cours> cours, String responsable_login) {
+		this.promoId = new PromotionId();
 		this.cours = cours;
-		this.responsable_login = responsable_login;
+		this.responsableLogin = responsable_login;
 	}
 
 }

@@ -19,7 +19,8 @@ public class Cours {
 	@SequenceGenerator(name = "cours_seq", sequenceName = "cours_id_seq", allocationSize = 10)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	private Long cours_id;
+	@Column(name = "cours_id")
+	private Long coursId;
 
 	//private UE ue;
 
@@ -27,7 +28,7 @@ public class Cours {
 	@JsonBackReference
 	private List<Promotion> promos;
 
-	private String intervenant_login;
+	private String intervenantLogin;
 
 	//private Salle salle;
 

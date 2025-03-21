@@ -3,7 +3,6 @@ package fr.utln.gp2.repositories;
 import fr.utln.gp2.entites.Personne;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Optional;
 

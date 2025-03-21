@@ -18,7 +18,6 @@ import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Path("/api/v1/cours")
 @Produces(MediaType.APPLICATION_JSON)
@@ -42,8 +41,8 @@ public class CoursRessource {
 
     @GET
     @Path("/{id}")
-    public Cours getCoursById(@PathParam("id") UUID id) {
-        return coursRepository.findById(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
+    public Cours getCoursById(@PathParam("id") Long id) {
+        return coursRepository.findByCoursId(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
     }
 
     @POST
@@ -52,10 +51,10 @@ public class CoursRessource {
         List<Promotion> managedPromotions = new ArrayList<>();
 
         for (Promotion promotion : cours.getPromos()) {
-            Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
+            Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
             if (managedPromotion == null) {
                 return Response.status(Response.Status.BAD_REQUEST)
-                        .entity("Promotion with ID " + promotion.getPromo_id() + " does not exist.")
+                        .entity("Promotion with ID " + promotion.getPromoId() + " does not exist.")
                         .build();
             }
             managedPromotions.add(managedPromotion);
@@ -63,7 +62,7 @@ public class CoursRessource {
 
         cours.setPromos(managedPromotions);
 
-        Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenant_login());
+        Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
         if (intervenantOpt.isPresent()) {
             Personne intervenant = intervenantOpt.get();
             if (!personneRepository.isPersistent(intervenant)) {

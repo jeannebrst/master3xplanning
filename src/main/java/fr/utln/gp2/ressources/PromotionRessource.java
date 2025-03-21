@@ -12,7 +12,6 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,7 +45,7 @@ public class PromotionRessource {
 	@POST
 	@Transactional
 	public Response createPromotion(Promotion promotion) {
-		Optional<Personne> responsableOpt = personneRepository.findByLogin(promotion.getResponsable_login());
+		Optional<Personne> responsableOpt = personneRepository.findByLogin(promotion.getResponsableLogin());
 		if (responsableOpt.isPresent()) {
 			Personne responsable = responsableOpt.get();
 			if (!personneRepository.isPersistent(responsable)) {
