@@ -1,7 +1,10 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+<<<<<<< HEAD
 
 import java.io.IOException;
 import java.net.URI;
@@ -9,29 +12,38 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+=======
+import org.apache.commons.codec.digest.DigestUtils;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
+import java.util.*;
+>>>>>>> origin/jpa
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 @Entity
 public class Personne {
     private static final HttpClient client = HttpClient.newHttpClient();
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
-	private Long id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personne_seq")
+	@SequenceGenerator(name="personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@Schema(hidden = true)
+	private Long personne_id;
 
-	@Column(name = "login", nullable = false)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@Schema(hidden = true)
 	private String login;
 
-	@Column(name = "mdp", nullable = false)
+	@Column(nullable = false)
 	private String hashMdp;
 
+	@Column(name = "nom", nullable = false)
 	private String nom;
 
+	@Column(name = "prenom", nullable = false)
 	private String prenom;
 
 	private String mail;
@@ -39,7 +51,7 @@ public class Personne {
 	public enum Role {
 		PROFESSEUR,
 		ETUDIANT,
-		SECRETARIAT ,
+		SECRETARIAT,
 		GESTIONNAIRE
 	}
 	private Role role;
@@ -75,4 +87,21 @@ public class Personne {
 		return super.toString();
 	}
 
+	@ManyToMany(mappedBy = "etudiants", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	private List<Promotion> promos;
+
+	public Personne(String hashMdp, String nom, String prenom, String mail, Role role, List<Promotion> promos) {
+		this.hashMdp = hashMdp;
+		this.nom = nom;
+		this.prenom = prenom;
+		this.login = nom+prenom;
+		this.mail = mail;
+		this.role = role;
+		if (role.equals(Role.ETUDIANT)) {
+			this.promos = promos;
+		}
+		else {
+			this.promos = null;
+		}
+	}
 }

@@ -2,14 +2,18 @@ package fr.utln.gp2.ressources;
 
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.repositories.PersonneRepository;
+import fr.utln.gp2.utils.AuthDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/v1/personnes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,9 +36,29 @@ public class PersonneRessource {
 
 	@POST
 	@Transactional
-	public Response createPersonne(Personne personne){
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response createPersonne(Personne personne) {
+		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
+		personne.setHashMdp(hashMdp);
 		personneRepository.persist(personne);
 		return Response.status(201).entity(personne).build();
+	}
+
+	@POST
+	@Transactional
+	@Path("/auth")
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
+	public Response authentification(AuthDTO dto) {
+		String hashMdp = DigestUtils.sha256Hex(dto.getMdp());
+
+		if(personneRepository.authentification(dto.getLogin(), hashMdp)) {
+			return Response.ok("Authentification réussie").build();
+		} else {
+			return Response.status(Response.Status.UNAUTHORIZED)
+					.build();
+		}
 	}
 
 	@DELETE
