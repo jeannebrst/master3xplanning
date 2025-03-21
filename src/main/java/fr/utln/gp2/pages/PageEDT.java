@@ -91,8 +91,8 @@ public class PageEDT extends Application {
 		});
 
 		infos.setOnAction(e -> {
-			String id ="58bb7cb0-834d-ee1a-353e-6ed3609ba018";
-			getPersonneInfo(id);
+			String login ="qlavit";
+			getPersonneInfo(login);
 
 		});
 		
@@ -220,10 +220,10 @@ public class PageEDT extends Application {
 		}
 	}
 
-	public void getPersonneInfo(String id) {
+	public void getPersonneInfo(String login) {
 		HttpClient client = HttpClient.newHttpClient();
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create("http://localhost:8080/personnes/" + id))
+			.uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
 			.GET()
 			.header("Content-Type", "application/json")
 			.build();
@@ -232,29 +232,11 @@ public class PageEDT extends Application {
 			.thenApply(HttpResponse::body)
 			.thenAccept(response -> {
 				System.out.println("Réponse : " + response);
-				afficherPersonne(response);
 			})
 			.exceptionally(e -> {
 				e.printStackTrace();
 				return null;
 			});
 }
-	public void afficherPersonne(String jsonResponse) {
-    try {
-        // Convertir la réponse JSON en objet JSON
-        ObjectMapper objectMapper = new ObjectMapper();
-        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
 
-        // Extraire les champs nécessaires
-        String nom = jsonNode.get("nom").asText();
-        String prenom = jsonNode.get("prenom").asText();
-        String mail = jsonNode.get("mail").asText();
-        String role = jsonNode.get("role").asText();
-
-        System.out.println(nom+"  "+prenom +"  "+ mail +"  "+role);
-
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 }
