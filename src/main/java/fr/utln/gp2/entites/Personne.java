@@ -28,7 +28,7 @@ public class Personne {
 	@Schema(hidden = true)
 	private String login;
 
-	@Column(name = "mdp", nullable = false)
+	@Column(nullable = false)
 	private String hashMdp;
 
 	@Column(name = "nom", nullable = false)
