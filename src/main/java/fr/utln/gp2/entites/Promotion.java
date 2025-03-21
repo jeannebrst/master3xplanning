@@ -26,11 +26,11 @@ public class Promotion {
 	@Column(name = "cours")
 	public List<Cours> cours;
 
-	private UUID responsable_id;
+	private Long responsable_id;
 
 	protected Promotion() {}
 
-	public Promotion(PromotionId id, List<Cours> cours, UUID responsable_id) {
+	public Promotion(PromotionId id, List<Cours> cours, Long responsable_id) {
 		this.promo_id = new PromotionId();
 		this.cours = cours;
 		this.responsable_id = responsable_id;

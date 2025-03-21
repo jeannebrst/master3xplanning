@@ -1,7 +1,9 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.*;
 
@@ -12,14 +14,18 @@ import java.util.*;
 @Entity
 public class Cours {
 	@Id
-	private UUID cours_id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cours_seq")
+	@SequenceGenerator(name = "cours_seq", sequenceName = "cours_id_seq", allocationSize = 10)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@Schema(hidden = true)
+	private Long cours_id;
 
 	//private UE ue;
 
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private List<Promotion> promos;
 
-	private UUID intervenant_id;
+	private Long intervenant_id;
 
 	//private Salle salle;
 

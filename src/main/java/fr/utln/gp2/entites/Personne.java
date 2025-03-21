@@ -1,7 +1,10 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import java.util.*;
 
 @Getter
@@ -12,7 +15,11 @@ import java.util.*;
 @Entity
 public class Personne {
 	@Id
-	private UUID id;
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personne_seq")
+	@SequenceGenerator(name="personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@Schema(hidden = true)
+	private Long id;
 
 	@Column(name = "login", nullable = false)
 	private String login;

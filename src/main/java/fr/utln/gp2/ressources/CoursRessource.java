@@ -39,6 +39,7 @@ public class CoursRessource {
     public Cours getCoursById(@PathParam("id") UUID id) {
         return coursRepository.findById(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
     }
+
     @POST
     @Transactional
     public Response createCours(Cours cours) {
