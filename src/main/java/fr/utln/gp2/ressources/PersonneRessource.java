@@ -13,6 +13,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Path("/api/v1/personnes")
 @Produces(MediaType.APPLICATION_JSON)
@@ -50,16 +51,15 @@ public class PersonneRessource {
 	@Path("/auth")
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response authentificationUtilisateur(AuthDTO auth) {
-		String login = auth.getLogin();
-		String mdp = auth.getMdp();
-		String hashMdp = DigestUtils.sha256Hex(mdp);
-		boolean authentifie = personneRepository.authentification(login, hashMdp);
-		if (!authentifie) {
-			throw new NotFoundException("Erreur auth");
-		}
-		return Response.status(200).build();
+	public Response authentification(AuthDTO dto) {
+		String hashMdp = DigestUtils.sha256Hex(dto.getMdp());
 
+		if(personneRepository.authentification(dto.getLogin(), hashMdp)) {
+			return Response.ok("Authentification réussie").build();
+		} else {
+			return Response.status(Response.Status.UNAUTHORIZED)
+					.build();
+		}
 	}
 
 	@DELETE

@@ -18,9 +18,15 @@ public class PersonneRepository implements PanacheRepository<Personne>{
 		return delete("login", login) >0;
 	}
 
-	public boolean authentification(String login, String password) {
-		String hashMdp = DigestUtils.sha256Hex(password);
-		return find("login = ?1 and hashMdp = ?2", login, hashMdp).firstResultOptional().isPresent();	}
+	public boolean authentification(String login, String hashMdp) {
+		Optional<Personne> personne = findByLogin(login);
+		if(personne.isEmpty()) {
+			return false;
+		}
+		else{
+			return personne.get().getHashMdp().equals(hashMdp);
+			}
+	}
 
 
 }

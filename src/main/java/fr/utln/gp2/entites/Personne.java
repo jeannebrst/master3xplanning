@@ -26,7 +26,7 @@ public class Personne {
 	@Column(name = "login", nullable = false)
 	private String login;
 
-	@Column(name = "mdp", nullable = false)
+	@Column(nullable = false)
 	private String hashMdp;
 
 	private String nom;
