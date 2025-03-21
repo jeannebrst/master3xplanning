@@ -1,5 +1,7 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.utln.gp2.utils.PromotionId;
 import jakarta.persistence.*;
@@ -29,13 +31,14 @@ public class Promotion {
 	@Column(name = "cours")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
+	@JsonManagedReference
 	public List<Cours> cours;
 
-	private Long responsable_id;
+	private String responsable_login;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
-			name = "promotion_etudiant",
+			name = "promotion_personnes",
 			joinColumns = {
 					@JoinColumn(name = "type_promotion", referencedColumnName = "type"),
 					@JoinColumn(name = "annee_promotion", referencedColumnName = "annee"),
@@ -43,17 +46,17 @@ public class Promotion {
 			},
 			inverseJoinColumns = @JoinColumn(name = "personne_id")
 	)
-	@Column(name = "etudiants")
+	@Column(name = "personnes")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	private List<Personne> etudiants = new ArrayList<>();
+	private List<Personne> personnes = new ArrayList<>();
 
 	protected Promotion() {}
 
-	public Promotion(PromotionId id, List<Cours> cours, Long responsable_id) {
+	public Promotion(PromotionId id, List<Cours> cours, String responsable_login) {
 		this.promo_id = new PromotionId();
 		this.cours = cours;
-		this.responsable_id = responsable_id;
+		this.responsable_login = responsable_login;
 	}
 
 }

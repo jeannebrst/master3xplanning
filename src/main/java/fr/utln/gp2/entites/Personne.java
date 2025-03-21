@@ -47,8 +47,8 @@ public class Personne {
 	}
 	private Role role;
 
-	@ManyToMany(mappedBy = "etudiants", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonIgnoreProperties("etudiants")
+	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JsonIgnoreProperties("personnes")
 	private List<Promotion> promos = new ArrayList<>();
 
 	public Personne(String hashMdp, String nom, String prenom, String mail, Role role, List<Promotion> promos) {
@@ -58,11 +58,5 @@ public class Personne {
 		this.mail = mail;
 		this.role = role;
 		this.promos = promos;
-//		if (role.equals(Role.ETUDIANT)) {
-//			this.promos = promos;
-//		}
-//		else {
-//			this.promos = null;
-//		}
 	}
 }

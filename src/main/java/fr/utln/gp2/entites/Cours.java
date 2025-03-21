@@ -1,6 +1,6 @@
 package fr.utln.gp2.entites;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,10 +24,10 @@ public class Cours {
 	//private UE ue;
 
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonIgnoreProperties("cours")
+	@JsonBackReference
 	private List<Promotion> promos;
 
-	private Long intervenant_id;
+	private String intervenant_login;
 
 	//private Salle salle;
 
