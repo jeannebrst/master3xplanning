@@ -17,8 +17,8 @@ import java.util.*;
 @Entity
 public class Personne {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personne_seq")
+	@SequenceGenerator(name="personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	private Long id;
