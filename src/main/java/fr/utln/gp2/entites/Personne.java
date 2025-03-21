@@ -7,7 +7,7 @@ import lombok.*;
 
 import java.net.http.HttpClient;
 
-import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +22,7 @@ public class Personne {
     private static final HttpClient client = HttpClient.newHttpClient();
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "personne_seq")
 	@SequenceGenerator(name = "personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
 	private Long id;
 
