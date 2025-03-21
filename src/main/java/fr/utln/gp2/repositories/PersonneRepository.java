@@ -3,6 +3,7 @@ package fr.utln.gp2.repositories;
 import fr.utln.gp2.entites.Personne;
 import io.quarkus.hibernate.orm.panache.PanacheRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Optional;
 
@@ -16,4 +17,10 @@ public class PersonneRepository implements PanacheRepository<Personne>{
 	public boolean deleteByLogin(String login) {
 		return delete("login", login) >0;
 	}
+
+	public boolean authentification(String login, String password) {
+		String hashMdp = DigestUtils.sha256Hex(password);
+		return find("login = ?1 and hashMdp = ?2", login, hashMdp).firstResultOptional().isPresent();	}
+
+
 }
