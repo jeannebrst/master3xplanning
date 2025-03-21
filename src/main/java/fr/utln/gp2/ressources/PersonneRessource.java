@@ -1,7 +1,9 @@
 package fr.utln.gp2.ressources;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PersonneRepository;
+import fr.utln.gp2.repositories.PromotionRepository;
 import fr.utln.gp2.utils.AuthDTO;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -13,6 +15,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 
 import java.util.List;
 
@@ -26,6 +29,9 @@ public class PersonneRessource {
 
 	@Inject
 	PersonneRepository personneRepository;
+
+	@Inject
+	PromotionRepository promotionRepository;
 
 	@GET
 	public List<Personne> getAllPersonnes() {
@@ -43,11 +49,37 @@ public class PersonneRessource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPersonne(Personne personne) {
-		personne.setLogin(personne.getPrenom().charAt(0)+personne.getNom());
-		personne.setMail(personne.getPrenom()+"."+personne.getNom()+"@master.com");
+		List<Promotion> managedPromotions = new ArrayList<>();
+		for (Promotion promotion : personne.getPromos()) {
+			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
+			if (managedPromotion == null) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("Promotion with ID " + promotion.getPromoId() + " does not exist.")
+						.build();
+			}
+			managedPromotions.add(managedPromotion);
+		}
+
+		personne.setPromos(managedPromotions);
+		for (Promotion promotion : managedPromotions) {
+			promotion.getPersonnes().add(personne);
+		}
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);
-		personneRepository.persist(personne);
+		personne.setMail(personne.getPrenom()+"."+personne.getNom()+"@master.com");
+		if (personne.getNom().length()<7) {
+			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase();
+			personne.setLogin(login);
+		} else {
+			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase().substring(0,7);
+			personne.setLogin(login);
+		}
+		if (personneRepository.isPersistent(personne)) {
+			personne = personneRepository.getEntityManager().merge(personne);
+		} else {
+			personneRepository.persist(personne);
+		}
+
 		return Response.status(201).entity(personne).build();
 	}
 

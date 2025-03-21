@@ -1,6 +1,8 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +14,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -22,6 +23,8 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Entity
 public class Personne {
     private static final HttpClient client = HttpClient.newHttpClient();
@@ -32,7 +35,8 @@ public class Personne {
 	@SequenceGenerator(name="personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	private Long personne_id;
+	@Column(name = "personne_id")
+	private Long personneId;
 
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
@@ -56,6 +60,11 @@ public class Personne {
 		GESTIONNAIRE
 	}
 	private Role role;
+
+	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@JsonIgnoreProperties("personnes")
+	private List<Promotion> promos = new ArrayList<>();
+
 
 	public Personne(String hashMdp, String nom, String prenom, String mail, Role role){
 		this.hashMdp = hashMdp;
@@ -86,21 +95,12 @@ public class Personne {
 		return super.toString();
 	}
 
-	@ManyToMany(mappedBy = "etudiants", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	private List<Promotion> promos;
-
 	public Personne(String hashMdp, String nom, String prenom, String mail, Role role, List<Promotion> promos) {
 		this.hashMdp = hashMdp;
 		this.nom = nom;
 		this.prenom = prenom;
-		this.login = nom+prenom;
 		this.mail = mail;
 		this.role = role;
-		if (role.equals(Role.ETUDIANT)) {
-			this.promos = promos;
-		}
-		else {
-			this.promos = null;
-		}
+		this.promos = promos;
 	}
 }

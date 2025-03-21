@@ -1,7 +1,9 @@
 package fr.utln.gp2.ressources;
 
 import fr.utln.gp2.entites.Cours;
+import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -11,6 +13,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.List;
+import java.util.Optional;
 
 @Path("/api/v1/promotions")
 @Produces(MediaType.APPLICATION_JSON)
@@ -20,6 +23,9 @@ public class PromotionRessource {
 
 	@Inject
 	PromotionRepository promotionRepository;
+
+	@Inject
+	PersonneRepository personneRepository;
 
 	@GET
 	public List<Promotion> getAllPromotions() {
@@ -39,6 +45,15 @@ public class PromotionRessource {
 	@POST
 	@Transactional
 	public Response createPromotion(Promotion promotion) {
+		Optional<Personne> responsableOpt = personneRepository.findByLogin(promotion.getResponsableLogin());
+		if (responsableOpt.isPresent()) {
+			Personne responsable = responsableOpt.get();
+			if (!personneRepository.isPersistent(responsable)) {
+				responsable = personneRepository.getEntityManager().merge(responsable);
+			}
+			promotion.getPersonnes().add(responsable);
+
+		}
 		promotionRepository.persist(promotion);
 		return Response.status(201).entity(promotion).build();
 	}

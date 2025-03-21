@@ -11,14 +11,14 @@ import java.util.Objects;
 @Getter
 @Setter
 public class PromotionId implements Serializable {
-	private enum Type {
-		LICENCE,
-		MASTER,
-		IUT,
-		LICENCE_PROFESSIONNELLE,
-		DOCTORAT
-	}
-	private Type type;
+    public static enum Type {
+        LICENCE,
+        MASTER,
+        IUT,
+        LICENCE_PROFESSIONNELLE,
+        DOCTORAT
+    }
+    private Type type;
 
 	private int annee;
 
