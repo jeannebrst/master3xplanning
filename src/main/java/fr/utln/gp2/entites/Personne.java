@@ -1,8 +1,10 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
 import java.util.*;
@@ -37,7 +39,7 @@ public class Personne {
 	private enum Role {
 		PROFESSEUR,
 		ETUDIANT,
-		SECRETARIAT ,
+		SECRETARIAT,
 		GESTIONNAIRE
 	}
 	private Role role;
