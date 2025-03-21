@@ -5,17 +5,18 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Personne.Role;
+import fr.utln.gp2.ressources.PersonneRessource;
 
 import java.io.IOException;
 
 public class AffichagePersonne{
-	private static final Logger logger = LoggerFactory.getLogger(Personne.class);
 	public static void main(String[] args) {
-		
+		Personne p1 = new Personne("MDP", "Pelerin", "Shawn", "mail", Role.ETUDIANT);
+		Personne p2 = new Personne("virgule", "Lavit", "Quentin", "mail", Role.ETUDIANT);
 
+		p1.creation();
+		p2.creation();
 	}
 }

@@ -16,7 +16,6 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 public class PersonneRessource {
-
 	@Inject
 	PersonneRepository personneRepository;
 
@@ -33,7 +32,7 @@ public class PersonneRessource {
 
 	@POST
 	@Transactional
-	public Response createPersonne(Personne personne) {
+	public Response createPersonne(Personne personne){
 		personneRepository.persist(personne);
 		return Response.status(201).entity(personne).build();
 	}

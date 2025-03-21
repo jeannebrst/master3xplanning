@@ -125,8 +125,6 @@ public class PageEDT extends Application {
 		Scene scene = new Scene(root, 1200, 800);
 		primaryStage.setTitle("Page d'accueil");
 		primaryStage.setScene(scene);
-		primaryStage.setWidth(900);
-		primaryStage.setHeight(900);
 		primaryStage.show();
 	}
 
