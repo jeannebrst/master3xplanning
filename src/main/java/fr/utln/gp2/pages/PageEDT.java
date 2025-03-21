@@ -1,6 +1,7 @@
 package fr.utln.gp2.pages;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Background;
@@ -13,6 +14,8 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.geometry.HPos;
@@ -22,11 +25,20 @@ import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;	
+import java.net.URI;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Locale;
 import java.lang.Integer;
+import java.net.URI;
 import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
@@ -76,6 +88,12 @@ public class PageEDT extends Application {
 		btnNextWeek.setOnAction(e -> {
 			lundi = lundi.plusWeeks(1);
 			majEDT();
+		});
+
+		infos.setOnAction(e -> {
+			String id ="58bb7cb0-834d-ee1a-353e-6ed3609ba018";
+			getPersonneInfo(id);
+
 		});
 		
 		boiteBtn.getChildren().addAll(cours,infos);
@@ -201,4 +219,42 @@ public class PageEDT extends Application {
 			coursMap.remove(id); 
 		}
 	}
+
+	public void getPersonneInfo(String id) {
+		HttpClient client = HttpClient.newHttpClient();
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create("http://localhost:8080/personnes/" + id))
+			.GET()
+			.header("Content-Type", "application/json")
+			.build();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenAccept(response -> {
+				System.out.println("Réponse : " + response);
+				afficherPersonne(response);
+			})
+			.exceptionally(e -> {
+				e.printStackTrace();
+				return null;
+			});
+}
+	public void afficherPersonne(String jsonResponse) {
+    try {
+        // Convertir la réponse JSON en objet JSON
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode jsonNode = objectMapper.readTree(jsonResponse);
+
+        // Extraire les champs nécessaires
+        String nom = jsonNode.get("nom").asText();
+        String prenom = jsonNode.get("prenom").asText();
+        String mail = jsonNode.get("mail").asText();
+        String role = jsonNode.get("role").asText();
+
+        System.out.println(nom+"  "+prenom +"  "+ mail +"  "+role);
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+}
 }
