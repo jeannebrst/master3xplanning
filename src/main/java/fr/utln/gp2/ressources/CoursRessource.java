@@ -46,7 +46,6 @@ public class CoursRessource {
         List<Promotion> managedPromotions = new ArrayList<>();
 
         for (Promotion promotion : cours.getPromos()) {
-            System.out.println("Promotion: " + promotion + ", promo_id: " + promotion.getPromo_id());
             Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
             if (managedPromotion == null) {
                 return Response.status(Response.Status.BAD_REQUEST)

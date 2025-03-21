@@ -33,7 +33,7 @@ public class Promotion {
 
 	private Long responsable_id;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "promotion_etudiant",
 			joinColumns = {
@@ -46,7 +46,7 @@ public class Promotion {
 	@Column(name = "etudiants")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	private List<Personne> etudiants;
+	private List<Personne> etudiants = new ArrayList<>();
 
 	protected Promotion() {}
 

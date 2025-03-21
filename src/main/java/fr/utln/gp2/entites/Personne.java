@@ -1,6 +1,7 @@
 package fr.utln.gp2.entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,6 +13,8 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @Entity
 public class Personne {
 	@Id
@@ -45,20 +48,21 @@ public class Personne {
 	private Role role;
 
 	@ManyToMany(mappedBy = "etudiants", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	private List<Promotion> promos;
+	@JsonIgnoreProperties("etudiants")
+	private List<Promotion> promos = new ArrayList<>();
 
 	public Personne(String hashMdp, String nom, String prenom, String mail, Role role, List<Promotion> promos) {
 		this.hashMdp = hashMdp;
 		this.nom = nom;
 		this.prenom = prenom;
-		this.login = nom+prenom;
 		this.mail = mail;
 		this.role = role;
-		if (role.equals(Role.ETUDIANT)) {
-			this.promos = promos;
-		}
-		else {
-			this.promos = null;
-		}
+		this.promos = promos;
+//		if (role.equals(Role.ETUDIANT)) {
+//			this.promos = promos;
+//		}
+//		else {
+//			this.promos = null;
+//		}
 	}
 }

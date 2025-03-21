@@ -1,8 +1,11 @@
 package fr.utln.gp2.ressources;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PersonneRepository;
+import fr.utln.gp2.repositories.PromotionRepository;
 import fr.utln.gp2.utils.AuthDTO;
+import fr.utln.gp2.utils.PromotionId;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -23,6 +26,9 @@ public class PersonneRessource {
 	@Inject
 	PersonneRepository personneRepository;
 
+	@Inject
+	PromotionRepository promotionRepository;
+
 	@GET
 	public List<Personne> getAllPersonnes() {
 		return personneRepository.listAll();
@@ -39,9 +45,31 @@ public class PersonneRessource {
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createPersonne(Personne personne) {
+		List<Promotion> managedPromotions = new ArrayList<>();
+		for (Promotion promotion : personne.getPromos()) {
+			Promotion managedPromotion = promotionRepository.findById(promotion.getPromo_id());
+			if (managedPromotion == null) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("Promotion with ID " + promotion.getPromo_id() + " does not exist.")
+						.build();
+			}
+			managedPromotions.add(managedPromotion);
+		}
+
+		personne.setPromos(managedPromotions);
+		for (Promotion promotion : managedPromotions) {
+			promotion.getEtudiants().add(personne);
+		}
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);
-		personneRepository.persist(personne);
+		String login = personne.getPrenom().toLowerCase().substring(0,1)+personne.getNom().toLowerCase().substring(0,7);
+		personne.setLogin(login);
+		if (personneRepository.isPersistent(personne)) {
+			personne = personneRepository.getEntityManager().merge(personne);
+		} else {
+			personneRepository.persist(personne);
+		}
+
 		return Response.status(201).entity(personne).build();
 	}
 
