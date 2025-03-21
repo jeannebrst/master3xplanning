@@ -1,6 +1,5 @@
 package fr.utln.gp2.pages;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -18,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -45,20 +45,22 @@ import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 
 
-public class PageEDT extends Application {
+public class PageEDT {
 
 	GridPane grilleEdt = new GridPane();
 	LocalDate lundi;
 	Label semaine;
 	int numSemaine;
 	private Map<Integer, StackPane> coursMap = new HashMap<>();
+	private Stage stage;
 
-	public static void main(String[] args) {
-		launch(args);
-	}
 
-	@Override
-	public void start(Stage primaryStage){
+	public PageEDT() {
+        stage = new Stage();
+    }
+
+	
+	public void show(){
 		lundi = LocalDate.now().with(DayOfWeek.MONDAY);
 		semaine = new Label("");
 		modifLabelSemaine();
@@ -119,13 +121,18 @@ public class PageEDT extends Application {
 
 		// Créer un layout pour les boutons et la grille
 		StackPane root = new StackPane();
+		root.setMinSize(1200, 800);
+		root.setPrefSize(1200, 800);
+		root.setMaxSize(1200, 800);
 		root.getChildren().add(pageComplete);
 		
 		// Création de la scène
-		Scene scene = new Scene(root, 1200, 800);
-		primaryStage.setTitle("Page d'accueil");
-		primaryStage.setScene(scene);
-		primaryStage.show();
+		Scene scene = new Scene(root);
+		stage.setTitle("Page d'accueil");
+		stage.setScene(scene);
+		stage.setMaximized(true);
+		stage.show();
+		
 	}
 
 	private void genereEDT(){

@@ -3,6 +3,7 @@ package fr.utln.gp2.pages;
 import java.util.ArrayList;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.StackPane;
@@ -114,15 +115,16 @@ public class PageLogin extends Application {
 	}
 
 	
-	public static void main(String[] args) {
-		launch(args);
-		
-	}
 
 	public void openPageAccueil(Stage stage) {
-		// Lancer la page d'accueil
-		stage.close();
-		PageEDT page = new PageEDT();
-		page.start(new Stage()); 
+		Platform.runLater(() -> {
+			stage.close(); // Ferme la fenêtre actuelle
+			
+			// Ouvre la page EDT
+			PageEDT pageEDT = new PageEDT();
+			pageEDT.show();
+		});
 	}
+	
+	
 }
