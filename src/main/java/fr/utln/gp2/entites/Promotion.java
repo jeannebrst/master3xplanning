@@ -7,15 +7,13 @@ import java.util.*;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
 @Builder
 public class Promotion {
 	@EmbeddedId
-	private PromotionId id;
+	private PromotionId promo_id;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "promotion_cours",
 			joinColumns = {
@@ -28,5 +26,13 @@ public class Promotion {
 	@Column(name = "cours")
 	public List<Cours> cours;
 
-	private Long responsable_id;
+	private UUID responsable_id;
+
+	protected Promotion() {}
+
+	public Promotion(PromotionId id, List<Cours> cours, UUID responsable_id) {
+		this.promo_id = new PromotionId();
+		this.cours = cours;
+		this.responsable_id = responsable_id;
+	}
 }

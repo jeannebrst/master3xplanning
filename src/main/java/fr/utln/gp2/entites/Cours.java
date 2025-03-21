@@ -12,16 +12,14 @@ import java.util.*;
 @Entity
 public class Cours {
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	@SequenceGenerator(name = "promotion_seq", sequenceName = "promotion_id_seq", allocationSize = 10)
-	private Long id;
+	private UUID cours_id;
 
 	//private UE ue;
 
-	@ManyToMany(mappedBy = "cours", fetch = FetchType.LAZY)
+	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private List<Promotion> promos;
 
-	private Long intervenant_id;
+	private UUID intervenant_id;
 
 	//private Salle salle;
 
