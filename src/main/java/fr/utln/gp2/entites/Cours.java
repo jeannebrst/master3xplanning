@@ -11,8 +11,9 @@ import java.util.*;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
 @Entity
+@AllArgsConstructor
+@Builder
 public class Cours {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cours_seq")
@@ -26,7 +27,7 @@ public class Cours {
 
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JsonBackReference
-	private List<Promotion> promos;
+	private List<Promotion> promos = new ArrayList<>();
 
 	private String intervenantLogin;
 
@@ -38,10 +39,21 @@ public class Cours {
 
 	private Date jour;
 
-	private enum Type {
+	public enum TypeC {
 		CM,
 		TD,
 		TP
 	}
-	private Type type;
+	private TypeC type;
+
+	public Cours(List<Promotion> promos, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
+		if(promos!=null){
+			this.promos = promos;
+		}
+		this.intervenantLogin = intervenantLogin;
+		this.heureDebut = heureDebut;
+		this.duree = duree;
+		this.jour = jour;
+		this.type = type;
+	}
 }

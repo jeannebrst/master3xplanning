@@ -12,12 +12,14 @@ import javafx.application.Platform;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
@@ -65,6 +67,31 @@ public class PageLogin extends Application {
 		champMdp.setMaxWidth(300);
 		champMdp.setMaxHeight(25);
 
+		TextField textField = new TextField();
+		textField.setMaxWidth(300);
+		textField.setMaxHeight(25);
+		textField.setManaged(false);
+		textField.setVisible(false);
+
+		ToggleButton toggleButton = new ToggleButton("Voir MDP");
+		toggleButton.setOnAction(e -> {
+			if (toggleButton.isSelected()) {
+				textField.setText(champMdp.getText());
+				textField.setManaged(true);
+				textField.setVisible(true);
+				champMdp.setManaged(false);
+				champMdp.setVisible(false);
+			} else {
+				champMdp.setText(textField.getText());
+				champMdp.setManaged(true);
+				champMdp.setVisible(true);
+				textField.setManaged(false);
+				textField.setVisible(false);
+			}
+		});
+
+		champMdp.textProperty().bindBidirectional(textField.textProperty());
+
 		//Creation bouton
 		Button bouton = new Button("Se connecter");
 		bouton.setOnAction(e -> {
@@ -104,7 +131,13 @@ public class PageLogin extends Application {
 		//Vbox pour les elements
 		VBox boite = new VBox(20);
 		boite.setAlignment(Pos.CENTER);
-		boite.getChildren().addAll(titre,erreur,service,champLogin,champMdp, bouton);
+		HBox mdpChiffre = new HBox(10);
+		mdpChiffre.getChildren().addAll(champMdp, toggleButton);
+		HBox mdpClair = new HBox(10);
+		mdpClair.getChildren().addAll(textField, toggleButton);
+		mdpChiffre.setAlignment(Pos.CENTER);
+		mdpClair.setAlignment(Pos.CENTER);
+		boite.getChildren().addAll(titre,erreur,service,champLogin,mdpChiffre, mdpClair, bouton);
 		conteneurFond.getChildren().addAll(imageview,boite);
 		root.getChildren().add(conteneurFond);
 		

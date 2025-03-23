@@ -27,7 +27,6 @@ import java.util.*;
 @Builder
 @Entity
 public class Personne {
-    private static final HttpClient client = HttpClient.newHttpClient();
 	private static final Logger logger = LoggerFactory.getLogger(Personne.class);
 
 	@Id
@@ -71,22 +70,6 @@ public class Personne {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.role = role;
-	}
-
-	public void creation(){
-		try{
-			String s = new ObjectMapper().writeValueAsString(this);
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("http://localhost:8080/api/v1/personnes"))
-				.header("Content-Type", "application/json")
-				.POST(HttpRequest.BodyPublishers.ofString(s))
-				.build();
-
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("Réponse : " + response.body());
-		}catch(IOException | InterruptedException e){
-			System.out.println("Erreur creation personne");
-		}
 	}
 
 	@Override

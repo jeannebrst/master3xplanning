@@ -2,12 +2,23 @@ package fr.utln.gp2.entites;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import fr.utln.gp2.utils.PromotionId;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.*;
+
+import fr.utln.gp2.utils.PromotionId;
+import fr.utln.gp2.utils.PromotionId.Type;
 
 @Getter
 @Setter
@@ -15,6 +26,9 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class Promotion {
+	private static final HttpClient client = HttpClient.newHttpClient();
+	private static final Logger logger = LoggerFactory.getLogger(Promotion.class);
+
 	@EmbeddedId
 	private PromotionId promoId;
 
@@ -32,7 +46,7 @@ public class Promotion {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	@JsonManagedReference
-	public List<Cours> cours;
+	public List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;
 
@@ -53,10 +67,13 @@ public class Promotion {
 
 	protected Promotion() {}
 
-	public Promotion(List<Cours> cours, String responsable_login) {
-		this.promoId = new PromotionId();
-		this.cours = cours;
+	public Promotion(Type type, int annee, String categorie, List<Cours> cours, String responsable_login, List<Personne> personnes) {
+		this.promoId = new PromotionId(type, annee, categorie);
+		if(cours != null){
+			this.cours = cours;
+		}
 		this.responsableLogin = responsable_login;
+		this.personnes = personnes;
 	}
-
+	
 }
