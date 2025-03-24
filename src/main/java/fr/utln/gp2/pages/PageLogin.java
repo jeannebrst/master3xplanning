@@ -94,33 +94,7 @@ public class PageLogin extends Application {
 
 		//Creation bouton
 		Button bouton = new Button("Se connecter");
-		bouton.setOnAction(e -> {
-			String hashMdp = DigestUtils.sha256Hex(champMdp.getText());
-			AuthDTO auth = new AuthDTO(champLogin.getText(), hashMdp);
-
-			try{
-			String authString = new ObjectMapper().writeValueAsString(auth);
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("http://localhost:8080/api/v1/personnes/auth"))
-				.header("Content-Type", "application/json")
-				.POST(HttpRequest.BodyPublishers.ofString(authString))
-				.build();
-
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("Authentification : " + response.statusCode());
-			if(response.statusCode() == 200){
-				openPageAccueil(primaryStage);
-			}
-			else{
-				erreur.setVisible(true);
-				champLogin.clear();
-				champMdp.clear();
-			}
-			}catch(IOException | InterruptedException err){
-				System.out.println("Erreur http authentification" + err);
-			}
-		}
-	);
+		bouton.setOnAction(e -> authentification(champLogin, champMdp, erreur, primaryStage));
 		
 		//Creation de l'image en fond
 		Image fond = new Image("file:src/main/resources/fond2.jpg");
@@ -153,7 +127,7 @@ public class PageLogin extends Application {
 		primaryStage.show();
 	}
 
-	public void openPageAccueil(Stage stage) {
+	private void openPageAccueil(Stage stage) {
 		Platform.runLater(() -> {
 			stage.close(); //Ferme la fenêtre actuelle
 			
@@ -161,5 +135,32 @@ public class PageLogin extends Application {
 			PageEDT pageEDT = new PageEDT();
 			pageEDT.show();
 		});
+	}
+
+	private void authentification(TextField champLogin, PasswordField champMdp, Label erreur, Stage primaryStage){
+		String hashMdp = DigestUtils.sha256Hex(champMdp.getText());
+		AuthDTO auth = new AuthDTO(champLogin.getText(), hashMdp);
+
+		try{
+		String authString = new ObjectMapper().writeValueAsString(auth);
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create("http://localhost:8080/api/v1/personnes/auth"))
+			.header("Content-Type", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString(authString))
+			.build();
+
+		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+		System.out.println("Authentification : " + response.statusCode());
+		if(response.statusCode() == 200){
+			openPageAccueil(primaryStage);
+		}
+		else{
+			erreur.setVisible(true);
+			champLogin.clear();
+			champMdp.clear();
+		}
+		}catch(IOException | InterruptedException err){
+			System.out.println("Erreur http authentification" + err);
+		}
 	}
 }

@@ -41,4 +41,9 @@ public class PromotionId implements Serializable {
 	public int hashCode() {
 		return Objects.hash(type, annee, categorie);
 	}
+
+	@Override
+	public String toString() {
+		return "" + type + annee + categorie;
+	}
 }

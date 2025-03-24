@@ -42,10 +42,10 @@ public class Promotion {
 			},
 			inverseJoinColumns = @JoinColumn(name = "cours_id")
 	)
-	@Column(name = "cours")
+	// @Column(name = "cours")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	@JsonManagedReference
+	// @JsonManagedReference
 	public List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;
@@ -74,6 +74,17 @@ public class Promotion {
 		}
 		this.responsableLogin = responsable_login;
 		this.personnes = personnes;
+	}
+
+	@Override
+	public String toString() {
+		String listCours = "[";
+		for (Cours c : cours){
+			listCours += c.toString() + " ";
+		}
+		listCours += "]";
+		return "Promotion [promoId=" + promoId.toString() + ", cours=" + cours + ", responsableLogin=" + responsableLogin
+				+ ", personnes=" + personnes + "]";
 	}
 	
 }

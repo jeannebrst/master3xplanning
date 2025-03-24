@@ -1,7 +1,10 @@
 package fr.utln.gp2.entites;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import fr.utln.gp2.utils.PromotionId;
 import jakarta.persistence.*;
 import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
@@ -25,9 +28,15 @@ public class Cours {
 
 	//private UE ue;
 
-	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonBackReference
-	private List<Promotion> promos = new ArrayList<>();
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(
+		name = "promotion_cours",
+		joinColumns = @JoinColumn(name = "cours_id")
+	)
+	// @JsonIgnoreProperties("cours")
+	// @JsonBackReference
+	@Builder.Default
+	private List<PromotionId> promosIds = new ArrayList<>();
 
 	private String intervenantLogin;
 
@@ -46,9 +55,9 @@ public class Cours {
 	}
 	private TypeC type;
 
-	public Cours(List<Promotion> promos, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
-		if(promos!=null){
-			this.promos = promos;
+	public Cours(List<PromotionId> promosIds, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
+		if(promosIds!=null){
+			this.promosIds = promosIds;
 		}
 		this.intervenantLogin = intervenantLogin;
 		this.heureDebut = heureDebut;
@@ -56,4 +65,11 @@ public class Cours {
 		this.jour = jour;
 		this.type = type;
 	}
+
+	@Override
+	public String toString(){
+		return "Cours [coursId=" + coursId + ", promos=" + promosIds.toString() + ", intervenantLogin=" + intervenantLogin
+				+ ", heureDebut=" + heureDebut + ", duree=" + duree + ", jour=" + jour + ", type=" + type + "]";
+	}
+
 }

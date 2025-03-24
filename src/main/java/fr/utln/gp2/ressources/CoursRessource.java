@@ -8,6 +8,7 @@ import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.CoursRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
+import fr.utln.gp2.utils.PromotionId;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -48,19 +49,21 @@ public class CoursRessource {
 	@POST
 	@Transactional
 	public Response createCours(Cours cours) {
+		List<PromotionId> managedPromotionsIds = new ArrayList<>();
 		List<Promotion> managedPromotions = new ArrayList<>();
 
-		for (Promotion promotion : cours.getPromos()) {
-			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
+		for (PromotionId promotionId : cours.getPromosIds()) {
+			Promotion managedPromotion = promotionRepository.findById(promotionId);
 			if (managedPromotion == null) {
 				return Response.status(Response.Status.BAD_REQUEST)
-						.entity("Promotion with ID " + promotion.getPromoId() + " does not exist.")
+						.entity("Promotion avec ID : " + promotionId + " n'existe pas.")
 						.build();
 			}
 			managedPromotions.add(managedPromotion);
+			managedPromotionsIds.add(promotionId);
 		}
 
-		cours.setPromos(managedPromotions);
+		cours.setPromosIds(managedPromotionsIds);
 
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
 		if (intervenantOpt.isPresent()) {
@@ -92,7 +95,7 @@ public class CoursRessource {
 			throw new NotFoundException("Cours non trouvé");
 		}
 
-		cours.getPromos().forEach(p -> p.getCours().remove(cours));
+		cours.getPromosIds().clear();
 
 		coursRepository.flush();
 		boolean deleted = coursRepository.deleteById(id);
