@@ -61,7 +61,7 @@ public class Personne {
 	private Role role;
 
 	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonIgnoreProperties("personnes")
+	@JsonIgnoreProperties({"personnes","cours"})//Pour eviter maxi redondance
 	private List<Promotion> promos = new ArrayList<>();
 
 
@@ -72,11 +72,6 @@ public class Personne {
 		this.role = role;
 	}
 
-	@Override
-	public String toString(){
-		return super.toString();
-	}
-
 	public Personne(String hashMdp, String nom, String prenom, Role role, List<Promotion> promos) {
 		this.hashMdp = hashMdp;
 		this.nom = nom;
@@ -84,4 +79,18 @@ public class Personne {
 		this.role = role;
 		this.promos = promos;
 	}
+
+	@Override
+	public String toString() {
+		String listPromos = "[";
+		for (Promotion p : promos){
+			listPromos += p.getPromoId().toString() + " ";
+		}
+		listPromos += "]";
+
+		return "Personne [personneId=" + personneId + ", login=" + login + ", nom=" + nom + ", prenom=" + prenom
+				+ ", mail=" + mail + ", role=" + role + ", promos=" + listPromos + "]";
+	}
+
+	
 }

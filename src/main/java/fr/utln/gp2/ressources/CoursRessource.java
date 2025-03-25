@@ -52,18 +52,19 @@ public class CoursRessource {
 		List<PromotionId> managedPromotionsIds = new ArrayList<>();
 		List<Promotion> managedPromotions = new ArrayList<>();
 
-		for (PromotionId promotionId : cours.getPromosIds()) {
-			Promotion managedPromotion = promotionRepository.findById(promotionId);
+		for (Promotion promotion : cours.getPromos()) {
+			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
 			if (managedPromotion == null) {
 				return Response.status(Response.Status.BAD_REQUEST)
-						.entity("Promotion avec ID : " + promotionId + " n'existe pas.")
+						.entity("Promotion avec ID : " + promotion.getPromoId() + " n'existe pas.")
 						.build();
 			}
 			managedPromotions.add(managedPromotion);
-			managedPromotionsIds.add(promotionId);
+			managedPromotionsIds.add(managedPromotion.getPromoId());
 		}
 
-		cours.setPromosIds(managedPromotionsIds);
+		// cours.setPromosIds(managedPromotionsIds);
+		cours.setPromos(managedPromotions);
 
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
 		if (intervenantOpt.isPresent()) {
@@ -95,7 +96,7 @@ public class CoursRessource {
 			throw new NotFoundException("Cours non trouvé");
 		}
 
-		cours.getPromosIds().clear();
+		cours.getPromos().clear();
 
 		coursRepository.flush();
 		boolean deleted = coursRepository.deleteById(id);

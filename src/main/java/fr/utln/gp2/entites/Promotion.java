@@ -32,7 +32,7 @@ public class Promotion {
 	@EmbeddedId
 	private PromotionId promoId;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(
 			name = "promotion_cours",
 			joinColumns = {
@@ -42,10 +42,11 @@ public class Promotion {
 			},
 			inverseJoinColumns = @JoinColumn(name = "cours_id")
 	)
-	// @Column(name = "cours")
+	@Column(name = "cours")
+	// @JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	// @JsonManagedReference
+	// @Builder.Default
 	public List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;
@@ -73,18 +74,27 @@ public class Promotion {
 			this.cours = cours;
 		}
 		this.responsableLogin = responsable_login;
-		this.personnes = personnes;
+		if(personnes != null){
+			this.personnes = personnes;
+		}
 	}
 
 	@Override
 	public String toString() {
 		String listCours = "[";
 		for (Cours c : cours){
-			listCours += c.toString() + " ";
+			listCours += c.getCoursId() + " ";
 		}
 		listCours += "]";
+
+		String listPersonnes = "[";
+		for (Personne p : personnes){
+			listPersonnes += p.getLogin() + " ";
+		}
+		listPersonnes += "]";
+
 		return "Promotion [promoId=" + promoId.toString() + ", cours=" + cours + ", responsableLogin=" + responsableLogin
-				+ ", personnes=" + personnes + "]";
+				+ ", personnes=" + listPersonnes + "]";
 	}
 	
 }

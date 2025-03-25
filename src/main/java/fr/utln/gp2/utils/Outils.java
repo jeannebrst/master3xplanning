@@ -31,7 +31,7 @@ public class Outils {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			System.out.println("Réponse : " + response.body());
 		}catch(IOException | InterruptedException e){
-			System.out.println("Erreur creation personne");
+			System.out.println("Erreur creation personne : " + e);
 		}
 	}
 }

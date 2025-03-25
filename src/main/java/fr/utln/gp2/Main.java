@@ -18,9 +18,10 @@ import fr.utln.gp2.entites.Cours.TypeC;
 public class Main{
 	public static void main(String[] args) {
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
-		Cours c1 = new Cours(Arrays.asList(m1info.getPromoId()), "spelerin", 14f, 2f, new Date(), TypeC.TP);
+		System.out.println(m1info.getPromoId());
+		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14f, 2f, new Date(), TypeC.TP);
 		Cours c2 = Cours.builder()
-			.promosIds(Arrays.asList(m1info.getPromoId()))
+			.promos(Arrays.asList(m1info))
 			.intervenantLogin("spelerin")
 			.heureDebut(16f)
 			.duree(2f)
