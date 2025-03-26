@@ -68,7 +68,7 @@ public class PageEDT {
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
 		Button cours = new Button("Cours");
-		Button infos = new Button("Informations Personelles");
+		Button infos = new Button("Informations Personnelles");
 
 		btnPreviousWeek.setOnAction(e -> {
 			lundi = lundi.minusWeeks(1);

@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -45,9 +46,10 @@ public class Promotion {
 	@Column(name = "cours")
 	// @JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnoreProperties({"promos"})
 	@Schema(hidden = true)
 	// @Builder.Default
-	public List<Cours> cours = new ArrayList<>();
+	private List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;
 
@@ -64,6 +66,7 @@ public class Promotion {
 	@Column(name = "personnes")
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
+	@JsonIgnoreProperties({"personneId","hashMdp","nom","prenom","mail","promos"})
 	private List<Personne> personnes = new ArrayList<>();
 
 	protected Promotion() {}

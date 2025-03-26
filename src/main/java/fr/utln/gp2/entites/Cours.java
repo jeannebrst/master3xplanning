@@ -18,11 +18,12 @@ import java.util.*;
 @AllArgsConstructor
 @Builder
 public class Cours {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cours_seq")
 	@SequenceGenerator(name = "cours_seq", sequenceName = "cours_id_seq", allocationSize = 10)
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	@Schema(hidden = true)
+	// @Schema(hidden = true)
 	@Column(name = "cours_id")
 	private Long coursId;
 

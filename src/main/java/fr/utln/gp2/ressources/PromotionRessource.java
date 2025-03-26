@@ -33,13 +33,13 @@ public class PromotionRessource {
 	}
 
 	@GET
-	@Path("/{id}/promotion/cours")
+	@Path("/{id}/cours")
 	public List<Cours> getCoursByPromotion(@PathParam("id") Long id) {
 		Promotion promotion = promotionRepository.findByIdWithCours(id);
 		if (promotion == null) {
 			throw new NotFoundException("Promotion non trouvée");
 		}
-		return promotion.cours;
+		return promotion.getCours();
 	}
 
 	@POST

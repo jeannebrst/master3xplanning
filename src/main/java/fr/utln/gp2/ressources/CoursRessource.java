@@ -48,6 +48,8 @@ public class CoursRessource {
 
 	@POST
 	@Transactional
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createCours(Cours cours) {
 		List<PromotionId> managedPromotionsIds = new ArrayList<>();
 		List<Promotion> managedPromotions = new ArrayList<>();
