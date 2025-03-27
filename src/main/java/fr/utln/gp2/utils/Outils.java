@@ -6,8 +6,10 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.utln.gp2.entites.Cours;
@@ -38,22 +40,40 @@ public class Outils{
 		}
 	}
 
-	public static void getCoursByPromo(PromotionId promoId){
+	public static CompletableFuture<List<Cours>> getCoursByPromo(PromotionId promoId){
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create("http://localhost:8080/api/v1/cours/?promoId="+promoId.toString()))
-			.GET()
-			.header("Content-Type", "application/json")
-			.build();
+		.uri(URI.create("http://localhost:8080/api/v1/cours/?promoId=" + promoId.toString()))
+		.GET()
+		.header("Content-Type", "application/json")
+		.build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-			.thenApply(HttpResponse::body)
-			.thenAccept(response ->
-				System.out.println("Réponse : " + response)
+	CompletableFuture<List<Cours>> futureCours = new CompletableFuture<>();
+
+	client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(response -> {
+			System.out.println("GetCoursPromo" + response);
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				return mapper.readValue(response, new TypeReference<List<Cours>>(){});
 				
-			)
-			.exceptionally(e -> {
+			} catch (Exception e) {
 				e.printStackTrace();
+				futureCours.completeExceptionally(e);
 				return null;
-			});
+			}
+		})
+		.thenAccept(coursList -> {
+			if (coursList != null) {
+				futureCours.complete(coursList); // Assure-toi que coursList est bien de type List<Cours>
+			}
+		})
+		.exceptionally(e -> {
+			e.printStackTrace();
+			futureCours.completeExceptionally(e);
+			return null;
+		});
+
+	return futureCours;
 	}
 }

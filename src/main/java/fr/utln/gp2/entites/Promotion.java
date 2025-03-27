@@ -45,9 +45,9 @@ public class Promotion {
 	)
 	@Column(name = "cours")
 	// @JsonManagedReference
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@JsonIgnoreProperties({"promos"})
-//	@Schema(hidden = true)
+	// @Schema(hidden = true)
 	// @Builder.Default
 	private List<Cours> cours = new ArrayList<>();
 
@@ -65,7 +65,7 @@ public class Promotion {
 			inverseJoinColumns = @JoinColumn(name = "personne_id")
 	)
 	@Column(name = "personnes")
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	@JsonIgnoreProperties({"personneId","hashMdp","nom","prenom","mail","promos"})
 	private List<Personne> personnes = new ArrayList<>();

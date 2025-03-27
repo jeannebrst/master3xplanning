@@ -26,12 +26,12 @@ public class Personne {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "personne_seq")
 	@SequenceGenerator(name="personne_seq", sequenceName = "personne_id_seq", allocationSize = 10)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	@Column(name = "personne_id")
 	private Long personneId;
 
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	private String login;
 
