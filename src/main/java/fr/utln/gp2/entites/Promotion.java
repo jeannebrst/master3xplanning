@@ -83,21 +83,18 @@ public class Promotion {
 	}
 
 	@Override
-	public String toString() {
-		String listCours = "[";
+	public String toString(){
+		List<Long> coursIds = new ArrayList<>();
 		for (Cours c : cours){
-			listCours += c.getCoursId() + " ";
+			coursIds.add(c.getCoursId());
 		}
-		listCours += "]";
 
-		String listPersonnes = "[";
+		List<String> personnesIds = new ArrayList<>();
 		for (Personne p : personnes){
-			listPersonnes += p.getLogin() + " ";
+			personnesIds.add(p.getLogin());
 		}
-		listPersonnes += "]";
 
-		return "Promotion [promoId=" + promoId.toString() + ", cours=" + cours + ", responsableLogin=" + responsableLogin
-				+ ", personnes=" + listPersonnes + "]";
+		return "Promotion [promoId=" + promoId.toString() + ", cours=" + coursIds + ", responsableLogin=" + responsableLogin
+				+ ", personnes=" + personnesIds + "]";
 	}
-	
 }

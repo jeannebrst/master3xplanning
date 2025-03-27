@@ -9,6 +9,7 @@ import fr.utln.gp2.repositories.CoursRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
 import fr.utln.gp2.utils.PromotionId;
+import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -19,6 +20,8 @@ import jakarta.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Path("/api/v1/cours")
 @Produces(MediaType.APPLICATION_JSON)
@@ -64,8 +67,7 @@ public class CoursRessource {
 			managedPromotions.add(managedPromotion);
 			managedPromotionsIds.add(managedPromotion.getPromoId());
 		}
-
-		// cours.setPromosIds(managedPromotionsIds);
+		
 		cours.setPromos(managedPromotions);
 
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
@@ -106,5 +108,30 @@ public class CoursRessource {
 			throw new NotFoundException("Cours non trouvée");
 		}
 		return Response.status(204).build();
+	}
+
+	@GET
+	@Path("?promoId={id}")
+	public List<Cours> getCoursByPromotion(@PathParam("id") String id) {
+
+		// Expression régulière pour séparer les parties
+		Pattern pattern = Pattern.compile("([A-Z]+)([0-9]+)([A-Za-z]+)");
+		Matcher matcher = pattern.matcher(id);
+
+		PromotionId promoId;
+		if (matcher.matches()){
+			promoId = new PromotionId(
+				Type.fromString(matcher.group(1)),
+				Integer.parseInt(matcher.group(2)),
+				matcher.group(3)
+			);
+		} else {
+			throw new IllegalArgumentException("Format invalide : " + id);
+		}
+		Promotion promotion = promotionRepository.findById(promoId);
+		if (promotion == null) {
+			throw new NotFoundException("Promotion non trouvée");
+		}
+		return promotion.getCours();
 	}
 }

@@ -2,18 +2,12 @@ package fr.utln.gp2.entites;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.utln.gp2.utils.PromotionId;
 import jakarta.persistence.*;
 import lombok.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
 
@@ -82,15 +76,12 @@ public class Personne {
 
 	@Override
 	public String toString() {
-		String listPromos = "[";
+		List<PromotionId> promosIds = new ArrayList<>();
 		for (Promotion p : promos){
-			listPromos += p.getPromoId().toString() + " ";
+			promosIds.add(p.getPromoId());
 		}
-		listPromos += "]";
 
 		return "Personne [personneId=" + personneId + ", login=" + login + ", nom=" + nom + ", prenom=" + prenom
-				+ ", mail=" + mail + ", role=" + role + ", promos=" + listPromos + "]";
+				+ ", mail=" + mail + ", role=" + role + ", promos=" + promosIds + "]";
 	}
-
-	
 }

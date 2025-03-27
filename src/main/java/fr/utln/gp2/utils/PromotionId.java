@@ -11,14 +11,23 @@ import java.util.Objects;
 @Getter
 @Setter
 public class PromotionId implements Serializable {
-    public enum Type {
-        LICENCE,
-        MASTER,
-        IUT,
-        LICENCE_PROFESSIONNELLE,
-        DOCTORAT
-    }
-    private Type type;
+	public enum Type {
+		LICENCE,
+		MASTER,
+		IUT,
+		LICENCE_PROFESSIONNELLE,
+		DOCTORAT;
+
+		public static Type fromString(String str) {
+            for (Type t : Type.values()) {
+                if (t.name().equalsIgnoreCase(str)) {
+                    return t;
+                }
+            }
+            throw new IllegalArgumentException("Type inconnu : " + str);
+        }
+	}
+	private Type type;
 
 	private int annee;
 

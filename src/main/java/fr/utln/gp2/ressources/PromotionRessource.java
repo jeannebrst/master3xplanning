@@ -32,16 +32,6 @@ public class PromotionRessource {
 		return promotionRepository.listAll();
 	}
 
-	@GET
-	@Path("/{id}/cours")
-	public List<Cours> getCoursByPromotion(@PathParam("id") Long id) {
-		Promotion promotion = promotionRepository.findByIdWithCours(id);
-		if (promotion == null) {
-			throw new NotFoundException("Promotion non trouvée");
-		}
-		return promotion.getCours();
-	}
-
 	@POST
 	@Transactional
 	public Response createPromotion(Promotion promotion) {

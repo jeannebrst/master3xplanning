@@ -31,8 +31,8 @@ public class Main{
 		// c2.getPromos().add(m1info);
 		m1info.getCours().add(c1);
 		m1info.getCours().add(c2);
-		// System.out.println(c2);
-		// System.out.println(m1info);
+		System.out.println(c2);
+		System.out.println(m1info);
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
@@ -44,8 +44,8 @@ public class Main{
 		Outils.persistence(p2);
 		Outils.persistence(p3); 
 		Outils.persistence(c1);
-		// Outils.persistence(c2);
-		System.out.println(m1info.getCours().size());
+		Outils.persistence(c2);
+		Outils.getCoursByPromo(m1info.getPromoId());
 		Application.launch(PageLogin.class, args);
 	}
 }

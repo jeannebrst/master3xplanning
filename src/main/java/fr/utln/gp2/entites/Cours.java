@@ -2,6 +2,7 @@ package fr.utln.gp2.entites;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import fr.utln.gp2.utils.PromotionId;
@@ -29,18 +30,9 @@ public class Cours {
 
 	//private UE ue;
 
-	// @ElementCollection(fetch = FetchType.EAGER)
-	// @CollectionTable(
-	// 	name = "promotion_cours",
-	// 	joinColumns = @JoinColumn(name = "cours_id")
-	// )
-	// @JsonIgnoreProperties("cours")
-	// @JsonBackReference
-	// @Builder.Default
-	// private List<PromotionId> promosIds = new ArrayList<>();
-
 	@Builder.Default
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER)
+	@JsonIgnore
 	@JsonIgnoreProperties({"cours","personnes"})//Pour eviter maxi redondance
     private List<Promotion> promos = new ArrayList<>();
 
@@ -62,17 +54,6 @@ public class Cours {
 	}
 	private TypeC type;
 
-	// public Cours(List<PromotionId> promosIds, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
-	// 	if(promosIds!=null){
-	// 		this.promosIds = promosIds;
-	// 	}
-	// 	this.intervenantLogin = intervenantLogin;
-	// 	this.heureDebut = heureDebut;
-	// 	this.duree = duree;
-	// 	this.jour = jour;
-	// 	this.type = type;
-	// }
-
 	public Cours(List<Promotion> promos, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
 		if(promos!=null){
 			this.promos = promos;
@@ -86,14 +67,12 @@ public class Cours {
 
 	@Override
 	public String toString(){
-		String listPromos = "[";
+		List<PromotionId> promosIds = new ArrayList<>();
 		for (Promotion p : promos){
-			listPromos += p.getPromoId().toString() + " ";
+			promosIds.add(p.getPromoId());
 		}
-		listPromos += "]";
 
-		return "Cours [coursId=" + coursId + ", promos=" + listPromos + ", intervenantLogin=" + intervenantLogin
+		return "Cours [coursId=" + coursId + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
 				+ ", heureDebut=" + heureDebut + ", duree=" + duree + ", jour=" + jour + ", type=" + type + "]";
 	}
-
 }

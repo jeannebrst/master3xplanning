@@ -13,13 +13,11 @@ public class PromotionRepository implements PanacheRepositoryBase<Promotion, Pro
 		return find("responsable", responsable).firstResult();
 	}
 
-	public Promotion findByIdWithCours(Long id) {
-		return find("SELECT p FROM Promotion p LEFT JOIN FETCH p.cours WHERE p.id = ?1", id).firstResult();
+	public Promotion findByIdWithCours(PromotionId id) {
+		return find("promoId", id).firstResult();
 	}
 
 	public boolean deleteByNom(String nom) {
 		return delete("nom", nom) > 0;
 	}
-
-
 }
