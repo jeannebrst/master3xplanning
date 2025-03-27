@@ -2,8 +2,11 @@ package fr.utln.gp2.pages;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -14,11 +17,13 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.Priority;
 import java.net.http.HttpClient;
@@ -32,6 +37,14 @@ import java.time.LocalDate;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
+import java.util.concurrent.CompletableFuture;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import fr.utln.gp2.entites.Personne;
+
 
 public class PageEDT {
 	private static final HttpClient client = HttpClient.newHttpClient();
@@ -42,9 +55,14 @@ public class PageEDT {
 	private int numSemaine;
 	private Map<Integer, StackPane> coursMap = new HashMap<>();
 	private Stage stage;
+	private String login;
+	private String nom;
+	private String prenom;
+	private String email;
+	private String role;
 
-
-	public PageEDT() {
+	public PageEDT(String login) {
+		this.login = login;
 		stage = new Stage();
 	}
 
@@ -81,8 +99,24 @@ public class PageEDT {
 		});
 
 		infos.setOnAction(e -> {
-			String login ="qlavit";
-			getPersonneInfo(login);
+			getPersonneInfo().thenAccept(personne -> {
+				if (personne != null) {
+					nom = personne.getNom();
+					prenom = personne.getPrenom();
+					email = personne.getMail();
+					role=personne.getRole().toString();
+					Platform.runLater(()->	{		
+					Pane sceneInfos = genereSceneInfos(nom,prenom,email,role);
+					Scene scene2 = new Scene(sceneInfos);
+					stage.setScene(scene2);
+
+					System.out.println(email);});
+
+				} else {
+					System.out.println("Erreur lors de la récupération de l'utilisateur.");
+				}
+			});
+
 
 		});
 		
@@ -120,14 +154,14 @@ public class PageEDT {
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
-		StackPane root = new StackPane();
-		root.setMinSize(1200, 800);
-		root.setPrefSize(1200, 800);
-		root.setMaxSize(1200, 800);
-		root.getChildren().add(pageComplete);
+		StackPane scene1 = new StackPane();
+		scene1.setMinSize(1920, 1080);
+		scene1.setPrefSize(1920, 1080);
+		scene1.setMaxSize(1920, 1080);
+		scene1.getChildren().add(pageComplete);
 		
 		// Création de la scène
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(scene1);
 		stage.setTitle("Page d'accueil");
 		stage.setScene(scene);
 		stage.setMaximized(true);
@@ -223,27 +257,64 @@ public class PageEDT {
 		}
 	}
 
-	public void getPersonneInfo(String login) {
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
-			.GET()
-			.header("Content-Type", "application/json")
-			.build();
+public CompletableFuture<Personne> getPersonneInfo() {
+    HttpRequest request = HttpRequest.newBuilder()
+        .uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
+        .GET()
+        .header("Content-Type", "application/json")
+        .build();
 
-		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-			.thenApply(HttpResponse::body)
-			.thenAccept(response ->
-				System.out.println("Réponse : " + response)
-			)
-			.exceptionally(e -> {
-				e.printStackTrace();
-				return null;
-			});
-	}
+    // Retourner un CompletableFuture
+    return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+        .thenApply(HttpResponse::body)  // Récupère la réponse sous forme de chaîne
+        .thenApply(response -> {
+            try {
+                ObjectMapper objectMapper = new ObjectMapper();
+                // Convertit la réponse JSON en objet Personne
+                return objectMapper.readValue(response, Personne.class);
+            } catch (Exception e) {
+                System.err.println("Erreur lors de la conversion JSON: " + e.getMessage());
+                return null;  // En cas d'erreur, retourner null
+            }
+        })
+        .exceptionally(e -> {
+            e.printStackTrace();
+            return null;  // En cas d'erreur de la requête HTTP, retourner null
+        });
+}
+
+
 
 	public LocalDate getLundiSemaine(int semaineNum) {
         return LocalDate.of(LocalDate.now().getYear(), 1, 1)
                 .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, semaineNum)
                 .with(java.time.DayOfWeek.MONDAY);
     }
+
+	public Pane genereSceneInfos(String nom,String prenom,String mail, String role){
+		Pane sceneInfos = new Pane();
+		VBox boiteInfos = new VBox(20);
+		Label labelNom = new Label(nom.toUpperCase()+" "+prenom);
+		labelNom.setFont(Font.font("Arial",FontWeight.BOLD,25));
+		labelNom.setTextFill(Color.BLACK);
+		labelNom.setLayoutX(300);
+		labelNom.setLayoutY(20);
+
+		Image imageRole = new Image("file:src/main/resources/"+role+".jpg");
+		ImageView imageview = new ImageView(imageRole);
+		imageview.setFitWidth(200);
+		imageview.setFitHeight(200);
+		imageview.setLayoutX(20);
+		imageview.setLayoutY(20);
+
+
+		Label labelInfos = new Label("Login : "+login+"\nEmail : "+mail+"\nPromo : ");
+		labelInfos.setFont(Font.font("Arial",FontWeight.BOLD,25));
+		labelInfos.setTextFill(Color.BLACK);
+		boiteInfos.getChildren().add(labelInfos);
+		boiteInfos.setLayoutX(50);
+		boiteInfos.setLayoutY(300);
+		sceneInfos.getChildren().addAll(imageview,labelNom,boiteInfos);
+		return sceneInfos;
+	}
 }

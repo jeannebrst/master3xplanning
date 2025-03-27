@@ -38,11 +38,14 @@ public class Main{
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info));
-		
+		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR, Arrays.asList(m1info));
+
+
 		Outils.persistence(p1);
 		Outils.persistence(m1info);
 		Outils.persistence(p2);
 		Outils.persistence(p3); 
+		Outils.persistence(p4);
 		Outils.persistence(c1);
 		Outils.persistence(c2);
 		Outils.getCoursByPromo(m1info.getPromoId());

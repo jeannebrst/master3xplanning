@@ -66,7 +66,7 @@ public class PersonneRessource {
 		}
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);
-		personne.setMail(personne.getPrenom()+"."+personne.getNom()+"@master.com");
+		personne.setMail(personne.getPrenom().toLowerCase()+"."+personne.getNom().toLowerCase()+"@master.com");
 		if (personne.getNom().length()<7) {
 			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase();
 			personne.setLogin(login);
