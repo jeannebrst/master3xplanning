@@ -22,21 +22,18 @@ public class UE {
     @SequenceGenerator(name = "ue_seq", sequenceName = "ue_id_seq", allocationSize = 10)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(hidden = true)
-    private Long ue_id;
+    @Column(name = "ue_id")
+    private Long ueId;
 
     private String nom;
 
+    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private List<Notes> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private List<Notes> notes;
-
-    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private List<Cours> cours;
+    private List<Cours> cours = new ArrayList<>();
 
     private Long responsableId;
 
     private int nbHeures;
-
-
-
 }

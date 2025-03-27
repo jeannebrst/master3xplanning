@@ -77,11 +77,15 @@ public class CoursRessource {
 				intervenant = personneRepository.getEntityManager().merge(intervenant);
 			}
 			for (Promotion promotion : managedPromotions) {
-				promotion.getPersonnes().add(intervenant);
+				if (!promotion.getPersonnes().contains(intervenant)) {
+					promotion.getPersonnes().add(intervenant);
+				}
 			}
 		}
 		for (Promotion promotion : managedPromotions) {
-			promotion.getCours().add(cours);
+			if (!promotion.getCours().contains(cours)) {
+				promotion.getCours().add(cours);
+			}
 		}
 		if (coursRepository.isPersistent(cours)) {
 			cours = coursRepository.getEntityManager().merge(cours);
