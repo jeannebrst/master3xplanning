@@ -8,6 +8,8 @@ import javafx.application.Application;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
@@ -46,9 +48,11 @@ public class Main{
 		Outils.persistence(p2);
 		Outils.persistence(p3); 
 		Outils.persistence(p4);
-		Outils.persistence(c1);
-		Outils.persistence(c2);
-		Outils.getCoursByPromo(m1info.getPromoId());
+		// Outils.persistence(c1);
+		// Outils.persistence(c2);
+		CompletableFuture<List<Cours>> coursFuture = Outils.getCoursByPromo(m1info.getPromoId());
+		List<Cours> coursList = coursFuture.join();
+		System.out.println(coursList);
 		Application.launch(PageLogin.class, args);
 	}
 }

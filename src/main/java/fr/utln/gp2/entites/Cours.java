@@ -23,7 +23,7 @@ public class Cours {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "cours_seq")
 	@SequenceGenerator(name = "cours_seq", sequenceName = "cours_id_seq", allocationSize = 10)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	// @Schema(hidden = true)
 	@Column(name = "cours_id")
 	private Long coursId;
@@ -32,7 +32,7 @@ public class Cours {
 
 	@Builder.Default
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER)
-	@JsonIgnore
+	// @JsonIgnore
 	@JsonIgnoreProperties({"cours","personnes"})//Pour eviter maxi redondance
     private List<Promotion> promos = new ArrayList<>();
 
