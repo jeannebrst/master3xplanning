@@ -94,7 +94,8 @@ public class CoursRessource {
 
 	@DELETE
 	@Transactional
-	public Response removeCours(Long id) {
+	@Path("/{id}")
+	public Response removeCoursById(@PathParam("id") Long id) {
 		Cours cours = coursRepository.findById(id);
 		if (cours == null) {
 			throw new NotFoundException("Cours non trouvé");

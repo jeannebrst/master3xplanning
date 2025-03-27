@@ -100,7 +100,7 @@ public class PersonneRessource {
 	@DELETE
 	@Path("/{login}")
 	@Transactional
-	public Response removePersonne(@PathParam("login") String login) {
+	public Response removePersonneByLogin(@PathParam("login") String login) {
 		boolean deleted = personneRepository.deleteByLogin(login);
 		if (!deleted) {
 			throw new NotFoundException("Personne non trouvée");

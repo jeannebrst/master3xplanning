@@ -47,9 +47,10 @@ public class Promotion {
 	// @JsonManagedReference
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@JsonIgnoreProperties({"promos"})
-	@Schema(hidden = true)
+//	@Schema(hidden = true)
 	// @Builder.Default
 	private List<Cours> cours = new ArrayList<>();
+
 
 	private String responsableLogin;
 

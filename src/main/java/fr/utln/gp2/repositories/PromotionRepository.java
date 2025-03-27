@@ -17,7 +17,7 @@ public class PromotionRepository implements PanacheRepositoryBase<Promotion, Pro
 		return find("promoId", id).firstResult();
 	}
 
-	public boolean deleteByNom(String nom) {
-		return delete("nom", nom) > 0;
+	public boolean deleteById(PromotionId id) {
+		return delete("id", id) > 0;
 	}
 }

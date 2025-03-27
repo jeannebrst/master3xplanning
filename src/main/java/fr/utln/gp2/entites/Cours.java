@@ -32,10 +32,9 @@ public class Cours {
 
 	@Builder.Default
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER)
-	@JsonIgnore
+//	@JsonIgnore
 	@JsonIgnoreProperties({"cours","personnes"})//Pour eviter maxi redondance
     private List<Promotion> promos = new ArrayList<>();
-
 
 	private String intervenantLogin;
 
