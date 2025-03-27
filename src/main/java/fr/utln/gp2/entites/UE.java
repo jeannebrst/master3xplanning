@@ -26,17 +26,14 @@ public class UE {
 
     private String nom;
 
-    @ManyToMany(mappedBy = "ue", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private List<Personne> intervenants;
 
-    @OneToMany(mappedBy = "ue", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Notes> notes;
 
-    @OneToMany(mappedBy = "ue", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Cours> cours;
 
-    @OneToOne
-    private Personne responsable;
+    private Long responsableId;
 
     private int nbHeures;
 

@@ -23,7 +23,10 @@ public class Cours {
 	@Column(name = "cours_id")
 	private Long coursId;
 
-	//private UE ue;
+	@ManyToOne
+	@JoinColumn(name = "ue_id")
+	private UE ues;
+
 
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JsonBackReference
@@ -31,7 +34,10 @@ public class Cours {
 
 	private String intervenantLogin;
 
-	//private Salle salle;
+	@ManyToOne
+	@JoinColumn(name = "salle_id")
+	private Salle salle;
+
 
 	private float heureDebut;
 

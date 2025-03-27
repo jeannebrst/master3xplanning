@@ -29,7 +29,7 @@ public class Notes {
     private Personne etudiant;
 
     @ManyToOne
-    private UE ue;
+    private UE ues;
 
     private float note;
 

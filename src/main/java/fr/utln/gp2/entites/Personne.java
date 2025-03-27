@@ -64,6 +64,14 @@ public class Personne {
 	@JsonIgnoreProperties("personnes")
 	private List<Promotion> promos = new ArrayList<>();
 
+	@ManyToMany
+	@JoinTable(
+			name = "personne_ue",
+			joinColumns = @JoinColumn(name = "personne_id"),
+			inverseJoinColumns = @JoinColumn(name = "ue_id")
+	)
+	private List<UE> ues = new ArrayList<>();
+
 
 	public Personne(String hashMdp, String nom, String prenom, Role role){
 		this.hashMdp = hashMdp;
@@ -84,4 +92,5 @@ public class Personne {
 		this.role = role;
 		this.promos = promos;
 	}
+
 }
