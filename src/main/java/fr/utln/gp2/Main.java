@@ -31,6 +31,7 @@ public class Main{
 			.type(TypeC.CM)
 			.build();
 		// c2.getPromos().add(m1info);
+		System.out.println(m1info.getCours());
 		m1info.getCours().add(c1);
 		m1info.getCours().add(c2);
 		System.out.println(c2);
