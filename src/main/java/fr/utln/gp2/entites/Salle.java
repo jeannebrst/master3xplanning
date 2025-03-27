@@ -16,22 +16,20 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Notes {
+public class Salle {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notes_seq")
-    @SequenceGenerator(name = "notes_seq", sequenceName = "notes_id_seq", allocationSize = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
+    @SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(hidden = true)
-    private Long notes_id;
+    private Long salle_id;
 
-    @ManyToOne
-    @JoinColumn(name = "etudiant_id")
-    private Personne etudiant;
+    private String nom;
 
-    @ManyToOne
-    private UE ues;
+    @OneToMany(mappedBy = "salle", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private List<Cours> cours;
 
-    private float note;
+    private int capacite;
 
-    private Date date;
+    private String description;
 }

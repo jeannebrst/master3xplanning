@@ -28,7 +28,10 @@ public class Cours {
 	@Column(name = "cours_id")
 	private Long coursId;
 
-	//private UE ue;
+	@ManyToOne
+	@JoinColumn(name = "ue_id")
+	private UE ues;
+
 
 	@Builder.Default
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER)
@@ -39,7 +42,10 @@ public class Cours {
 
 	private String intervenantLogin;
 
-	//private Salle salle;
+	@ManyToOne
+	@JoinColumn(name = "salle_id")
+	private Salle salle;
+
 
 	private int heureDebut;
 
