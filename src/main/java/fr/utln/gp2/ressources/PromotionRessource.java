@@ -5,6 +5,7 @@ import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
+import fr.utln.gp2.utils.PromotionId;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -14,6 +15,8 @@ import jakarta.ws.rs.core.Response;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Path("/api/v1/promotions")
 @Produces(MediaType.APPLICATION_JSON)
@@ -49,10 +52,22 @@ public class PromotionRessource {
 	}
 
 	@DELETE
-	@Path("/{nom}/promotion")
+	@Path("/{id}")
 	@Transactional
-	public Response removePromotion(@PathParam("nom") String nom) {
-		boolean deleted = promotionRepository.deleteByNom(nom);
+	public Response removePromotion(@PathParam("id") String id) {
+		Pattern pattern = Pattern.compile("([A-Z]+)([0-9]+)([A-Za-z]+)");
+		Matcher matcher = pattern.matcher(id);
+		PromotionId promoId;
+		if (matcher.matches()){
+			promoId = new PromotionId(
+					PromotionId.Type.fromString(matcher.group(1)),
+					Integer.parseInt(matcher.group(2)),
+					matcher.group(3)
+			);
+		} else {
+			throw new IllegalArgumentException("Format invalide : " + id);
+		}
+		boolean deleted = promotionRepository.deleteById(promoId);
 		if (!deleted) {
 			throw new NotFoundException("Promotion non trouvée");
 		}
