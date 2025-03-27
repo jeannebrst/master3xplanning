@@ -5,10 +5,12 @@ import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
 import javafx.application.Application;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import fr.utln.gp2.entites.Cours;
@@ -51,9 +53,12 @@ public class Main{
 		Outils.persistence(p4);
 		// Outils.persistence(c1);
 		// Outils.persistence(c2);
-		CompletableFuture<List<Cours>> coursFuture = Outils.getCoursByPromo(m1info.getPromoId());
-		List<Cours> coursList = coursFuture.join();
-		System.out.println(coursList);
+		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = Outils.getCoursByPromo(m1info.getPromoId());
+		Map<Integer, List<Cours>> coursMap = futureCoursMap.exceptionally(e -> {
+			System.err.println("Erreur lors de la récupération des cours : " + e.getMessage());
+			return Map.of();
+		}).join();
+		System.out.println(coursMap);
 		Application.launch(PageLogin.class, args);
 	}
 }
