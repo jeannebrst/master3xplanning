@@ -32,7 +32,7 @@ public class Cours {
 
 	@Builder.Default
 	@ManyToMany(mappedBy = "cours", fetch = FetchType.EAGER)
-	@JsonIgnore
+	//@JsonIgnore
 	@JsonIgnoreProperties({"cours","personnes"})//Pour eviter maxi redondance
     private List<Promotion> promos = new ArrayList<>();
 
@@ -41,9 +41,9 @@ public class Cours {
 
 	//private Salle salle;
 
-	private float heureDebut;
+	private int heureDebut;
 
-	private float duree;
+	private int duree;
 
 	private Date jour;
 
@@ -54,7 +54,7 @@ public class Cours {
 	}
 	private TypeC type;
 
-	public Cours(List<Promotion> promos, String intervenantLogin, float heureDebut, float duree, Date jour, TypeC type) {
+	public Cours(List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type) {
 		if(promos!=null){
 			this.promos = promos;
 		}

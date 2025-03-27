@@ -32,8 +32,10 @@ import java.net.http.HttpResponse;
 import java.net.URI;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
@@ -41,9 +43,15 @@ import java.util.concurrent.CompletableFuture;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.ArrayList;
+import java.util.Calendar; 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.utils.Outils;
 
 
 public class PageEDT {
@@ -53,13 +61,15 @@ public class PageEDT {
 	private LocalDate lundi;
 	private Label semaine;
 	private int numSemaine;
-	private Map<Integer, StackPane> coursMap = new HashMap<>();
+	private Map<Long, StackPane> coursMap = new HashMap<>();
 	private Stage stage;
 	private String login;
 	private String nom;
 	private String prenom;
 	private String email;
+	private List<Promotion> promo;
 	private String role;
+	private List<Cours> EDT = new ArrayList();
 
 	public PageEDT(String login) {
 		this.login = login;
@@ -68,6 +78,28 @@ public class PageEDT {
 
 	
 	public void show(){
+
+		getPersonneInfo().thenAccept(personne -> {
+			if (personne != null) {
+				nom = personne.getNom();
+				prenom = personne.getPrenom();
+				email = personne.getMail();
+				role=personne.getRole().toString();
+				promo = personne.getPromos(); 
+
+				for (Promotion p : promo){
+					for(Cours c : p.getCours()){
+						EDT.add(c);	
+					}
+				}
+				System.out.println(promo.toString());
+				System.out.println("-------------------------------------------------------");
+				afficherCours(EDT);
+				System.out.println("-------------------------------------------------------");
+			}
+		});
+		
+
 		lundi = LocalDate.now().with(DayOfWeek.MONDAY);
 		semaine = new Label("");
 		modifLabelSemaine();
@@ -77,11 +109,12 @@ public class PageEDT {
 
 		genereEDT();
 
-		ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK,1);
-		ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK,2);
-		ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK,3);
-		ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE,4);
-		supprimerCours(2);
+
+		// ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK,1);
+		// ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK,2);
+		// ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK,3);
+		// ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE,4);
+		
 
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
@@ -99,23 +132,9 @@ public class PageEDT {
 		});
 
 		infos.setOnAction(e -> {
-			getPersonneInfo().thenAccept(personne -> {
-				if (personne != null) {
-					nom = personne.getNom();
-					prenom = personne.getPrenom();
-					email = personne.getMail();
-					role=personne.getRole().toString();
-					Platform.runLater(()->	{		
-					Pane sceneInfos = genereSceneInfos(nom,prenom,email,role);
-					Scene scene2 = new Scene(sceneInfos);
-					stage.setScene(scene2);
-
-					System.out.println(email);});
-
-				} else {
-					System.out.println("Erreur lors de la récupération de l'utilisateur.");
-				}
-			});
+			Pane sceneInfos = genereSceneInfos(nom,prenom,email,role);
+			Scene scene2 = new Scene(sceneInfos);
+			stage.setScene(scene2);
 
 
 		});
@@ -221,7 +240,7 @@ public class PageEDT {
 		}
 	}
 
-	public void ajouterCours(String name,String salle,String prof, int jour, int heure, int duree, Color couleur,int id){
+	public void ajouterCours(String name,String salle,String prof, int jour, int heure, int duree, Color couleur,Long id){
 
 		Label nom = new Label(name+"\n"+prof+"\n"+salle);
 		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -308,7 +327,7 @@ public CompletableFuture<Personne> getPersonneInfo() {
 		imageview.setLayoutY(20);
 
 
-		Label labelInfos = new Label("Login : "+login+"\nEmail : "+mail+"\nPromo : ");
+		Label labelInfos = new Label("Login : "+login+"\nEmail : "+mail+"\nPromo : "+promo.get(0).getPromoId());
 		labelInfos.setFont(Font.font("Arial",FontWeight.BOLD,25));
 		labelInfos.setTextFill(Color.BLACK);
 		boiteInfos.getChildren().add(labelInfos);
@@ -316,5 +335,16 @@ public CompletableFuture<Personne> getPersonneInfo() {
 		boiteInfos.setLayoutY(300);
 		sceneInfos.getChildren().addAll(imageview,labelNom,boiteInfos);
 		return sceneInfos;
+	}
+	// public List<Cours> recupererCours(){
+	// 	Outils.getCoursByPromo(promo.get(0).getPromoId());
+	// }
+
+	public void afficherCours(List<Cours> edt){
+		System.out.println(edt.size());
+		for(Cours c : edt){
+			System.out.println(c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().getValue());
+			ajouterCours("Maths","112",c.getIntervenantLogin(),c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().getValue(),c.getHeureDebut()-7,c.getDuree(),Color.BLUE,c.getCoursId());
+		}
 	}
 }
