@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.utln.gp2.utils.PromotionId;
@@ -64,6 +65,7 @@ public class Personne {
 			joinColumns = @JoinColumn(name = "personne_id"),
 			inverseJoinColumns = @JoinColumn(name = "ue_id")
 	)
+	@JsonIgnore
 	private List<UE> ues = new ArrayList<>();
 
 
