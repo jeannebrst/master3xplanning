@@ -67,30 +67,22 @@ public class PageLogin extends Application {
 		champMdp.setMaxWidth(300);
 		champMdp.setMaxHeight(25);
 
-		TextField textField = new TextField();
-		textField.setMaxWidth(300);
-		textField.setMaxHeight(25);
-		textField.setManaged(false);
-		textField.setVisible(false);
+		TextField champMdpClair = new TextField();
+		champMdpClair.setMaxWidth(300);
+		champMdpClair.setMaxHeight(25);
+		champMdpClair.setManaged(false);
+		champMdpClair.setVisible(false);
 
 		ToggleButton toggleButton = new ToggleButton("Voir MDP");
 		toggleButton.setOnAction(e -> {
-			if (toggleButton.isSelected()) {
-				textField.setText(champMdp.getText());
-				textField.setManaged(true);
-				textField.setVisible(true);
-				champMdp.setManaged(false);
-				champMdp.setVisible(false);
-			} else {
-				champMdp.setText(textField.getText());
-				champMdp.setManaged(true);
-				champMdp.setVisible(true);
-				textField.setManaged(false);
-				textField.setVisible(false);
-			}
+			boolean voirMdp = toggleButton.isSelected();
+			champMdp.setManaged(!voirMdp);
+			champMdp.setVisible(!voirMdp);
+			champMdpClair.setManaged(voirMdp);
+			champMdpClair.setVisible(voirMdp);
 		});
 
-		champMdp.textProperty().bindBidirectional(textField.textProperty());
+		champMdp.textProperty().bindBidirectional(champMdpClair.textProperty());
 
 		//Creation bouton
 		Button bouton = new Button("Se connecter");
@@ -99,23 +91,20 @@ public class PageLogin extends Application {
 		//Creation de l'image en fond
 		Image fond = new Image("file:src/main/resources/fond2.jpg");
 		ImageView imageview = new ImageView(fond);
-		imageview.setFitWidth(800);
-		imageview.setFitHeight(600);
+		imageview.setFitWidth(1920);
+		imageview.setFitHeight(1080);
 
 		//Vbox pour les elements
 		VBox boite = new VBox(20);
 		boite.setAlignment(Pos.CENTER);
 		HBox mdpChiffre = new HBox(10);
-		mdpChiffre.getChildren().addAll(champMdp, toggleButton);
-		HBox mdpClair = new HBox(10);
-		mdpClair.getChildren().addAll(textField, toggleButton);
+		mdpChiffre.getChildren().addAll(champMdp,champMdpClair, toggleButton);
 		mdpChiffre.setAlignment(Pos.CENTER);
-		mdpClair.setAlignment(Pos.CENTER);
-		boite.getChildren().addAll(titre,erreur,service,champLogin,mdpChiffre, mdpClair, bouton);
+		boite.getChildren().addAll(titre,erreur,service,champLogin,mdpChiffre,bouton);
 		conteneurFond.getChildren().addAll(imageview,boite);
 		root.getChildren().add(conteneurFond);
 		
-		Scene scene1 = new Scene(root, 800, 600);
+		Scene scene1 = new Scene(root, 1920, 1080);
 
 		primaryStage.setTitle("Page de login");
 		primaryStage.setScene(scene1);
@@ -127,12 +116,12 @@ public class PageLogin extends Application {
 		primaryStage.show();
 	}
 
-	private void openPageAccueil(Stage stage) {
+	public void openPageAccueil(Stage stage,String login) {
 		Platform.runLater(() -> {
 			stage.close(); //Ferme la fenêtre actuelle
 			
 			//Ouvre la page EDT
-			PageEDT pageEDT = new PageEDT();
+			PageEDT pageEDT = new PageEDT(login);
 			pageEDT.show();
 		});
 	}
@@ -152,7 +141,7 @@ public class PageLogin extends Application {
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 		System.out.println("Authentification : " + response.statusCode());
 		if(response.statusCode() == 200){
-			openPageAccueil(primaryStage);
+			openPageAccueil(primaryStage,champLogin.getText());
 		}
 		else{
 			erreur.setVisible(true);
