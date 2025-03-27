@@ -31,19 +31,31 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.net.URI;
 import java.util.Map;
+import java.util.EnumMap;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.DayOfWeek;
 import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
+
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
+import java.util.ArrayList;
+import java.util.Calendar; 
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import fr.utln.gp2.entites.Cours;
+import fr.utln.gp2.entites.Cours.TypeC;
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.utils.Outils;
 
 
 public class PageEDT {
@@ -53,13 +65,19 @@ public class PageEDT {
 	private LocalDate lundi;
 	private Label semaine;
 	private int numSemaine;
-	private Map<Integer, StackPane> coursMap = new HashMap<>();
+	private Map<Long, StackPane> coursMap = new HashMap<>();
 	private Stage stage;
 	private String login;
 	private String nom;
 	private String prenom;
 	private String email;
+	private List<Promotion> promo;
 	private String role;
+	private List<Cours> EDT = new ArrayList<>();
+	private Map<TypeC,Color> couleurCours = new EnumMap<>(Map.of(TypeC.CM,Color.RED,TypeC.TD,Color.BLUE,TypeC.TP,Color.GREEN));
+	private Scene sceneEDT; 
+	private Scene sceneInfos; 
+	
 
 	public PageEDT(String login) {
 		this.login = login;
@@ -68,25 +86,71 @@ public class PageEDT {
 
 	
 	public void show(){
+	
+		getPersonneInfo().thenCompose(personne -> {
+			if (personne == null) return CompletableFuture.completedFuture(null);
+
+			nom = personne.getNom();
+			prenom = personne.getPrenom();
+			email = personne.getMail();
+			role = personne.getRole().toString();
+			promo = personne.getPromos();
+
+			// Liste des futures pour récupérer les cours de chaque promo
+			List<CompletableFuture<List<Cours>>> futures = promo.stream()
+				.map(p -> Outils.getCoursByPromo(p.getPromoId()))
+				.collect(Collectors.toList());
+
+			// Attendre que toutes les requêtes se terminent et collecter les résultats
+			return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]))
+				.thenApply(v -> futures.stream()
+					.map(CompletableFuture::join)  // Récupérer chaque liste de cours
+					.flatMap(List::stream)         // Aplatir en une seule liste
+					.collect(Collectors.toList())
+				);
+		}).thenAccept(coursList -> {
+			if (coursList != null) {
+				EDT.addAll(coursList);
+				afficherCours(EDT);  // Maintenant, on affiche après avoir récupéré tous les cours
+			}
+		});
+		
+
 		lundi = LocalDate.now().with(DayOfWeek.MONDAY);
 		semaine = new Label("");
 		modifLabelSemaine();
-
-		VBox pageComplete = new VBox(10);
-		HBox boiteBtn = new HBox(10);
-
 		genereEDT();
+		sceneEDT =new Scene(genereSceneEDT());
+		sceneInfos =new Scene(genereSceneInfos(nom, prenom, email, role));
 
-		ajouterCours("Maths","112","T.Champion",1,1,3,Color.PINK,1);
-		ajouterCours("Maths","112","T.Champion",2,1,3,Color.PINK,2);
-		ajouterCours("Maths","112","T.Champion",3,4,3,Color.PINK,3);
-		ajouterCours("Maths","112","T.Champion",4,2,3,Color.BLUE,4);
-		supprimerCours(2);
+		stage.setTitle("Page d'accueil");
+		stage.setScene(sceneEDT);
+		stage.setMaximized(true);
+		stage.show();
+		
+	}
 
-		Button btnPreviousWeek = new Button("<");
-		Button btnNextWeek = new Button(">");
+	private HBox genereBoutonHaut(){
+		HBox boiteBtn = new HBox(10);
 		Button cours = new Button("Cours");
 		Button infos = new Button("Informations Personnelles");
+		infos.setOnAction(e -> {
+			stage.setScene(sceneInfos);
+
+		});
+		cours.setOnAction(e -> {
+			stage.setScene(sceneEDT);
+
+		});
+		boiteBtn.getChildren().addAll(cours,infos);
+		return boiteBtn;
+	}
+
+	private StackPane genereSceneEDT(){
+		VBox pageComplete = new VBox(10);
+		Button btnPreviousWeek = new Button("<");
+		Button btnNextWeek = new Button(">");
+
 
 		btnPreviousWeek.setOnAction(e -> {
 			lundi = lundi.minusWeeks(1);
@@ -98,29 +162,7 @@ public class PageEDT {
 			majEDT();
 		});
 
-		infos.setOnAction(e -> {
-			getPersonneInfo().thenAccept(personne -> {
-				if (personne != null) {
-					nom = personne.getNom();
-					prenom = personne.getPrenom();
-					email = personne.getMail();
-					role=personne.getRole().toString();
-					Platform.runLater(()->	{		
-					Pane sceneInfos = genereSceneInfos(nom,prenom,email,role);
-					Scene scene2 = new Scene(sceneInfos);
-					stage.setScene(scene2);
 
-					System.out.println(email);});
-
-				} else {
-					System.out.println("Erreur lors de la récupération de l'utilisateur.");
-				}
-			});
-
-
-		});
-		
-		boiteBtn.getChildren().addAll(cours,infos);
 
 		HBox semainesBox = new HBox(5);
 		for (int i = 1; i <= 52; i++) {
@@ -149,7 +191,9 @@ public class PageEDT {
 		// Centrer la cellule dans la grille
 		GridPane.setHalignment(cellBouton, HPos.CENTER);
 		GridPane.setValignment(cellBouton, VPos.CENTER);
-
+		
+		HBox boiteBtn = new HBox(genereBoutonHaut()); 
+		
 		pageComplete.getChildren().addAll(boiteBtn,grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
@@ -159,14 +203,7 @@ public class PageEDT {
 		scene1.setPrefSize(1920, 1080);
 		scene1.setMaxSize(1920, 1080);
 		scene1.getChildren().add(pageComplete);
-		
-		// Création de la scène
-		Scene scene = new Scene(scene1);
-		stage.setTitle("Page d'accueil");
-		stage.setScene(scene);
-		stage.setMaximized(true);
-		stage.show();
-		
+		return scene1;
 	}
 
 	private void genereEDT(){
@@ -221,7 +258,7 @@ public class PageEDT {
 		}
 	}
 
-	public void ajouterCours(String name,String salle,String prof, int jour, int heure, int duree, Color couleur,int id){
+	public void ajouterCours(String name,String salle,String prof, int jour, int heure, int duree, Color couleur,Long id){
 
 		Label nom = new Label(name+"\n"+prof+"\n"+salle);
 		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
@@ -249,7 +286,7 @@ public class PageEDT {
 		semaine.setText("Semaine n°" + numSemaine);
 	}
 	
-	public void supprimerCours(Integer id) {
+	public void supprimerCours(Long id) {
 		StackPane cours = coursMap.get(id);  
 		if (cours != null) {
 			grilleEdt.getChildren().remove(cours);  
@@ -291,9 +328,13 @@ public CompletableFuture<Personne> getPersonneInfo() {
                 .with(java.time.DayOfWeek.MONDAY);
     }
 
+
+
 	public Pane genereSceneInfos(String nom,String prenom,String mail, String role){
+		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		Pane sceneInfos = new Pane();
 		VBox boiteInfos = new VBox(20);
+	
 		Label labelNom = new Label(nom.toUpperCase()+" "+prenom);
 		labelNom.setFont(Font.font("Arial",FontWeight.BOLD,25));
 		labelNom.setTextFill(Color.BLACK);
@@ -305,16 +346,24 @@ public CompletableFuture<Personne> getPersonneInfo() {
 		imageview.setFitWidth(200);
 		imageview.setFitHeight(200);
 		imageview.setLayoutX(20);
-		imageview.setLayoutY(20);
+		imageview.setLayoutY(30);
 
 
-		Label labelInfos = new Label("Login : "+login+"\nEmail : "+mail+"\nPromo : ");
+		Label labelInfos = new Label("Login : "+login+"\nEmail : "+mail+"\nPromo : "+promo.get(0).getPromoId());
 		labelInfos.setFont(Font.font("Arial",FontWeight.BOLD,25));
 		labelInfos.setTextFill(Color.BLACK);
 		boiteInfos.getChildren().add(labelInfos);
 		boiteInfos.setLayoutX(50);
 		boiteInfos.setLayoutY(300);
-		sceneInfos.getChildren().addAll(imageview,labelNom,boiteInfos);
+		sceneInfos.getChildren().addAll(boiteBtn,imageview,labelNom,boiteInfos);
 		return sceneInfos;
+	}
+
+
+	public void afficherCours(List<Cours> edt){
+		for(Cours c : edt){
+			System.out.println(c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().getValue());
+			ajouterCours("Maths","112",c.getIntervenantLogin(),c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate().getDayOfWeek().getValue(),c.getHeureDebut()-7,c.getDuree(),couleurCours.get(c.getType()),c.getCoursId());
+		}
 	}
 }
