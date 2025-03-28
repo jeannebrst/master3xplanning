@@ -26,7 +26,7 @@ public class Main{
 		// List<Cours> cours = new ArrayList<>();
 		
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
-		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"labit",null);
+		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
 
 		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c2 = new Cours(Arrays.asList(m1info), "spelerin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
@@ -46,7 +46,8 @@ public class Main{
 		// 	.type(TypeC.CM)
 		// 	.build();
 			
-		m1info.setCours(Arrays.asList(c1,c2,c3,c4,c5,c6,c7,c8,c9));
+		m1info.setCours(Arrays.asList(c1,c2,c3,c4,c5,c6,c7,c8));
+		l1info.setCours(Arrays.asList(c9));
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
@@ -56,8 +57,9 @@ public class Main{
 
 
 		Outils.persistence(p1);
-		Outils.persistence(m1info);
 		Outils.persistence(p2);
+		Outils.persistence(m1info);
+		// Outils.persistence(p2);
 		Outils.persistence(l1info);
 		Outils.persistence(p3); 
 		Outils.persistence(p4);

@@ -6,6 +6,7 @@ import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
 import fr.utln.gp2.utils.PromotionId;
+import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
@@ -33,6 +34,31 @@ public class PromotionRessource {
 	@GET
 	public List<Promotion> getAllPromotions() {
 		return promotionRepository.listAll();
+	}
+
+	@GET
+	@Path("{id}")
+	public Promotion getPromotionById(@PathParam("id") String id) {
+
+		// Expression régulière pour séparer les parties
+		Pattern pattern = Pattern.compile("([A-Z]+)([0-9]+)([A-Za-z]+)");
+		Matcher matcher = pattern.matcher(id);
+
+		PromotionId promoId;
+		if (matcher.matches()){
+			promoId = new PromotionId(
+				Type.fromString(matcher.group(1)),
+				Integer.parseInt(matcher.group(2)),
+				matcher.group(3)
+			);
+		} else {
+			throw new IllegalArgumentException("Format invalide : " + id);
+		}
+		Promotion promotion = promotionRepository.findById(promoId);
+		if (promotion == null) {
+			throw new NotFoundException("Promotion non trouvée");
+		}
+		return promotion;
 	}
 
 	@POST

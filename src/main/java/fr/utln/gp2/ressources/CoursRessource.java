@@ -39,6 +39,7 @@ public class CoursRessource {
 	PersonneRepository personneRepository;
 
 	@GET
+	@Path("/All")
 	public List<Cours> getAllCours() {
 		return coursRepository.listAll();
 	}
@@ -112,9 +113,12 @@ public class CoursRessource {
 	}
 
 	@GET
-	@Path("?promoId={id}")
-	public List<Cours> getCoursByPromotion(@PathParam("id") String id) {
-
+	@Path("")
+	public List<Cours> getCoursByPromotion(@QueryParam("promoId") String id) {
+		if (id == null || id.isBlank()) {
+			throw new IllegalArgumentException("Le paramètre promoId est obligatoire.");
+		}
+		
 		// Expression régulière pour séparer les parties
 		Pattern pattern = Pattern.compile("([A-Z]+)([0-9]+)([A-Za-z]+)");
 		Matcher matcher = pattern.matcher(id);

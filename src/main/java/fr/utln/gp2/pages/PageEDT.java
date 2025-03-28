@@ -105,7 +105,7 @@ public class PageEDT {
 	private void getCoursOfPromo(int indice){
 		Promotion promo = p.getPromos().get(indice);
 		coursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
-		System.out.println("" + coursMap + "\n");
+		System.out.println("GetCoursOf" + promo.getPromoId().toString() + indice + " : " + coursMap + "\n");
 		majEDT();
 	}
 
