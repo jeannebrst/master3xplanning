@@ -16,12 +16,13 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@Builder
 public class UE {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ue_seq")
     @SequenceGenerator(name = "ue_seq", sequenceName = "ue_id_seq", allocationSize = 10)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Schema(hidden = true)
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+//    @Schema(hidden = true)
     @Column(name = "ue_id")
     private Long ueId;
 
@@ -30,10 +31,10 @@ public class UE {
     @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private List<Notes> notes = new ArrayList<>();
 
-    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Cours> cours = new ArrayList<>();
 
-    private Long responsableId;
+    private String responsableLogin;
 
     private int nbHeures;
 }

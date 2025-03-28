@@ -5,9 +5,11 @@ import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 
+import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.repositories.CoursRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
+import fr.utln.gp2.repositories.UERepository;
 import fr.utln.gp2.utils.PromotionId;
 import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -37,6 +39,9 @@ public class CoursRessource {
 
 	@Inject
 	PersonneRepository personneRepository;
+
+	@Inject
+	UERepository ueRepository;
 
 	@GET
 	public List<Cours> getAllCours() {
@@ -87,6 +92,28 @@ public class CoursRessource {
 				promotion.getCours().add(cours);
 			}
 		}
+
+		System.out.println("Avant findById : " + cours.getUes());
+		if (cours.getUes() == null) {
+			throw new IllegalArgumentException("L'objet ue est null");
+
+		} else if (cours.getUes().getUeId() == null) {
+			throw new IllegalArgumentException("L'id de l'ue est null");
+		}
+
+		System.out.println("ID de l'UE : " + cours.getUes().getUeId());
+		UE ue = ueRepository.findById(cours.getUes().getUeId());
+		System.out.println("UE trouvée : " + ue);
+		if (ue == null) {
+			throw new IllegalArgumentException("L'UE avec l'ID " + cours.getUes().getUeId() + " n'existe pas !");
+		}
+//		cours.setUes(ue);
+
+		if (!ueRepository.isPersistent(ue)) {
+			ueRepository.persist(ue);
+		}
+		cours.setUes(ue);
+
 		if (coursRepository.isPersistent(cours)) {
 			cours = coursRepository.getEntityManager().merge(cours);
 		} else {

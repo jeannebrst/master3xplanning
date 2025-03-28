@@ -1,5 +1,6 @@
 package fr.utln.gp2;
 
+import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.pages.PageLogin;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
@@ -21,15 +22,22 @@ public class Main{
 	public static void main(String[] args){
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
 		System.out.println(m1info.getPromoId());
-		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, new Date(), TypeC.TP);
+		UE optimisation = UE.builder()
+			.nom("Optimisation")
+			.responsableLogin("spelerin")
+			.nbHeures(45)
+			.build();
+		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, new Date(), TypeC.TP);
 		Cours c2 = Cours.builder()
 			.promos(Arrays.asList(m1info))
+			.ues(optimisation)
 			.intervenantLogin("spelerin")
 			.heureDebut(16)
 			.duree(2)
 			.jour(new Date())
 			.type(TypeC.CM)
 			.build();
+
 		// c2.getPromos().add(m1info);
 		System.out.println(m1info.getCours());
 		m1info.getCours().add(c1);
@@ -45,15 +53,17 @@ public class Main{
 
 
 		Outils.persistence(p1);
+		Outils.persistence(optimisation);
 		Outils.persistence(m1info);
 		Outils.persistence(p2);
-		Outils.persistence(p3); 
+		Outils.persistence(p3);
 		Outils.persistence(p4);
-		// Outils.persistence(c1);
+		 Outils.persistence(c1);
 		// Outils.persistence(c2);
 		CompletableFuture<List<Cours>> coursFuture = Outils.getCoursByPromo(m1info.getPromoId());
 		List<Cours> coursList = coursFuture.join();
 		System.out.println(coursList);
 		Application.launch(PageLogin.class, args);
 	}
+
 }

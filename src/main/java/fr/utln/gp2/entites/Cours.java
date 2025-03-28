@@ -28,8 +28,8 @@ public class Cours {
 	@Column(name = "cours_id")
 	private Long coursId;
 
-	@ManyToOne
-	@JoinColumn(name = "ue_id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "ue_id", nullable = false)
 	private UE ues;
 
 
@@ -71,6 +71,18 @@ public class Cours {
 		this.type = type;
 	}
 
+	public Cours(UE ues, List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type) {
+		this.ues = ues;
+		if(promos!=null){
+			this.promos = promos;
+		}
+		this.intervenantLogin = intervenantLogin;
+		this.heureDebut = heureDebut;
+		this.duree = duree;
+		this.jour = jour;
+		this.type = type;
+	}
+
 	@Override
 	public String toString(){
 		List<PromotionId> promosIds = new ArrayList<>();
@@ -78,7 +90,7 @@ public class Cours {
 			promosIds.add(p.getPromoId());
 		}
 
-		return "Cours [coursId=" + coursId + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
+		return "Cours [coursId=" + coursId + ", ue=" + ues + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
 				+ ", heureDebut=" + heureDebut + ", duree=" + duree + ", jour=" + jour + ", type=" + type + "]";
 	}
 }
