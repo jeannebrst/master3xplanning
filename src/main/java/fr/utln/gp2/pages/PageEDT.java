@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -125,6 +126,13 @@ public class PageEDT {
 	}
 
 	private StackPane genereSceneEDT(){
+		ComboBox<String> menuPromo = new ComboBox<>();
+		for (Promotion p : p.getPromos()){
+			menuPromo.getItems().add(p.getPromoId().toString());
+		}
+		menuPromo.setValue("Promotion :");
+		//menuPromo.setOnAction(e -> );//Metre la fonction de Sh<3wn
+		
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
@@ -170,7 +178,7 @@ public class PageEDT {
 		
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		
-		pageComplete.getChildren().addAll(boiteBtn,grilleEdt,semainesBox);
+		pageComplete.getChildren().addAll(menuPromo,boiteBtn,grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
