@@ -28,7 +28,7 @@ public class Cours {
 	@Column(name = "cours_id")
 	private Long coursId;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ue_id", nullable = false)
 	private UE ues;
 

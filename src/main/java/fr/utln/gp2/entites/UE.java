@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -32,9 +33,23 @@ public class UE {
     private List<Notes> notes = new ArrayList<>();
 
     @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Builder.Default
+    @JsonIgnoreProperties({"ues"})
     private List<Cours> cours = new ArrayList<>();
 
     private String responsableLogin;
 
     private int nbHeures;
+
+    @Override
+    public String toString() {
+        return "UE{" +
+                "ueId=" + ueId +
+                ", nom='" + nom + '\'' +
+                ", notes=" + notes +
+                ", cours=" + cours +
+                ", responsableLogin='" + responsableLogin + '\'' +
+                ", nbHeures=" + nbHeures +
+                '}';
+    }
 }
