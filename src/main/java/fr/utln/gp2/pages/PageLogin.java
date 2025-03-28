@@ -139,7 +139,7 @@ public class PageLogin extends Application {
 			.build();
 
 		HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-		System.out.println("Authentification : " + response.statusCode());
+		System.out.println("Authentification : " + response.statusCode() + "\n");
 		if(response.statusCode() == 200){
 			openPageAccueil(primaryStage,champLogin.getText());
 		}
@@ -149,7 +149,7 @@ public class PageLogin extends Application {
 			champMdp.clear();
 		}
 		}catch(IOException | InterruptedException err){
-			System.out.println("Erreur http authentification" + err);
+			System.out.println("Erreur http authentification" + err + "\n");
 		}
 	}
 }

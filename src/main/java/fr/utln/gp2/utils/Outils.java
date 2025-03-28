@@ -40,9 +40,9 @@ public class Outils{
 				.build();
 
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("Réponse : " + response.body());
+			System.out.println("Réponse : " + response.body() + "\n");
 		}catch(IOException | InterruptedException e){
-			System.out.println("Erreur creation personne : " + e);
+			System.out.println("Erreur creation personne : " + e + "\n");
 		}
 	}
 
@@ -58,7 +58,7 @@ public class Outils{
 		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
 		.thenApply(HttpResponse::body)
 		.thenApply(response -> {
-			System.out.println("GetCoursPromo: " + response);
+			System.out.println("GetCoursPromo: " + response + "\n");
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				List<Cours> coursList = mapper.readValue(response, new TypeReference<List<Cours>>() {});

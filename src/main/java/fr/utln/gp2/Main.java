@@ -66,7 +66,7 @@ public class Main{
 			System.err.println("Erreur lors de la récupération des cours : " + e.getMessage());
 			return Map.of();
 		}).join();
-		System.out.println(coursMap);
+		System.out.println(coursMap + "\n");
 		Application.launch(PageLogin.class, args);
 	}
 }

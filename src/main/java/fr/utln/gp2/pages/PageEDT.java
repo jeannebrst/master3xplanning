@@ -82,40 +82,30 @@ public class PageEDT {
 	
 	public PageEDT(String login) {
 		p = getPersonneInfo(login).join();
-		System.out.println("Personne récup : " + p);
+		System.out.println("Personne récup : " + p + "\n");
 		stage = new Stage();
 	}
 	
 	public void show(){
-		System.out.println(couleurCours);
-		for(Promotion promo : p.getPromos()){
-			Map<Integer, List<Cours>> promoCoursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
-
-			for (Map.Entry<Integer, List<Cours>> entry : promoCoursMap.entrySet()) {
-				int sem = entry.getKey();
-				List<Cours> coursList = entry.getValue();
-
-				coursMap.computeIfAbsent(sem, k -> new ArrayList<>());
-
-				Set<Cours> uniqueCours = new HashSet<>(coursMap.get(sem));
-				uniqueCours.addAll(coursList);
-
-				coursMap.put(sem, new ArrayList<>(uniqueCours));
-			}
-		}
-		System.out.println(coursMap);
-
 		lundi = LocalDate.now().with(DayOfWeek.MONDAY);
 		semaine = new Label("");
 		modifLabelSemaine();
 		genereEDT();
 		sceneEDT = new Scene(genereSceneEDT());
 		sceneInfos = new Scene(genereSceneInfos(p.getNom(), p.getPrenom(), p.getMail(), p.getRole().toString()));
+		getCoursOfPromo(0);
 
 		stage.setTitle("Page d'accueil");
 		stage.setScene(sceneEDT);
 		stage.setMaximized(true);
 		stage.show();
+	}
+
+	private void getCoursOfPromo(int indice){
+		Promotion promo = p.getPromos().get(indice);
+		coursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
+		System.out.println("" + coursMap + "\n");
+		majEDT();
 	}
 
 	private HBox genereBoutonHaut(){
@@ -230,8 +220,6 @@ public class PageEDT {
 			GridPane.setValignment(horaire, VPos.CENTER);
 			grilleEdt.add(horaire, 0, i+1);
 		}
-
-		ajouteAllCours();
 	}
 
 	private void majEDT(){
@@ -250,7 +238,7 @@ public class PageEDT {
 	}
 
 	private void ajouterCours(Cours c){
-		Label nom = new Label("Nom UE.."+"\n"+c.getIntervenantLogin()+"\n"+"Salle..");
+		Label nom = new Label("Nom UE.."+"\n"+c.getIntervenantLogin()+"\n"+"Salle.."+"\n"+c.getType().toString());
 		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
 		nom.setTextFill(Color.WHITE);
 
@@ -264,7 +252,7 @@ public class PageEDT {
 
         LocalDate localDate = c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         int jourSemaine = localDate.get(WeekFields.of(Locale.FRANCE).dayOfWeek());
-		grilleEdt.add(cell, jourSemaine, c.getHeureDebut() - 8);//-8 car la grid commence à 8h
+		grilleEdt.add(cell, jourSemaine, c.getHeureDebut() - 7);//-7 car la grid commence à 8h
 		GridPane.setRowSpan(cell, c.getDuree());
 		GridPane.setColumnSpan(cell, 1);  
 
@@ -309,7 +297,7 @@ public class PageEDT {
 					// Convertit la réponse JSON en objet Personne
 					return objectMapper.readValue(response, Personne.class);
 				} catch (Exception e) {
-					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage());
+					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n");
 					return null;
 				}
 			})
