@@ -131,7 +131,7 @@ public class PageEDT {
 			menuPromo.getItems().add(p.getPromoId().toString());
 		}
 		menuPromo.setValue("Promotion :");
-		//menuPromo.setOnAction(e -> );//Metre la fonction de Sh<3wn
+		menuPromo.setOnAction(e -> getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex()));//Metre la fonction de Sh<3wn
 		
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
