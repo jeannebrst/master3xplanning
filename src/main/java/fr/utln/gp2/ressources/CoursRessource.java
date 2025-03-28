@@ -54,83 +54,14 @@ public class CoursRessource {
 		return coursRepository.findByCoursId(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
 	}
 
-//	@POST
-//	@Transactional
-//	@Produces(MediaType.APPLICATION_JSON)
-//	@Consumes(MediaType.APPLICATION_JSON)
-//	public Response createCours(Cours cours) {
-//		List<PromotionId> managedPromotionsIds = new ArrayList<>();
-//		List<Promotion> managedPromotions = new ArrayList<>();
-//
-//		for (Promotion promotion : cours.getPromos()) {
-//			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
-//			if (managedPromotion == null) {
-//				return Response.status(Response.Status.BAD_REQUEST)
-//						.entity("Promotion avec ID : " + promotion.getPromoId() + " n'existe pas.")
-//						.build();
-//			}
-//			managedPromotions.add(managedPromotion);
-//			managedPromotionsIds.add(managedPromotion.getPromoId());
-//		}
-//
-//		cours.setPromos(managedPromotions);
-//
-//		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
-//		if (intervenantOpt.isPresent()) {
-//			Personne intervenant = intervenantOpt.get();
-//			if (!personneRepository.isPersistent(intervenant)) {
-//				intervenant = personneRepository.getEntityManager().merge(intervenant);
-//			}
-//			for (Promotion promotion : managedPromotions) {
-//				if (!promotion.getPersonnes().contains(intervenant)) {
-//					promotion.getPersonnes().add(intervenant);
-//				}
-//			}
-//		}
-//		for (Promotion promotion : managedPromotions) {
-//			if (!promotion.getCours().contains(cours)) {
-//				promotion.getCours().add(cours);
-//			}
-//		}
-//
-//		System.out.println("Avant findById : " + cours.getUes());
-//		if (cours.getUes() == null) {
-//			throw new IllegalArgumentException("L'objet ue est null");
-//
-//		} else if (cours.getUes().getUeId() == null) {
-//			throw new IllegalArgumentException("L'id de l'ue est null");
-//		}
-//
-//		System.out.println("ID de l'UE : " + cours.getUes().getUeId());
-//		UE ue = ueRepository.findById(cours.getUes().getUeId());
-//		System.out.println("UE trouvée : " + ue);
-//		if (ue == null) {
-//			throw new IllegalArgumentException("L'UE avec l'ID " + cours.getUes().getUeId() + " n'existe pas !");
-//		}
-////		cours.setUes(ue);
-//
-//		if (!ueRepository.isPersistent(ue)) {
-//			ueRepository.persist(ue);
-//		}
-//		cours.setUes(ue);
-//
-//		if (coursRepository.isPersistent(cours)) {
-//			cours = coursRepository.getEntityManager().merge(cours);
-//		} else {
-//			coursRepository.persist(cours);
-//		}
-//
-//		return Response.status(201).entity(cours).build();
-//	}
-
 	@POST
 	@Transactional
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.APPLICATION_JSON)
 	public Response createCours(Cours cours) {
-		// Gérer les promotions
 		List<PromotionId> managedPromotionsIds = new ArrayList<>();
 		List<Promotion> managedPromotions = new ArrayList<>();
+
 		for (Promotion promotion : cours.getPromos()) {
 			Promotion managedPromotion = promotionRepository.findById(promotion.getPromoId());
 			if (managedPromotion == null) {
@@ -141,9 +72,37 @@ public class CoursRessource {
 			managedPromotions.add(managedPromotion);
 			managedPromotionsIds.add(managedPromotion.getPromoId());
 		}
+
 		cours.setPromos(managedPromotions);
 
-		// Gérer l'intervenant
+		if (cours.getUes() == null || cours.getUes().getNom() == null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("L'UE associée au cours est nulle ou sans nom.")
+					.build();
+		}
+
+		final String ueNom = cours.getUes().getNom();
+
+		// Récupérer l'UE dans la base de données en utilisant le nom
+		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUes().getNom());
+
+		// Vérification si l'UE existe, sinon retour d'une erreur
+		UE ue = optionalUe.orElseThrow(() -> new IllegalArgumentException(
+				"L'UE avec le nom " + ueNom + " n'existe pas."
+		));
+
+		// Associer l'UE au cours
+		cours.setUes(ue);
+
+		if (ue != null && !ue.getCours().contains(cours)) {
+			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
+		}
+
+		// Vérification et persistance de l'UE
+		if (!ueRepository.isPersistent(ue)) {
+			ueRepository.persist(ue);
+		}
+
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
 		if (intervenantOpt.isPresent()) {
 			Personne intervenant = intervenantOpt.get();
@@ -156,37 +115,11 @@ public class CoursRessource {
 				}
 			}
 		}
-
-		// Ajouter les cours aux promotions
 		for (Promotion promotion : managedPromotions) {
 			if (!promotion.getCours().contains(cours)) {
 				promotion.getCours().add(cours);
 			}
 		}
-
-		// Vérification de l'UE associée
-		if (cours.getUes() == null || cours.getUes().getUeId() == null) {
-			throw new IllegalArgumentException("L'UE associée au cours est nulle ou sans ID !");
-		}
-
-		// Trouver et associer l'UE
-		System.out.println("ID de l'UE : " + cours.getUes().getUeId());
-		UE ue = ueRepository.findById(cours.getUes().getUeId());
-		System.out.println("UE trouvée : " + ue);
-
-		if (ue == null) {
-			throw new IllegalArgumentException("L'UE avec l'ID " + cours.getUes().getUeId() + " n'existe pas !");
-		}
-
-		// Si l'UE n'est pas persistée, la persister
-		if (!ueRepository.isPersistent(ue)) {
-			ueRepository.persist(ue);
-		}
-
-		// Associer l'UE au cours
-		cours.setUes(ue);
-
-		// Persister ou fusionner le Cours
 		if (coursRepository.isPersistent(cours)) {
 			cours = coursRepository.getEntityManager().merge(cours);
 		} else {
@@ -195,7 +128,6 @@ public class CoursRessource {
 
 		return Response.status(201).entity(cours).build();
 	}
-
 
 	@DELETE
 	@Transactional

@@ -24,22 +24,20 @@ public class Main{
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Outils.persistence(p1);
 
+		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
+		System.out.println(m1info.getPromoId());
+		Outils.persistence(m1info);
+
 		UE optimisation = UE.builder()
 				.nom("Optimisation")
 				.responsableLogin("spelerin")
 				.nbHeures(45)
 				.build();
-		System.out.println(optimisation.getCours());
-
-
-		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
-		System.out.println(m1info.getPromoId());
-		Outils.persistence(m1info);
-
-		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, new Date(), TypeC.TP);
-		optimisation.getCours().add(c1);
 		Outils.persistence(optimisation);
-//		Outils.persistence(c1);
+
+
+		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, new Date(), TypeC.TP);
+		Outils.persistence(c1);
 
 		Cours c2 = Cours.builder()
 			.promos(Arrays.asList(m1info))
@@ -50,6 +48,9 @@ public class Main{
 			.jour(new Date())
 			.type(TypeC.CM)
 			.build();
+		Outils.persistence(c2);
+
+		System.out.println("Cours du module d'optimisation : " + optimisation.getCours());
 
 		// c2.getPromos().add(m1info);
 		System.out.println(m1info.getCours());

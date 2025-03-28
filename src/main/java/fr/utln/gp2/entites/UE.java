@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
@@ -35,6 +36,7 @@ public class UE {
     @OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Builder.Default
     @JsonIgnoreProperties({"ues"})
+    @JsonBackReference
     private List<Cours> cours = new ArrayList<>();
 
     private String responsableLogin;
