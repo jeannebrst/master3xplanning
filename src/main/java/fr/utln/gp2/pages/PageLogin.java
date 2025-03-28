@@ -25,6 +25,9 @@ import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.text.TextFlow;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
@@ -44,10 +47,28 @@ public class PageLogin extends Application {
 		erreur.setTextFill(Color.RED);
 		erreur.setVisible(false);
 
-		Label titre = new Label("Bienvenue sur MasterPlanning !");
+
+		Text texte1 = new Text("Bienvenue ");
+		texte1.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte1.setFill(Color.RED);
+		Text texte6 = new Text("sur ");
+		texte6.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte6.setFill(Color.ORANGE);
+		Text texte2 = new Text("Master");
+		texte2.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte2.setFill(Color.YELLOW);
+		Text texte3 = new Text("Master");
+		texte3.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte3.setFill(Color.GREEN);
+		Text texte4 = new Text("Master");
+		texte4.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte4.setFill(Color.INDIGO);
+		Text texte5 = new Text("Planning");
+		texte5.setFont(Font.font(font,FontWeight.BOLD,30));
+		texte5.setFill(Color.PURPLE);
+		TextFlow titre = new TextFlow(texte1,texte6,texte2,texte3,texte4,texte5);
+		titre.setTextAlignment(TextAlignment.CENTER);
 		Label service = new Label("Service d'authentification");
-		titre.setFont(Font.font(font,FontWeight.BOLD,30));
-		titre.setTextFill(Color.WHITE);
 		service.setFont(Font.font(font,FontWeight.BOLD,25));
 		service.setTextFill(Color.WHITE);
 
