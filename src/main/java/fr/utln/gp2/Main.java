@@ -31,11 +31,11 @@ public class Main{
 
 
 		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
-		Cours c2 = new Cours(Arrays.asList(m1info), "spelerin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
+		Cours c2 = new Cours(Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c3 = new Cours(Arrays.asList(m1info), "spelerin", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		Cours c4 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
+		Cours c4 = new Cours(Arrays.asList(m1info), "hglotin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 		Cours c5 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
-		Cours c6 = new Cours(Arrays.asList(m1info), "spelerin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
+		Cours c6 = new Cours(Arrays.asList(m1info), "hglotin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c7 = new Cours(Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c8 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 		Cours c9 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);

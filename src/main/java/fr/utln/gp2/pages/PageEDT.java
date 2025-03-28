@@ -67,10 +67,12 @@ public class PageEDT {
 	
 	public PageEDT(String login) {
 		p = Outils.getPersonneInfo(login).join();
-		System.out.println("Personne récup : " + p + "\n");
+		// System.out.println("Personne récup : " + p + "\n");
+
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());
 		}
+
 		stage = new Stage();
 	}
 	
@@ -79,10 +81,16 @@ public class PageEDT {
 		semaine = new Label("");
 		modifLabelSemaine();
 		genereEDT();
-		sceneEDT = new Scene(genereSceneEDT(),1920,1080);
-		sceneInfos = new Scene(genereSceneInfos(),1920,1080);
-		getCoursOfPromo(0);
-
+		sceneEDT = new Scene(genereSceneEDT());
+		sceneInfos = new Scene(genereSceneInfos());
+		if(p.getRole().equals(Role.PROFESSEUR)){
+			coursMap = Outils.getCoursByIntervenant(p.getLogin()).join();
+		}
+		else{
+			getCoursOfPromo(0);
+		}
+		majEDT();
+	
 		stage.setTitle("Page d'accueil");
 		stage.setScene(sceneEDT);
 		stage.setMaximized(false);
@@ -93,7 +101,6 @@ public class PageEDT {
 		Promotion promo = p.getPromos().get(indice);
 		coursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
 		System.out.println("" + coursMap + "\n");
-		majEDT();
 	}
 
 	private HBox genereBoutonHaut(){
@@ -120,7 +127,10 @@ public class PageEDT {
 			menuPromo.getItems().add("Promotion : "+p.getPromoId().toString());
 		}
 		menuPromo.setValue("Promotion : " +p.getPromos().get(0).getPromoId().toString());
-		menuPromo.setOnAction(e -> getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex()));//Metre la fonction de Sh<3wn
+		menuPromo.setOnAction(e -> {
+			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
+			majEDT();
+		});//Metre la fonction de Sh<3wn
 		
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
@@ -167,7 +177,11 @@ public class PageEDT {
 		
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		
-		pageComplete.getChildren().addAll(boiteBtn,menuPromo,grilleEdt,semainesBox);
+		pageComplete.getChildren().add(boiteBtn);
+		if (!p.getRole().equals(Role.PROFESSEUR)){
+			pageComplete.getChildren().add(menuPromo);
+		}
+		pageComplete.getChildren().addAll(grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
@@ -248,13 +262,26 @@ public class PageEDT {
 	}
 
 	private void ajouterCours(Cours c){
-		Label nom = new Label("Nom UE.."+"\n"+c.getIntervenantLogin()+"\n"+"Salle.."+"\n"+c.getType().toString());
-		nom.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-		nom.setTextFill(Color.WHITE);
+		Label label = new Label("UE"+"\n"+c.getIntervenantLogin()+"\nSalle"+"\n"+c.getType().toString());
+		// VBox boiteLabels = new VBox(5);
+		
+		// Label nom = new Label("Nom UE..");
+		// Label prof = new Label(c.getIntervenantLogin());
+		// Label salle = new Label("Salle");
+		// Label typeCours = new Label(c.getType().toString());
+
+		// Label[] labels = {nom,prof,salle,typeCours};
+		// for (Label l : labels){
+		// 	l.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+		// 	l.setTextFill(Color.WHITE);
+		// }
+		// boiteLabels.setAlignment(Pos.CENTER);
+		// boiteLabels.getChildren().addAll(nom,prof,salle,typeCours);
 
 		// Crée un StackPane pour centrer le label dans la cellule
 		StackPane cell = new StackPane();
-		cell.getChildren().add(nom);
+		//cell.getChildren().add(boiteLabels);
+		cell.getChildren().add(label);
 		cell.setAlignment(Pos.CENTER);  
 		cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
 		cell.setBackground(new Background(new BackgroundFill(couleurCours.get(c.getType()), new CornerRadii(0), new Insets(1))));
@@ -290,9 +317,6 @@ public class PageEDT {
 			grilleEdt.getChildren().remove(sp);
 		}
 	}
-
-	
-
 
 	public LocalDate getLundiSemaine(int semaineNum) {
 		return LocalDate.of(LocalDate.now().getYear(), 1, 1)
