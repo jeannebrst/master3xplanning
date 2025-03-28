@@ -18,6 +18,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -39,7 +40,6 @@ public class CoursRessource {
 	PersonneRepository personneRepository;
 
 	@GET
-	@Path("/all")
 	public List<Cours> getAllCours() {
 		return coursRepository.listAll();
 	}
@@ -113,7 +113,7 @@ public class CoursRessource {
 	}
 
 	@GET
-	@Path("")
+	@Path("/by-promo")
 	public List<Cours> getCoursByPromotion(@QueryParam("promoId") String id) {
 		if (id == null || id.isBlank()) {
 			throw new IllegalArgumentException("Le paramètre promoId est obligatoire.");
@@ -138,5 +138,21 @@ public class CoursRessource {
 			throw new NotFoundException("Promotion non trouvée");
 		}
 		return promotion.getCours();
+	}
+
+	@GET
+	@Path("by-intervenant")
+	public List<Cours> getCoursByIntervenant(@QueryParam("intervenantLogin") String intervenantLogin) {
+		if (intervenantLogin == null || intervenantLogin.isBlank()){
+			throw new IllegalArgumentException("Le paramètre intervenantLogin est obligatoire.");
+		}
+		
+		Optional<List<Cours>> listCours = coursRepository.findByIntervenantLogin(intervenantLogin);
+		if (listCours.isPresent()) {
+			return listCours.get();
+		}
+		else{
+			return Collections.emptyList();
+		}
 	}
 }

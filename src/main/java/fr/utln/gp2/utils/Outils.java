@@ -76,7 +76,7 @@ public class Outils{
 
 	public static CompletableFuture<Map<Integer, List<Cours>>> getCoursByPromo(PromotionId promoId){
 		HttpRequest request = HttpRequest.newBuilder()
-		.uri(URI.create("http://localhost:8080/api/v1/cours/?promoId=" + promoId.toString()))
+		.uri(URI.create("http://localhost:8080/api/v1/cours/by-promo?promoId=" + promoId.toString()))
 		.GET()
 		.header("Content-Type", "application/json")
 		.build();
@@ -87,6 +87,47 @@ public class Outils{
 		.thenApply(HttpResponse::body)
 		.thenApply(response -> {
 			System.out.println("GetCoursPromo: " + response + "\n");
+			try {
+				ObjectMapper mapper = new ObjectMapper();
+				List<Cours> coursList = mapper.readValue(response, new TypeReference<List<Cours>>() {});
+                        return coursList.stream()
+                                .collect(Collectors.groupingBy(cours -> {
+									LocalDate date = cours.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+									return date.get(WeekFields.of(Locale.FRANCE).weekOfWeekBasedYear());
+								}));
+			} catch (Exception e) {
+				e.printStackTrace();
+				futureCoursMap.completeExceptionally(e);
+				return null;
+			}
+		})
+		.thenAccept(coursMap -> {
+			if (coursMap != null) {
+				futureCoursMap.complete(coursMap);
+			}
+		})
+		.exceptionally(e -> {
+			e.printStackTrace();
+			futureCoursMap.completeExceptionally(e);
+			return null;
+		});
+
+		return futureCoursMap;
+	}
+
+	public static CompletableFuture<Map<Integer, List<Cours>>> getCoursByIntervenant(String intervenantLogin){
+		HttpRequest request = HttpRequest.newBuilder()
+		.uri(URI.create("http://localhost:8080/api/v1/cours/by-intervenant?intervenantLogin=" + intervenantLogin))
+		.GET()
+		.header("Content-Type", "application/json")
+		.build();
+
+		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = new CompletableFuture<>();
+
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+		.thenApply(HttpResponse::body)
+		.thenApply(response -> {
+			System.out.println("GetCoursProf: " + response + "\n");
 			try {
 				ObjectMapper mapper = new ObjectMapper();
 				List<Cours> coursList = mapper.readValue(response, new TypeReference<List<Cours>>() {});

@@ -84,10 +84,12 @@ public class PageEDT {
 	
 	public PageEDT(String login) {
 		p = Outils.getPersonneInfo(login).join();
-		System.out.println("Personne récup : " + p + "\n");
+		// System.out.println("Personne récup : " + p + "\n");
+
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());
 		}
+
 		stage = new Stage();
 	}
 	
@@ -98,8 +100,14 @@ public class PageEDT {
 		genereEDT();
 		sceneEDT = new Scene(genereSceneEDT());
 		sceneInfos = new Scene(genereSceneInfos());
-		getCoursOfPromo(0);
-
+		if(p.getRole().equals(Role.PROFESSEUR)){
+			coursMap = Outils.getCoursByIntervenant(p.getLogin()).join();
+		}
+		else{
+			getCoursOfPromo(0);
+		}
+		majEDT();
+	
 		stage.setTitle("Page d'accueil");
 		stage.setScene(sceneEDT);
 		stage.setMaximized(true);
@@ -110,7 +118,6 @@ public class PageEDT {
 		Promotion promo = p.getPromos().get(indice);
 		coursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
 		System.out.println("" + coursMap + "\n");
-		majEDT();
 	}
 
 	private HBox genereBoutonHaut(){
@@ -135,7 +142,10 @@ public class PageEDT {
 			menuPromo.getItems().add("Promotion : "+p.getPromoId().toString());
 		}
 		menuPromo.setValue("Promotion : " +p.getPromos().get(0).getPromoId().toString());
-		menuPromo.setOnAction(e -> getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex()));//Metre la fonction de Sh<3wn
+		menuPromo.setOnAction(e -> {
+			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
+			majEDT();
+		});//Metre la fonction de Sh<3wn
 		
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
@@ -182,7 +192,11 @@ public class PageEDT {
 		
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		
-		pageComplete.getChildren().addAll(boiteBtn,menuPromo,grilleEdt,semainesBox);
+		pageComplete.getChildren().addAll(boiteBtn,grilleEdt,semainesBox);
+		if (!p.getRole().equals(Role.PROFESSEUR)){
+			pageComplete.getChildren().add(menuPromo);
+		}
+
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
@@ -305,9 +319,6 @@ public class PageEDT {
 			grilleEdt.getChildren().remove(sp);
 		}
 	}
-
-	
-
 
 	public LocalDate getLundiSemaine(int semaineNum) {
 		return LocalDate.of(LocalDate.now().getYear(), 1, 1)
