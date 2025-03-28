@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import fr.utln.gp2.utils.PromotionId;
@@ -57,6 +58,15 @@ public class Personne {
 	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@JsonIgnoreProperties({"personnes","cours"})//Pour eviter maxi redondance
 	private List<Promotion> promos = new ArrayList<>();
+
+	@ManyToMany
+	@JoinTable(
+			name = "personne_ue",
+			joinColumns = @JoinColumn(name = "personne_id"),
+			inverseJoinColumns = @JoinColumn(name = "ue_id")
+	)
+	@JsonIgnore
+	private List<UE> ues = new ArrayList<>();
 
 
 	public Personne(String hashMdp, String nom, String prenom, Role role){

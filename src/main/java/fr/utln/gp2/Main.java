@@ -1,5 +1,6 @@
 package fr.utln.gp2;
 
+import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.pages.PageLogin;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
@@ -23,12 +24,9 @@ import fr.utln.gp2.entites.Cours.TypeC;
 
 public class Main{
 	public static void main(String[] args){
-		// List<Cours> cours = new ArrayList<>();
-		
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
 		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
 		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
-
 
 		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c2 = new Cours(Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
@@ -39,17 +37,16 @@ public class Main{
 		Cours c7 = new Cours(Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c8 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 		Cours c9 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		// Cours c2 = Cours.builder()
-		// 	.promos(Arrays.asList(m1info))
-		// 	.intervenantLogin("spelerin")
-		// 	.heureDebut(16)
-		// 	.duree(2)
-		// 	.jour(new Date())
-		// 	.type(TypeC.CM)
-		// 	.build();
-			
+
 		m1info.setCours(Arrays.asList(c1,c2,c3,c4,c5,c6,c7,c8));
 		l1info.setCours(Arrays.asList(c9));
+
+		UE optimisation = UE.builder()
+				.nom("Optimisation")
+				.responsableLogin("spelerin")
+				.nbHeures(45)
+				.build();
+		
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
@@ -59,8 +56,9 @@ public class Main{
 		Personne p5 = new Personne("0","Viagra","Thierry",Role.GESTIONNAIRE);
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 
-
 		Outils.persistence(p1);
+		Outils.persistence(optimisation);
+		Outils.persistence(m1info);
 		Outils.persistence(p2);
 		Outils.persistence(m1info);
 		// Outils.persistence(p2);
@@ -80,4 +78,5 @@ public class Main{
 		System.out.println(coursMap + "\n");
 		Application.launch(PageLogin.class, args);
 	}
+
 }

@@ -5,9 +5,11 @@ import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 
+import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.repositories.CoursRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.PromotionRepository;
+import fr.utln.gp2.repositories.UERepository;
 import fr.utln.gp2.utils.PromotionId;
 import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -39,6 +41,9 @@ public class CoursRessource {
 	@Inject
 	PersonneRepository personneRepository;
 
+	@Inject
+	UERepository ueRepository;
+
 	@GET
 	public List<Cours> getAllCours() {
 		return coursRepository.listAll();
@@ -68,8 +73,36 @@ public class CoursRessource {
 			managedPromotions.add(managedPromotion);
 			managedPromotionsIds.add(managedPromotion.getPromoId());
 		}
-		
+
 		cours.setPromos(managedPromotions);
+
+		if (cours.getUes() == null || cours.getUes().getNom() == null) {
+			return Response.status(Response.Status.BAD_REQUEST)
+					.entity("L'UE associée au cours est nulle ou sans nom.")
+					.build();
+		}
+
+		final String ueNom = cours.getUes().getNom();
+
+		// Récupérer l'UE dans la base de données en utilisant le nom
+		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUes().getNom());
+
+		// Vérification si l'UE existe, sinon retour d'une erreur
+		UE ue = optionalUe.orElseThrow(() -> new IllegalArgumentException(
+				"L'UE avec le nom " + ueNom + " n'existe pas."
+		));
+
+		// Associer l'UE au cours
+		cours.setUes(ue);
+
+		if (ue != null && !ue.getCours().contains(cours)) {
+			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
+		}
+
+		// Vérification et persistance de l'UE
+		if (!ueRepository.isPersistent(ue)) {
+			ueRepository.persist(ue);
+		}
 
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
 		if (intervenantOpt.isPresent()) {
@@ -78,11 +111,15 @@ public class CoursRessource {
 				intervenant = personneRepository.getEntityManager().merge(intervenant);
 			}
 			for (Promotion promotion : managedPromotions) {
-				promotion.getPersonnes().add(intervenant);
+				if (!promotion.getPersonnes().contains(intervenant)) {
+					promotion.getPersonnes().add(intervenant);
+				}
 			}
 		}
 		for (Promotion promotion : managedPromotions) {
-			promotion.getCours().add(cours);
+			if (!promotion.getCours().contains(cours)) {
+				promotion.getCours().add(cours);
+			}
 		}
 		if (coursRepository.isPersistent(cours)) {
 			cours = coursRepository.getEntityManager().merge(cours);

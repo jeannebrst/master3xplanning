@@ -62,7 +62,9 @@ public class PersonneRessource {
 
 		personne.setPromos(managedPromotions);
 		for (Promotion promotion : managedPromotions) {
-			promotion.getPersonnes().add(personne);
+			if (!promotion.getPersonnes().contains(personne)) {
+				promotion.getPersonnes().add(personne);
+			}
 		}
 		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
 		personne.setHashMdp(hashMdp);

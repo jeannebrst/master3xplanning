@@ -70,8 +70,9 @@ public class PromotionRessource {
 			if (!personneRepository.isPersistent(responsable)) {
 				responsable = personneRepository.getEntityManager().merge(responsable);
 			}
-			promotion.getPersonnes().add(responsable);
-
+			if (!promotion.getPersonnes().contains(responsable)) {
+				promotion.getPersonnes().add(responsable);
+			}
 		}
 		promotionRepository.persist(promotion);
 		return Response.status(201).entity(promotion).build();
