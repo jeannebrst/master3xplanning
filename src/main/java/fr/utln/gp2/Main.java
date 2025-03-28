@@ -28,7 +28,13 @@ public class Main{
 		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
 		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
 
-		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
+		UE optimisation = UE.builder()
+				.nom("Optimisation")
+				.responsableLogin("spelerin")
+				.nbHeures(45)
+				.build();
+
+		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c2 = new Cours(Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c3 = new Cours(Arrays.asList(m1info), "spelerin", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 		Cours c4 = new Cours(Arrays.asList(m1info), "hglotin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
@@ -36,17 +42,11 @@ public class Main{
 		Cours c6 = new Cours(Arrays.asList(m1info), "hglotin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c7 = new Cours(Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c8 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		Cours c9 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
+		Cours c9 = new Cours(Arrays.asList(l1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 
-		m1info.setCours(Arrays.asList(c1,c2,c3,c4,c5,c6,c7,c8));
-		l1info.setCours(Arrays.asList(c9));
-
-		UE optimisation = UE.builder()
-				.nom("Optimisation")
-				.responsableLogin("spelerin")
-				.nbHeures(45)
-				.build();
-		
+		// m1info.setCours(Arrays.asList(c1,c2,c3,c4,c5,c6,c7,c8));
+		// l1info.setCours(Arrays.asList(c9));
+	
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
@@ -59,17 +59,17 @@ public class Main{
 		Outils.persistence(p1);
 		Outils.persistence(optimisation);
 		Outils.persistence(m1info);
-		Outils.persistence(p2);
-		Outils.persistence(m1info);
-		// Outils.persistence(p2);
+		Outils.persistence(m2glotin);
 		Outils.persistence(l1info);
+		Outils.persistence(p2);
 		Outils.persistence(p3); 
 		Outils.persistence(p4);
 		Outils.persistence(p5);
 		Outils.persistence(p6);
-		Outils.persistence(m2glotin);
-		// Outils.persistence(c1);
-		// Outils.persistence(c2);
+		Outils.persistence(c1);
+		Outils.persistence(c2);
+		Outils.persistence(c9);
+
 		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = Outils.getCoursByPromo(m1info.getPromoId());
 		Map<Integer, List<Cours>> coursMap = futureCoursMap.exceptionally(e -> {
 			System.err.println("Erreur lors de la récupération des cours : " + e.getMessage());
