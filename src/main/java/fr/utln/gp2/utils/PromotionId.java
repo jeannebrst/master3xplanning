@@ -54,5 +54,6 @@ public class PromotionId implements Serializable {
 	@Override
 	public String toString() {
 		return "" + type + annee + categorie;
+		
 	}
 }

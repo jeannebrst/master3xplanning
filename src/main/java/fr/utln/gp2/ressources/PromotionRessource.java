@@ -32,6 +32,7 @@ public class PromotionRessource {
 	PersonneRepository personneRepository;
 
 	@GET
+	@Path("/all")
 	public List<Promotion> getAllPromotions() {
 		return promotionRepository.listAll();
 	}

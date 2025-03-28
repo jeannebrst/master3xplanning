@@ -58,6 +58,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Cours.TypeC;
+import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.utils.Outils;
@@ -75,15 +76,18 @@ public class PageEDT {
 	private Scene sceneInfos; 
 	private Stage stage;
 
-	private Map<TypeC,Color> couleurCours = new EnumMap<>(Map.of(TypeC.CM,Color.RED,TypeC.TD,Color.BLUE,TypeC.TP,Color.GREEN));
+	private Map<TypeC,Color> couleurCours = new EnumMap<>(Map.of(TypeC.CM,Color.PINK,TypeC.TD,Color.DEEPSKYBLUE,TypeC.TP,Color.LIMEGREEN));
 	private Map<Integer, List<Cours>> coursMap = new HashMap<>();
 	private List<StackPane> coursCells = new ArrayList<>();
 	
 	private Personne p;
 	
 	public PageEDT(String login) {
-		p = getPersonneInfo(login).join();
+		p = Outils.getPersonneInfo(login).join();
 		System.out.println("Personne récup : " + p + "\n");
+		if (p.getRole().equals(Role.GESTIONNAIRE)){
+			p.setPromos(Outils.getAllPromo().join());
+		}
 		stage = new Stage();
 	}
 	
@@ -93,7 +97,7 @@ public class PageEDT {
 		modifLabelSemaine();
 		genereEDT();
 		sceneEDT = new Scene(genereSceneEDT());
-		sceneInfos = new Scene(genereSceneInfos(p.getNom(), p.getPrenom(), p.getMail(), p.getRole().toString()));
+		sceneInfos = new Scene(genereSceneInfos());
 		getCoursOfPromo(0);
 
 		stage.setTitle("Page d'accueil");
@@ -105,7 +109,7 @@ public class PageEDT {
 	private void getCoursOfPromo(int indice){
 		Promotion promo = p.getPromos().get(indice);
 		coursMap = Outils.getCoursByPromo(promo.getPromoId()).join();
-		System.out.println("GetCoursOf" + promo.getPromoId().toString() + indice + " : " + coursMap + "\n");
+		System.out.println("" + coursMap + "\n");
 		majEDT();
 	}
 
@@ -128,9 +132,9 @@ public class PageEDT {
 	private StackPane genereSceneEDT(){
 		ComboBox<String> menuPromo = new ComboBox<>();
 		for (Promotion p : p.getPromos()){
-			menuPromo.getItems().add(p.getPromoId().toString());
+			menuPromo.getItems().add("Promotion : "+p.getPromoId().toString());
 		}
-		menuPromo.setValue("Promotion :");
+		menuPromo.setValue("Promotion : " +p.getPromos().get(0).getPromoId().toString());
 		menuPromo.setOnAction(e -> getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex()));//Metre la fonction de Sh<3wn
 		
 		VBox pageComplete = new VBox(10);
@@ -178,7 +182,7 @@ public class PageEDT {
 		
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		
-		pageComplete.getChildren().addAll(menuPromo,boiteBtn,grilleEdt,semainesBox);
+		pageComplete.getChildren().addAll(boiteBtn,menuPromo,grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
 		// Créer un layout pour les boutons et la grille
@@ -214,19 +218,30 @@ public class PageEDT {
 			String jourNom = jourDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			String moisNom = jourDate.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			Label jourLabel = new Label(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
+			StackPane jourCell = new StackPane();
+			jourCell.setAlignment(Pos.CENTER);
+			jourCell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			jourCell.setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, new CornerRadii(0), new Insets(1))));
 			
-			GridPane.setHalignment(jourLabel, HPos.CENTER);
-			GridPane.setValignment(jourLabel, VPos.CENTER);
-
-			grilleEdt.add(jourLabel, i+1, 0);
+			jourCell.getChildren().add(jourLabel);
+			GridPane.setHalignment(jourCell, HPos.CENTER);
+			GridPane.setValignment(jourCell, VPos.CENTER);
+			
+			grilleEdt.add(jourCell, i+1, 0);
 		}
 
 		for (int i=0; i<horaires.length;i++){
 			Label horaire = new Label(horaires[i]);
+			StackPane horaireCellule = new StackPane();
+			horaireCellule.setAlignment(Pos.CENTER);
+			horaireCellule.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			horaireCellule.setBackground(new Background(new BackgroundFill(Color.LIGHTGOLDENRODYELLOW, new CornerRadii(0), new Insets(1))));
 
-			GridPane.setHalignment(horaire, HPos.CENTER);  
-			GridPane.setValignment(horaire, VPos.CENTER);
-			grilleEdt.add(horaire, 0, i+1);
+			horaireCellule.getChildren().add(horaire);
+
+			GridPane.setHalignment(horaireCellule, HPos.CENTER);  
+			GridPane.setValignment(horaireCellule, VPos.CENTER);
+			grilleEdt.add(horaireCellule, 0, i+1);
 		}
 	}
 
@@ -239,7 +254,9 @@ public class PageEDT {
 			String jourNom = jourDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			String moisNom = jourDate.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			
-			((Label) grilleEdt.getChildren().get(i+1)).setText(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
+			StackPane jourCell = (StackPane) grilleEdt.getChildren().get(i + 1);
+			Label jourLabel = (Label) jourCell.getChildren().get(0); // Le Label est le premier enfant du StackPane
+			jourLabel.setText(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
 		}
 
 		ajouteAllCours();
@@ -289,31 +306,7 @@ public class PageEDT {
 		}
 	}
 
-	public CompletableFuture<Personne> getPersonneInfo(String login) {
-		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
-			.GET()
-			.header("Content-Type", "application/json")
-			.build();
-
-		// Retourner un CompletableFuture
-		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-			.thenApply(HttpResponse::body)  // Récupère la réponse sous forme de chaîne
-			.thenApply(response -> {
-				try {
-					ObjectMapper objectMapper = new ObjectMapper();
-					// Convertit la réponse JSON en objet Personne
-					return objectMapper.readValue(response, Personne.class);
-				} catch (Exception e) {
-					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n");
-					return null;
-				}
-			})
-			.exceptionally(e -> {
-				e.printStackTrace();
-				return null;
-			});
-	}
+	
 
 
 	public LocalDate getLundiSemaine(int semaineNum) {
@@ -323,32 +316,46 @@ public class PageEDT {
 	}
 
 
-	public Pane genereSceneInfos(String nom,String prenom,String mail, String role){
+	public Pane genereSceneInfos(){
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
 		Pane sceneInfos = new Pane();
-		VBox boiteInfos = new VBox(20);
-	
-		Label labelNom = new Label(nom.toUpperCase()+" "+prenom);
+		VBox boiteInfos = new VBox(30);
+		boiteInfos.setAlignment(Pos.CENTER);
+		
+		Label labelNom = new Label(p.getNom().toUpperCase()+" "+p.getPrenom());
 		labelNom.setFont(Font.font("Arial",FontWeight.BOLD,25));
 		labelNom.setTextFill(Color.BLACK);
-		labelNom.setLayoutX(300);
-		labelNom.setLayoutY(20);
+		// labelNom.setLayoutX(300);
+		// labelNom.setLayoutY(20);
 
-		Image imageRole = new Image("file:src/main/resources/"+role+".jpg");
+		Image imageRole = new Image("file:src/main/resources/"+p.getRole().toString()+".jpg");
 		ImageView imageview = new ImageView(imageRole);
 		imageview.setFitWidth(200);
 		imageview.setFitHeight(200);
-		imageview.setLayoutX(20);
-		imageview.setLayoutY(30);
+		// imageview.setLayoutX(20);
+		// imageview.setLayoutY(30);
 
+		Label login = new Label("Login : "+p.getLogin());
+		Label email = new Label("Email : "+p.getMail());
+		String chainePromo = "";
+		for (Promotion promo : p.getPromos() ){
+			chainePromo+=promo.getPromoId().toString()+" | ";
+		}
+		Label promoLabel = new Label("Promotion(s) : "+chainePromo);
+		
+		Label[] labels = {labelNom,login,email,promoLabel};
+		for(Label l : labels){
+			l.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+    		l.setTextFill(Color.BLACK);
+		}
 
-		Label labelInfos = new Label("Login : "+p.getLogin()+"\nEmail : "+mail+"\nPromo : "+p.getPromos().get(0).getPromoId());
-		labelInfos.setFont(Font.font("Arial",FontWeight.BOLD,25));
-		labelInfos.setTextFill(Color.BLACK);
-		boiteInfos.getChildren().add(labelInfos);
+		
+		boiteInfos.getChildren().addAll(imageview,labelNom,login,email,promoLabel);
 		boiteInfos.setLayoutX(50);
 		boiteInfos.setLayoutY(300);
-		sceneInfos.getChildren().addAll(boiteBtn,imageview,labelNom,boiteInfos);
+		sceneInfos.getChildren().addAll(boiteBtn,boiteInfos);
 		return sceneInfos;
 	}
+
+	//private List<Promotion> recupererToutesLesPromos()
 }

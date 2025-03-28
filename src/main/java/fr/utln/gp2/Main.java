@@ -27,6 +27,8 @@ public class Main{
 		
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
 		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
+		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
+
 
 		Cours c1 = new Cours(Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
 		Cours c2 = new Cours(Arrays.asList(m1info), "spelerin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
@@ -54,6 +56,8 @@ public class Main{
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info));
 		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR, Arrays.asList(m1info));
+		Personne p5 = new Personne("0","Viagra","Thierry",Role.GESTIONNAIRE);
+		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 
 
 		Outils.persistence(p1);
@@ -63,6 +67,9 @@ public class Main{
 		Outils.persistence(l1info);
 		Outils.persistence(p3); 
 		Outils.persistence(p4);
+		Outils.persistence(p5);
+		Outils.persistence(p6);
+		Outils.persistence(m2glotin);
 		// Outils.persistence(c1);
 		// Outils.persistence(c2);
 		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = Outils.getCoursByPromo(m1info.getPromoId());

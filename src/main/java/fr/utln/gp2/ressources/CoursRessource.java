@@ -39,7 +39,7 @@ public class CoursRessource {
 	PersonneRepository personneRepository;
 
 	@GET
-	@Path("/All")
+	@Path("/all")
 	public List<Cours> getAllCours() {
 		return coursRepository.listAll();
 	}
