@@ -262,26 +262,34 @@ public class PageEDT {
 	}
 
 	private void ajouterCours(Cours c){
-		Label label = new Label("UE"+"\n"+c.getIntervenantLogin()+"\nSalle"+"\n"+c.getType().toString());
-		// VBox boiteLabels = new VBox(5);
-		
-		// Label nom = new Label("Nom UE..");
-		// Label prof = new Label(c.getIntervenantLogin());
-		// Label salle = new Label("Salle");
-		// Label typeCours = new Label(c.getType().toString());
 
-		// Label[] labels = {nom,prof,salle,typeCours};
-		// for (Label l : labels){
-		// 	l.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-		// 	l.setTextFill(Color.WHITE);
-		// }
-		// boiteLabels.setAlignment(Pos.CENTER);
-		// boiteLabels.getChildren().addAll(nom,prof,salle,typeCours);
+		HBox boiteVbox = new HBox(50);
+		//Label label = new Label("UE"+"\n"+c.getIntervenantLogin()+"\nSalle"+"\n"+c.getType().toString());
+		VBox boiteLabelUE_SALLE = new VBox(1+c.getDuree()*5);
+		VBox boiteLabelProf_TYpe = new VBox(1+c.getDuree()*5);
+		Label nom = new Label("Nom UE..");
+		Label prof = new Label(c.getIntervenantLogin());
+		Label salle = new Label("Salle");
+		Label typeCours = new Label(c.getType().toString());
+
+		Label[] labels = {nom,prof,salle,typeCours};
+		for (Label l : labels){
+			l.setFont(Font.font("Arial", FontWeight.BOLD, 14));
+			l.setTextFill(Color.WHITE);
+		}
+		boiteLabelUE_SALLE.setAlignment(Pos.CENTER);
+		boiteLabelUE_SALLE.getChildren().addAll(nom,salle);
+
+		boiteLabelProf_TYpe.setAlignment(Pos.CENTER);
+		boiteLabelProf_TYpe.getChildren().addAll(prof,typeCours);
+
+		boiteVbox.setAlignment(Pos.CENTER);
+		boiteVbox.getChildren().addAll(boiteLabelUE_SALLE,boiteLabelProf_TYpe);
 
 		// Crée un StackPane pour centrer le label dans la cellule
 		StackPane cell = new StackPane();
-		//cell.getChildren().add(boiteLabels);
-		cell.getChildren().add(label);
+		cell.getChildren().add(boiteVbox);
+		//cell.getChildren().add(label);
 		cell.setAlignment(Pos.CENTER);  
 		cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
 		cell.setBackground(new Background(new BackgroundFill(couleurCours.get(c.getType()), new CornerRadii(0), new Insets(1))));
