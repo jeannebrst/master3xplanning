@@ -16,20 +16,31 @@ import java.util.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
+@Builder
 public class Salle {
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
-    @SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    @Schema(hidden = true)
-    private Long salle_id;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
+	@SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@Schema(hidden = true)
+	private Long salle_id;
 
-    private String nom;
+	private String nom;
 
-    @OneToMany(mappedBy = "salle", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    private List<Cours> cours;
+	@OneToMany(mappedBy = "salle", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@Builder.Default
+	private List<Cours> cours = new ArrayList<>();
 
-    private int capacite;
+	private int capacite;
 
-    private String description;
+	private String description;
+
+	public Salle(String nom, List<Cours> cours, int capacite, String description) {
+		this.nom = nom;
+		if(cours!=null){
+			this.cours = cours;
+		}
+		this.capacite = capacite;
+		this.description = description;
+	}
 }

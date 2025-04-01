@@ -19,6 +19,7 @@ import java.util.concurrent.CompletableFuture;
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Cours.TypeC;
 
@@ -43,6 +44,8 @@ public class Main{
 		Cours c7 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
 		Cours c8 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
 		Cours c9 = new Cours(optimisation, Arrays.asList(l1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
+
+		// Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
@@ -71,13 +74,8 @@ public class Main{
 		Outils.persistence(c7);
 		Outils.persistence(c8);
 		Outils.persistence(c9);
+		Outils.persistence(s1);
 
-		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = Outils.getCoursByPromo(m1info.getPromoId());
-		Map<Integer, List<Cours>> coursMap = futureCoursMap.exceptionally(e -> {
-			System.err.println("Erreur lors de la récupération des cours : " + e.getMessage());
-			return Map.of();
-		}).join();
-		System.out.println(coursMap + "\n");
 		Application.launch(PageLogin.class, args);
 	}
 
