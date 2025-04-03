@@ -10,6 +10,7 @@ import fr.utln.gp2.entites.Cours;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -32,10 +33,11 @@ public class PageModif {
 
 
 
+        stage.setScene(generePage());
 		stage.show();
     }
 
-    private void generePage(){
+    private Scene generePage(){
         ComboBox<String> ueComboBox = new ComboBox<>();
         ueComboBox.getItems().addAll();
 
@@ -71,10 +73,13 @@ public class PageModif {
 
         // 📌 Mise en page
         VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
-        Scene scene = new Scene(layout, 300, 200);
+        Pane pane = new Pane();
+        pane.getChildren().add(layout);
+        Scene scene = new Scene(pane);
+        return scene;
     }
 
     private void ajouteUnCours(){
-        
+        // Cours c = new Cours()
     }
 }
