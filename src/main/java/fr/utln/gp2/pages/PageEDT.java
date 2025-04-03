@@ -21,6 +21,7 @@ import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId;
+import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -69,7 +70,6 @@ public class PageEDT {
 
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());
-			System.out.println(p.getPromos());
 		}
 
 		stage = new Stage();
@@ -256,8 +256,11 @@ public class PageEDT {
 				StackPane cell = new StackPane();
 				cell.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(1))));
 				cell.setOnMouseClicked(event -> {
-					System.out.println("Cell cliquée" + num);
-					//Appel fonction gestionnaire
+					Platform.runLater(()-> {
+					PageModif pageModif = new PageModif(p);
+					pageModif.show();}
+					);
+					
 				});
 				grilleEdt.add(cell, j, i);
 			}
@@ -414,5 +417,5 @@ public class PageEDT {
 		boutonModif.setOnAction(e -> {});
 		return boutonModif;
 	}
-	
+
 }
