@@ -20,6 +20,7 @@ import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.utils.Outils;
+import fr.utln.gp2.utils.PromotionId;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -71,6 +72,7 @@ public class PageEDT {
 
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());
+			System.out.println(p.getPromos());
 		}
 
 		stage = new Stage();
@@ -107,6 +109,7 @@ public class PageEDT {
 		HBox boiteBtn = new HBox(10);
 		Button cours = new Button("Cours");
 		Button infos = new Button("Informations Personnelles");
+		
 		infos.setOnAction(e -> {
 			stage.setScene(sceneInfos);
 			
@@ -118,15 +121,19 @@ public class PageEDT {
 
 		});
 		boiteBtn.getChildren().addAll(cours,infos);
+		if (p.getRole().equals(Role.GESTIONNAIRE)){
+			boiteBtn.getChildren().add(genereBoutonGestionnaire());
+		}
 		return boiteBtn;
 	}
 
 	private StackPane genereSceneEDT(){
 		ComboBox<String> menuPromo = new ComboBox<>();
-		for (Promotion p : p.getPromos()){
-			menuPromo.getItems().add("Promotion : "+p.getPromoId().toString());
+		for (Promotion p : p.getPromos() ){
+			PromotionId pTemporaire = p.getPromoId();
+			menuPromo.getItems().add(pTemporaire.getType().toString()+" "+pTemporaire.getAnnee()+" "+ pTemporaire.getCategorie());
 		}
-		menuPromo.setValue("Promotion : " +p.getPromos().get(0).getPromoId().toString());
+		menuPromo.setValue(p.getPromos().get(0).getPromoId().getType().toString()+" "+p.getPromos().get(0).getPromoId().getAnnee()+" "+p.getPromos().get(0).getPromoId().getCategorie());
 		menuPromo.setOnAction(e -> {
 			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
 			majEDT();
@@ -176,11 +183,14 @@ public class PageEDT {
 		GridPane.setValignment(cellBouton, VPos.CENTER);
 		
 		HBox boiteBtn = new HBox(genereBoutonHaut()); 
-		
+
+
+
 		pageComplete.getChildren().add(boiteBtn);
 		if (!p.getRole().equals(Role.PROFESSEUR)){
 			pageComplete.getChildren().add(menuPromo);
 		}
+		
 		pageComplete.getChildren().addAll(grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
@@ -402,5 +412,10 @@ public class PageEDT {
 		return sceneInfos;
 	}
 
+	public Button genereBoutonGestionnaire(){
+		Button boutonModif = new Button("Modifier l'EDT");
+		boutonModif.setOnAction(e -> {});
+		return boutonModif;
+	}
 	
 }
