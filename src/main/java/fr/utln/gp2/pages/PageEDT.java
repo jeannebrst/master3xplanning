@@ -255,9 +255,11 @@ public class PageEDT {
 				int num = i*6 + j;
 				StackPane cell = new StackPane();
 				cell.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(1))));
-				cell.setOnMouseClicked(event -> {
-					Platform.runLater(()-> {new PageModif(p);});
-				});
+				cell.setOnMouseClicked(event -> 
+					ouvrirPageModif()
+					);
+					
+				;
 				grilleEdt.add(cell, j, i);
 			}
 		}
@@ -306,6 +308,7 @@ public class PageEDT {
 		// Crée un StackPane pour centrer le label dans la cellule
 		StackPane cell = new StackPane();
 		cell.getChildren().add(boiteVbox);
+		cell.setOnMouseClicked(event->ouvrirPageModif());
 		//cell.getChildren().add(label);
 		cell.setAlignment(Pos.CENTER);  
 		cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
@@ -414,4 +417,14 @@ public class PageEDT {
 		return boutonModif;
 	}
 
+	public void ModifierLesCellules(){
+
+	}
+	private void ouvrirPageModif(){
+		Platform.runLater(()-> {
+			PageModif pageModif = new PageModif(p, coursMap);
+			pageModif.show();
+		});
+		
+	}
 }
