@@ -327,10 +327,6 @@ public class PageEDT {
 		coursCells.add(cell);
 	}
 
-	private void remplirEDT(){
-
-	}
-
 	private void ajouteAllCours(){
 		if (coursMap.get(numSemaine) != null){
 			for (Cours c : coursMap.get(numSemaine)){

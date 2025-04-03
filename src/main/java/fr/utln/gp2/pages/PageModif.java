@@ -29,10 +29,13 @@ public class PageModif {
     public void show(){
         stage.setTitle("Page de modification");
 		stage.setMaximized(false);
+
+
+
 		stage.show();
     }
 
-    public void generePage(){
+    private void generePage(){
         ComboBox<String> ueComboBox = new ComboBox<>();
         ueComboBox.getItems().addAll();
 
@@ -69,5 +72,9 @@ public class PageModif {
         // 📌 Mise en page
         VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
         Scene scene = new Scene(layout, 300, 200);
+    }
+
+    private void ajouteUnCours(){
+        
     }
 }
