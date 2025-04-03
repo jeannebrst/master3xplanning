@@ -31,7 +31,7 @@ public class Cours {
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ue_id", nullable = false)
 	@JsonIgnoreProperties({"cours"})
-	private UE ues;
+	private UE ue;
 
 
 	@Builder.Default
@@ -72,8 +72,8 @@ public class Cours {
 		this.type = type;
 	}
 
-	public Cours(UE ues, List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type) {
-		this.ues = ues;
+	public Cours(UE ue, List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type) {
+		this.ue = ue;
 		if(promos!=null){
 			this.promos = promos;
 		}
@@ -91,7 +91,7 @@ public class Cours {
 			promosIds.add(p.getPromoId());
 		}
 
-		return "Cours [coursId=" + coursId + ", ue=" + ues + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
+		return "Cours [coursId=" + coursId + ", ue=" + ue + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
 				+ ", heureDebut=" + heureDebut + ", duree=" + duree + ", jour=" + jour + ", type=" + type + "]";
 	}
 }

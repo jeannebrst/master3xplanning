@@ -6,7 +6,6 @@ import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.repositories.NoteRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.UERepository;
-import fr.utln.gp2.utils.NoteDTO;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -17,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Path("/notes")
+@Path("/api/v1/notes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class NoteRessource {
@@ -51,28 +50,28 @@ public class NoteRessource {
      */
     @POST
     @Transactional
-    public Response addNote(NoteDTO request) {
+    public Response createNote(Note note) {
         // Vérifier si l'étudiant existe
-        Optional<Personne> etudiantOpt = personneRepository.find("login", request.login).firstResultOptional();
+        Optional<Personne> etudiantOpt = personneRepository.find("login", note.getEtudiant().getLogin()).firstResultOptional();
         if (etudiantOpt.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Étudiant avec le login " + request.login + " introuvable.")
+                    .entity("Étudiant avec le login " + note.getEtudiant().getLogin() + " introuvable.")
                     .build();
         }
 
         // Vérifier si l'UE existe
-        Optional<UE> ueOpt = ueRepository.findByIdOptional(request.ueId);
+        Optional<UE> ueOpt = ueRepository.findByIdOptional(note.getUe().getUeId());
         if (ueOpt.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("UE avec l'ID " + request.ueId + " introuvable.")
+                    .entity("UE " + ueOpt.get().getNom() + " introuvable.")
                     .build();
         }
 
-        Note note = new Note(etudiantOpt.get(), ueOpt.get(), request.getNote(), request.getDate());
+        ;
 
         notesRepository.persist(note);
         return Response.status(Response.Status.CREATED)
-                .entity(note)
+                .entity("Note ajoutée avec succès pour l'étudiant " + note.getEtudiant().getLogin())
                 .build();
     }
 

@@ -25,7 +25,8 @@ public class Note {
     private Personne etudiant;
 
     @ManyToOne
-    private UE ues;
+    private UE ue;
+
 
     private float note;
 
@@ -33,8 +34,10 @@ public class Note {
 
     public Note(Personne personne, UE ue, float note, Date date) {
         this.etudiant = personne;
-        this.ues = ue;
+        this.ue = ue;
         this.note = note;
         this.date = date;
     }
+
+
 }

@@ -3,6 +3,8 @@ package fr.utln.gp2.entites;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+
 import java.util.*;
 
 @Getter
@@ -26,13 +28,14 @@ public class UE {
 
 	private String nom;
 
-	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "ue", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	private List<Note> notes = new ArrayList<>();
 
-	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "ue", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Builder.Default
-	@JsonIgnoreProperties({"ues", "promos", "intervenantLogin", "salle", "heureDebut"})
+	@JsonIgnoreProperties({"ue", "promos", "intervenantLogin", "salle", "heureDebut"})
 //	@JsonBackReference
+	@Schema(hidden = true)
 	private List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;

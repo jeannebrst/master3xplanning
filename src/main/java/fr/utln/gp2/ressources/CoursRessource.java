@@ -76,16 +76,16 @@ public class CoursRessource {
 
 		cours.setPromos(managedPromotions);
 
-		if (cours.getUes() == null || cours.getUes().getNom() == null) {
+		if (cours.getUe() == null || cours.getUe().getNom() == null) {
 			return Response.status(Response.Status.BAD_REQUEST)
 					.entity("L'UE associée au cours est nulle ou sans nom.")
 					.build();
 		}
 
-		final String ueNom = cours.getUes().getNom();
+		final String ueNom = cours.getUe().getNom();
 
 		// Récupérer l'UE dans la base de données en utilisant le nom
-		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUes().getNom());
+		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUe().getNom());
 
 		// Vérification si l'UE existe, sinon retour d'une erreur
 		UE ue = optionalUe.orElseThrow(() -> new IllegalArgumentException(
@@ -93,7 +93,7 @@ public class CoursRessource {
 		));
 
 		// Associer l'UE au cours
-		cours.setUes(ue);
+		cours.setUe(ue);
 
 		if (ue != null) {
 			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE

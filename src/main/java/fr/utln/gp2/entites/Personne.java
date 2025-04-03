@@ -68,6 +68,14 @@ public class Personne {
 	@JsonIgnore
 	private List<UE> ues = new ArrayList<>();
 
+	@ManyToMany
+	@JoinTable(
+			name = "personne_note",
+			joinColumns = @JoinColumn(name = "personne_id"),
+			inverseJoinColumns = @JoinColumn(name = "note_id")
+	)
+	private List<Note> notes = new ArrayList<>();
+
 
 	public Personne(String hashMdp, String nom, String prenom, Role role){
 		this.hashMdp = hashMdp;
