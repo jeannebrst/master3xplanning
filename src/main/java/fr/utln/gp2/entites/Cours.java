@@ -30,7 +30,7 @@ public class Cours {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ue_id", nullable = false)
-//	@JsonIgnoreProperties({"cours"})
+	@JsonIgnoreProperties({"cours"})
 	private UE ues;
 
 

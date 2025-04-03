@@ -28,6 +28,10 @@ public class UE {
 	@Column(name = "ue_id")
 	private Long ueId;
 
+	@ElementCollection
+	@Builder.Default
+	private List<String> intervenantsLogin = new ArrayList<>();
+
 	private String nom;
 
 	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)

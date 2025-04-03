@@ -32,6 +32,7 @@ public class Main{
 		UE optimisation = UE.builder()
 				.nom("Optimisation")
 				.responsableLogin("spelerin")
+				.intervenantsLogin(Arrays.asList("hglotin"))
 				.nbHeures(45)
 				.build();
 
