@@ -28,6 +28,10 @@ public class UE {
 	@Column(name = "ue_id")
 	private Long ueId;
 
+	@ElementCollection
+	@Builder.Default
+	private List<String> intervenantsLogin = new ArrayList<>();
+
 	private String nom;
 
 	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
@@ -35,8 +39,8 @@ public class UE {
 
 	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Builder.Default
-	@JsonIgnoreProperties({"ues"})
-	@JsonBackReference
+	@JsonIgnoreProperties({"ues", "promos", "intervenantLogin", "salle", "heureDebut"})
+//	@JsonBackReference
 	private List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;

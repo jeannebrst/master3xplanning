@@ -95,7 +95,7 @@ public class CoursRessource {
 		// Associer l'UE au cours
 		cours.setUes(ue);
 
-		if (ue != null && !ue.getCours().contains(cours)) {
+		if (ue != null) {
 			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
 		}
 
@@ -107,8 +107,9 @@ public class CoursRessource {
 		Optional<Personne> intervenantOpt = personneRepository.findByLogin(cours.getIntervenantLogin());
 		if (intervenantOpt.isPresent()) {
 			Personne intervenant = intervenantOpt.get();
-			if (!personneRepository.isPersistent(intervenant)) {
-				intervenant = personneRepository.getEntityManager().merge(intervenant);
+			if (!ue.getIntervenantsLogin().contains(intervenant.getLogin())) {
+				return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Le professeur " + intervenant.getLogin() +" ne fait pas partie des intervenants de cette UE : " + ue.getIntervenantsLogin().toString()).build();
 			}
 			for (Promotion promotion : managedPromotions) {
 				if (!promotion.getPersonnes().contains(intervenant)) {

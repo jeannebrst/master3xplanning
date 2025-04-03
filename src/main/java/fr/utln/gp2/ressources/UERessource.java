@@ -34,6 +34,10 @@ public class UERessource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUE(UE ue) {
+        if (!ue.getIntervenantsLogin().contains(ue.getResponsableLogin())) {
+            ue.getIntervenantsLogin().add(ue.getResponsableLogin());
+        }
+
         ueRepository.persist(ue);
         return Response.status(201).entity(ue).build();
     }
