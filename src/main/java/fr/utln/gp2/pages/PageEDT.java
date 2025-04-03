@@ -256,11 +256,7 @@ public class PageEDT {
 				StackPane cell = new StackPane();
 				cell.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(1))));
 				cell.setOnMouseClicked(event -> {
-					Platform.runLater(()-> {
-					PageModif pageModif = new PageModif(p);
-					pageModif.show();}
-					);
-					
+					Platform.runLater(()-> {new PageModif(p);});
 				});
 				grilleEdt.add(cell, j, i);
 			}

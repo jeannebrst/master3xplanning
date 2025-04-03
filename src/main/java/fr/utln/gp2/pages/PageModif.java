@@ -10,11 +10,16 @@ public class PageModif {
 
     public PageModif(Personne p){
         stage = new Stage();
+        show();
     }
 
-    public void show(){
+    private void show(){
         stage.setTitle("Page de modification");
 		stage.setMaximized(false);
 		stage.show();
+    }
+
+    private void ajouteCours(){
+
     }
 }
