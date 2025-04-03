@@ -74,7 +74,6 @@ public class Main{
 		Outils.persistence(c7);
 		Outils.persistence(c8);
 		Outils.persistence(c9);
-		Outils.persistence(s1);
 
 		Application.launch(PageLogin.class, args);
 	}
