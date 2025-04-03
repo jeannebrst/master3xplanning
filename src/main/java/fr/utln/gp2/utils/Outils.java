@@ -158,7 +158,7 @@ public class Outils{
 
 	public static CompletableFuture<List<Promotion>> getAllPromo() {
 		HttpRequest request = HttpRequest.newBuilder()
-			.uri(URI.create("http://localhost:8080/api/v1/promotions/all"))
+			.uri(URI.create("http://localhost:8080/api/v1/promotions"))
 			.GET()
 			.header("Content-Type", "application/json")
 			.build();
