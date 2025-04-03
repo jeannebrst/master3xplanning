@@ -242,6 +242,19 @@ public class PageEDT {
 			GridPane.setValignment(horaireCellule, VPos.CENTER);
 			grilleEdt.add(horaireCellule, 0, i+1);
 		}
+
+		for (int i=1; i<12; i++){
+			for (int j=1; j<6; j++){
+				int num = i*6 + j;
+				StackPane cell = new StackPane();
+				cell.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(1))));
+				cell.setOnMouseClicked(event -> {
+					System.out.println("Cell cliquée" + num);
+					//Appel fonction gestionnaire
+				});
+				grilleEdt.add(cell, j, i);
+			}
+		}
 	}
 
 	private void majEDT(){
@@ -262,9 +275,7 @@ public class PageEDT {
 	}
 
 	private void ajouterCours(Cours c){
-
 		HBox boiteVbox = new HBox(50);
-		//Label label = new Label("UE"+"\n"+c.getIntervenantLogin()+"\nSalle"+"\n"+c.getType().toString());
 		VBox boiteLabelUE_SALLE = new VBox(1+c.getDuree()*5);
 		VBox boiteLabelProf_TYpe = new VBox(1+c.getDuree()*5);
 		Label nom = new Label(c.getUes().getNom());
@@ -305,6 +316,10 @@ public class PageEDT {
 		GridPane.setHalignment(cell, HPos.CENTER);  
 		GridPane.setValignment(cell, VPos.CENTER);
 		coursCells.add(cell);
+	}
+
+	private void remplirEDT(){
+
 	}
 
 	private void ajouteAllCours(){
