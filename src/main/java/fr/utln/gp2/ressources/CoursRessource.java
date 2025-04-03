@@ -95,7 +95,7 @@ public class CoursRessource {
 		// Associer l'UE au cours
 		cours.setUes(ue);
 
-		if (ue != null && !ue.getCours().contains(cours)) {
+		if (ue != null) {
 			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
 		}
 

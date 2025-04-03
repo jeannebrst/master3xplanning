@@ -35,8 +35,8 @@ public class UE {
 
 	@OneToMany(mappedBy = "ues", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@Builder.Default
-	@JsonIgnoreProperties({"ues"})
-	@JsonBackReference
+	@JsonIgnoreProperties({"ues", "promos", "intervenantLogin", "salle", "heureDebut"})
+//	@JsonBackReference
 	private List<Cours> cours = new ArrayList<>();
 
 	private String responsableLogin;
