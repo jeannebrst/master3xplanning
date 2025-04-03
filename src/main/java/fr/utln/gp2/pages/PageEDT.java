@@ -49,8 +49,6 @@ import javafx.stage.Stage;
 
 
 public class PageEDT {
-	private static final HttpClient client = HttpClient.newHttpClient();
-
 	private GridPane grilleEdt = new GridPane();
 	private LocalDate lundi;
 	private Label semaine;
@@ -68,7 +66,6 @@ public class PageEDT {
 	
 	public PageEDT(String login) {
 		p = Outils.getPersonneInfo(login).join();
-		// System.out.println("Personne récup : " + p + "\n");
 
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());

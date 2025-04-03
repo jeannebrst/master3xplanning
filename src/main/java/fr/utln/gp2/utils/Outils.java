@@ -21,6 +21,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
+import fr.utln.gp2.entites.UE;
 
 public class Outils{
 	private static final HttpClient client = HttpClient.newHttpClient();
@@ -171,6 +172,31 @@ public class Outils{
 					ObjectMapper objectMapper = new ObjectMapper();
 					// Convertit la réponse JSON en objet Personne
 					return objectMapper.readValue(response, new TypeReference<List<Promotion>>() {});
+				} catch (Exception e) {
+					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n");
+					return null;
+				}
+			})
+			.exceptionally(e -> {
+				e.printStackTrace();
+				return null;
+			});
+	}
+
+	public static CompletableFuture<List<UE>> getAllUE() {
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create("http://localhost:8080/api/v1/ues"))
+			.GET()
+			.header("Content-Type", "application/json")
+			.build();
+
+		// Retourner un CompletableFuture
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)  // Récupère la réponse sous forme de chaîne
+			.thenApply(response -> {
+				try {
+					ObjectMapper objectMapper = new ObjectMapper();
+					return objectMapper.readValue(response, new TypeReference<List<UE>>() {});
 				} catch (Exception e) {
 					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n");
 					return null;
