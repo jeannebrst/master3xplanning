@@ -21,52 +21,53 @@ import fr.utln.gp2.entites.Cours.TypeC;
 
 public class Main{
 	public static void main(String[] args){
-		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
-		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
+		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "tbah", null);
+		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"tbah",null);
 		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
 
 		UE optimisation = UE.builder()
 				.nom("Optimisation")
-				.responsableLogin("spelerin")
+				.responsableLogin("tbah")
 				.intervenantsLogin(Arrays.asList("hglotin"))
 				.nbHeures(45)
 				.build();
 
 		Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
 
-		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "tbah", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
 		Cours c2 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
-		Cours c3 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c3 = new Cours(optimisation, Arrays.asList(m1info), "tbah", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
 		Cours c4 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
-		Cours c5 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c5 = new Cours(optimisation, Arrays.asList(m1info), "tbah", 14, 2, Date.from(LocalDate.of(2025, 3, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
 		Cours c6 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
-		Cours c7 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
-		Cours c8 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
-		Cours c9 = new Cours(optimisation, Arrays.asList(l1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c7 = new Cours(optimisation, Arrays.asList(m1info, m2glotin), "tbah", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c8 = new Cours(optimisation, Arrays.asList(m1info), "tbah", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c9 = new Cours(optimisation, Arrays.asList(l1info), "tbah", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
 
 
+//		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT, Arrays.asList(m1info, m2glotin));
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info));
-		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR, Arrays.asList(m1info));
+		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR);
 		Personne p5 = new Personne("0","Viagra","Thierry",Role.GESTIONNAIRE);
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 		Personne p7 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
 
 //		Note n1 = new Note(p7, optimisation, 20, new Date());
 
+		Outils.persistence(p4);
+		Outils.persistence(p6);
 		Outils.persistence(p1);
-		Outils.persistence(p2);
 		Outils.persistence(optimisation);
 		Outils.persistence(m1info);
 		Outils.persistence(m2glotin);
 		Outils.persistence(l1info);
 		Outils.persistence(s1);
-		Outils.persistence(p3); 
-		Outils.persistence(p4);
+		Outils.persistence(p3);
 		Outils.persistence(p5);
-		Outils.persistence(p6);
+		Outils.persistence(p2);
 		Outils.persistence(c1);
 		Outils.persistence(c2);
 		Outils.persistence(c3);

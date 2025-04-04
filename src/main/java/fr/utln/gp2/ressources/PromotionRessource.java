@@ -70,8 +70,15 @@ public class PromotionRessource {
 			if (!personneRepository.isPersistent(responsable)) {
 				responsable = personneRepository.getEntityManager().merge(responsable);
 			}
+			if (!responsable.getRole().equals(Personne.Role.PROFESSEUR)) {
+				return Response.status(Response.Status.BAD_REQUEST)
+						.entity("La personne (responsable) " + responsable.getLogin() +" n'est pas un(e) professeur(e), c'est un(e) " + responsable.getRole()).build();
+			}
 			if (!promotion.getPersonnes().contains(responsable)) {
 				promotion.getPersonnes().add(responsable);
+			}
+			if (!responsable.getPromos().contains(promotion)) {
+				responsable.getPromos().add(promotion);
 			}
 		}
 		promotionRepository.persist(promotion);

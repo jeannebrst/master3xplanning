@@ -1,5 +1,6 @@
 package fr.utln.gp2.ressources;
 
+import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.UERepository;
@@ -37,7 +38,18 @@ public class UERessource {
         if (!ue.getIntervenantsLogin().contains(ue.getResponsableLogin())) {
             ue.getIntervenantsLogin().add(ue.getResponsableLogin());
         }
-
+        final Personne responsableUe = personneRepository.findByLogin(ue.getResponsableLogin()).get();
+        if (!responsableUe.getRole().equals(Personne.Role.PROFESSEUR)) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                    .entity("La personne (responsable) " + responsableUe.getLogin() +" n'est pas un(e) professeur(e), c'est un(e) " + responsableUe.getRole()).build();
+        }
+        for (String intervenantLogin : ue.getIntervenantsLogin()) {
+            Personne intervenantUe = personneRepository.findByLogin(intervenantLogin).get();
+            if (!intervenantUe.getRole().equals(Personne.Role.PROFESSEUR)) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                        .entity("La personne (intervenant) " + intervenantUe.getLogin() +" n'est pas un(e) professeur(e), c'est un(e) " + intervenantUe.getRole()).build();
+            }
+        }
         ueRepository.persist(ue);
         return Response.status(201).entity(ue).build();
     }
