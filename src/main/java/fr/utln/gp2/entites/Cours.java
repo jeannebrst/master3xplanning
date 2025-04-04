@@ -30,7 +30,7 @@ public class Cours {
 
 	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "ue_id", nullable = false)
-	@JsonIgnoreProperties({"cours"})
+	@JsonIgnoreProperties({"cours", "notes"})
 	private UE ue;
 
 
@@ -45,6 +45,7 @@ public class Cours {
 
 	@ManyToOne
 	@JoinColumn(name = "salle_id")
+	@JsonIgnoreProperties({"cours"})
 	private Salle salle;
 
 
@@ -72,7 +73,7 @@ public class Cours {
 		this.type = type;
 	}
 
-	public Cours(UE ue, List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type) {
+	public Cours(UE ue, List<Promotion> promos, String intervenantLogin, int heureDebut, int duree, Date jour, TypeC type, Salle salle) {
 		this.ue = ue;
 		if(promos!=null){
 			this.promos = promos;
@@ -82,6 +83,7 @@ public class Cours {
 		this.duree = duree;
 		this.jour = jour;
 		this.type = type;
+		this.salle = salle;
 	}
 
 	@Override

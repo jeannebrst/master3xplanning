@@ -1,5 +1,6 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -29,6 +30,7 @@ public class Salle {
 
 	@OneToMany(mappedBy = "salle", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@Builder.Default
+	@JsonIgnoreProperties({"salle"})
 	private List<Cours> cours = new ArrayList<>();
 
 	private int capacite;

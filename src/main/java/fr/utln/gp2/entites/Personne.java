@@ -74,6 +74,7 @@ public class Personne {
 			joinColumns = @JoinColumn(name = "personne_id"),
 			inverseJoinColumns = @JoinColumn(name = "note_id")
 	)
+	@JsonIgnore
 	private List<Note> notes = new ArrayList<>();
 
 
