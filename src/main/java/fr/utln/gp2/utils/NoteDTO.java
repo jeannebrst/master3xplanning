@@ -6,7 +6,6 @@ import java.util.Date;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class NoteDTO {
@@ -14,4 +13,7 @@ public class NoteDTO {
     private String ue;
     private float note;
     private Date date;
+    public NoteDTO() {
+        // Obligatoire pour Jackson
+    }
 }

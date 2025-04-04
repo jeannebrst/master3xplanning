@@ -16,12 +16,7 @@ public class NoteRepository implements PanacheRepository<Note> {
     PersonneRepository personneRepository;
 
     public List<Note> findByLogin(String login) {
-        return personneRepository.findByLogin(login)
-                .map(p -> {
-                    // force l'initialisation des notes si besoin
-                    p.getNotes().size();
-                    return p.getNotes();
-                })
-                .orElse(Collections.emptyList());
+        System.out.println(personneRepository.findByLogin(login).get().getNotes());
+        return personneRepository.findByLogin(login).get().getNotes();
     }
 }

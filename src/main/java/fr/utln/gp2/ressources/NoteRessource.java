@@ -43,12 +43,15 @@ public class NoteRessource {
     @GET
     @Path("/{login}")
     public Response getNotesByLogin(@PathParam("login") String login) {
-        List<Note> notes = noteRepository.findByLogin(login);
-        if (notes.isEmpty()) {
+        // Vérifier si l'étudiant existe
+        Optional<Personne> etudiantOpt = personneRepository.findByLogin(login);
+        if (etudiantOpt.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Aucune note trouvée pour l'étudiant avec le login : " + login)
+                    .entity("Étudiant avec le login " + login + " introuvable.")
                     .build();
         }
+
+        List<Note> notes = noteRepository.findByLogin(login);
         return Response.ok(notes).build();
     }
 

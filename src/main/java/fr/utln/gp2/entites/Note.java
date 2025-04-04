@@ -46,9 +46,9 @@ public class Note {
     @Override
     public String toString() {
         return "Note{" +
-                "notes_id=" + noteId +
+                "noteId=" + noteId +
                 ", etudiant=" + etudiant +
-                ", ue=" + ue +
+                ", ue=" + ue.getNom() +
                 ", note=" + note +
                 ", date=" + date +
                 '}';
