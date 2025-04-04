@@ -1,6 +1,6 @@
 package fr.utln.gp2;
 
-import fr.utln.gp2.entites.UE;
+import fr.utln.gp2.entites.*;
 import fr.utln.gp2.pages.PageLogin;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
@@ -16,10 +16,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-import fr.utln.gp2.entites.Cours;
-import fr.utln.gp2.entites.Personne;
-import fr.utln.gp2.entites.Promotion;
-import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Cours.TypeC;
 
@@ -36,17 +32,18 @@ public class Main{
 				.nbHeures(45)
 				.build();
 
-		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
-		Cours c2 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
-		Cours c3 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		Cours c4 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		Cours c5 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
-		Cours c6 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP);
-		Cours c7 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM);
-		Cours c8 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
-		Cours c9 = new Cours(optimisation, Arrays.asList(l1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD);
+		Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
 
-		// Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
+		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c2 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c3 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 13, 3, Date.from(LocalDate.of(2025, 3, 26).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c4 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 2, Date.from(LocalDate.of(2025, 3, 27).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c5 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c6 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 14, 4, Date.from(LocalDate.of(2025, 3, 17).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c7 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 10, 2, Date.from(LocalDate.of(2025, 3, 18).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c8 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 20).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+		Cours c9 = new Cours(optimisation, Arrays.asList(l1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1);
+
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
 		Personne p2 = new Personne("virgule", "lavit", "Quentin", Role.ETUDIANT);
@@ -55,13 +52,17 @@ public class Main{
 		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR, Arrays.asList(m1info));
 		Personne p5 = new Personne("0","Via","Thierry",Role.GESTIONNAIRE);
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
+		Personne p7 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
+
+//		Note n1 = new Note(p7, optimisation, 20, new Date());
 
 		Outils.persistence(p1);
+		Outils.persistence(p2);
 		Outils.persistence(optimisation);
 		Outils.persistence(m1info);
 		Outils.persistence(m2glotin);
 		Outils.persistence(l1info);
-		Outils.persistence(p2);
+		Outils.persistence(s1);
 		Outils.persistence(p3); 
 		Outils.persistence(p4);
 		Outils.persistence(p5);
@@ -77,6 +78,9 @@ public class Main{
 		Outils.persistence(c9);
 		// Outils.persistence(s1);
 
+		Outils.persistence(p7);
+
+		//Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);
 	}
 

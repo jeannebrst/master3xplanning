@@ -5,18 +5,14 @@ import lombok.*;
 import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.*;
-import lombok.*;
 import org.eclipse.microprofile.openapi.annotations.media.Schema;
-
-import java.util.*;
 
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-public class Notes {
+public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notes_seq")
     @SequenceGenerator(name = "notes_seq", sequenceName = "notes_id_seq", allocationSize = 10)
@@ -29,9 +25,19 @@ public class Notes {
     private Personne etudiant;
 
     @ManyToOne
-    private UE ues;
+    private UE ue;
+
 
     private float note;
 
     private Date date;
+
+    public Note(Personne personne, UE ue, float note, Date date) {
+        this.etudiant = personne;
+        this.ue = ue;
+        this.note = note;
+        this.date = date;
+    }
+
+
 }
