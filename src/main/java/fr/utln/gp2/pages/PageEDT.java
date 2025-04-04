@@ -50,15 +50,17 @@ import javafx.stage.Stage;
 
 
 public class PageEDT {
+	private static final HttpClient client = HttpClient.newHttpClient();
+
 	private GridPane grilleEdt = new GridPane();
 	private LocalDate lundi;
 	private Label semaine;
 	private int numSemaine;
-
+	private Label texteEdition = new Label("MODE EDITION ACTIVEEE !!!!");
 	private Scene sceneEDT; 
 	private Scene sceneInfos; 
 	private Stage stage;
-
+	private Boolean modeEdition = false;
 	private Map<TypeC,Color> couleurCours = new EnumMap<>(Map.of(TypeC.CM,Color.DEEPPINK,TypeC.TD,Color.DEEPSKYBLUE,TypeC.TP,Color.ORANGE));
 	private Map<Integer, List<Cours>> coursMap = new HashMap<>();
 	private List<StackPane> coursCells = new ArrayList<>();
@@ -67,6 +69,7 @@ public class PageEDT {
 	
 	public PageEDT(String login) {
 		p = Outils.getPersonneInfo(login).join();
+		// System.out.println("Personne récup : " + p + "\n");
 
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
 			p.setPromos(Outils.getAllPromo().join());
@@ -119,7 +122,8 @@ public class PageEDT {
 		});
 		boiteBtn.getChildren().addAll(cours,infos);
 		if (p.getRole().equals(Role.GESTIONNAIRE)){
-			boiteBtn.getChildren().add(genereBoutonGestionnaire());
+			texteEdition.setVisible(false);
+			boiteBtn.getChildren().addAll(genereBoutonGestionnaire(),texteEdition);
 		}
 		return boiteBtn;
 	}
@@ -254,10 +258,8 @@ public class PageEDT {
 			for (int j=1; j<6; j++){
 				int num = i*6 + j;
 				StackPane cell = new StackPane();
-				cell.setBackground(new Background(new BackgroundFill(Color.BLUE, new CornerRadii(0), new Insets(1))));
-				cell.setOnMouseClicked(event -> 
-					ouvrirPageModif()
-					);
+				cell.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE,new CornerRadii(0), new Insets(1))));
+				cell.setOnMouseClicked(event -> {if(modeEdition){ouvrirPageModif();}});
 					
 				;
 				grilleEdt.add(cell, j, i);
@@ -413,18 +415,22 @@ public class PageEDT {
 
 	public Button genereBoutonGestionnaire(){
 		Button boutonModif = new Button("Modifier l'EDT");
-		boutonModif.setOnAction(e -> {});
+		boutonModif.setOnAction(e -> {
+			modeEdition=!modeEdition;
+			texteEdition.setVisible(modeEdition);
+			
+		});
 		return boutonModif;
 	}
 
-	public void ModifierLesCellules(){
-
-	}
+	
 	private void ouvrirPageModif(){
 		Platform.runLater(()-> {
-			PageModif pageModif = new PageModif(p, coursMap);
+			PageModif pageModif = new PageModif(p,coursMap,numSemaine);
 			pageModif.show();
 		});
 		
 	}
+
+
 }

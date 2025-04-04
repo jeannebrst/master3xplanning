@@ -1,6 +1,8 @@
 package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.UE;
+import fr.utln.gp2.utils.Outils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,11 +22,13 @@ public class PageModif {
     private Stage stage;
     private Personne p;
     private Map<Integer, List<Cours>> cours;
+    private int numSemaine;
 
-    public PageModif(Personne p, Map<Integer, List<Cours>> cours){
+    public PageModif(Personne p, Map<Integer, List<Cours>> cours,int numSemaine){
         stage = new Stage();
         this.p = p;
         this.cours = cours;
+        this.numSemaine=numSemaine;
     }
 
     public void show(){
@@ -35,29 +39,27 @@ public class PageModif {
     }
 
     public Scene generePage(){
+
+
         ComboBox<String> ueComboBox = new ComboBox<>();
-        ueComboBox.getItems().addAll();
-
-        // 📌 Liste des profs (associée aux UE)
-        Map<String, List<String>> profsParUE = new HashMap<>();
-        profsParUE.put("Mathématiques", List.of("Prof. Dupont", "Prof. Martin"));
-        profsParUE.put("Informatique", List.of("Prof. Durand", "Prof. Petit"));
-        profsParUE.put("Physique", List.of("Prof. Leroy", "Prof. Bernard"));
-
-        // 📌 ComboBox pour les professeurs
+        for (UE ue : Outils.getAllUE().join()){
+            ueComboBox.getItems().add(ue.getNom());
+        }
+        
+        
+        
         ComboBox<String> profComboBox = new ComboBox<>();
         profComboBox.setDisable(true); // Désactivé au début
 
-        // 📌 Événement : Mettre à jour les profs en fonction de l'UE choisie
         ueComboBox.setOnAction(event -> {
             String ueChoisie = ueComboBox.getValue();
             if (ueChoisie != null) {
-                profComboBox.getItems().setAll(profsParUE.get(ueChoisie));
+                profComboBox.getItems().setAll();
                 profComboBox.setDisable(false);
             }
         });
 
-        // 📌 Bouton pour valider le choix
+  
         Button validerButton = new Button("Valider");
         validerButton.setOnAction(event -> {
             String ueChoisie = ueComboBox.getValue();
@@ -68,7 +70,7 @@ public class PageModif {
             }
         });
 
-        // 📌 Mise en page
+        
         VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
         Pane pane = new Pane();
         pane.getChildren().add(layout);
