@@ -8,7 +8,6 @@ import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -328,7 +327,10 @@ public class PageEDT {
 		MenuItem supprimer = new MenuItem("Supprimer");
 		supprimer.setOnAction(event -> {
 			long coursID = c.getCoursId();
-			//supprimerCours(coursID);
+			Outils.supprimerCoursById(coursID);
+			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
+			majEDT();
+
 		});
 
 		menuModifSupp.getItems().addAll(modifier, supprimer);

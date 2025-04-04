@@ -33,6 +33,8 @@ public class Main{
 				.build();
 
 		Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
+		Salle s2 = new Salle("U002", null, 32, "Salle master2 tha les neuils");
+		Salle s3 = new Salle("U003", null, 32, "Toilettes bro");
 
 		Cours c1 = new Cours(optimisation, Arrays.asList(m1info), "spelerin", 14, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
 		Cours c2 = new Cours(optimisation, Arrays.asList(m1info), "hglotin", 11, 1, Date.from(LocalDate.of(2025, 3, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
