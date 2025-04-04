@@ -8,6 +8,7 @@ import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
@@ -292,7 +293,7 @@ public class PageEDT {
 		VBox boiteLabelProf_TYpe = new VBox(1+c.getDuree()*5);
 		Label nom = new Label(c.getUe().getNom());
 		Label prof = new Label(c.getIntervenantLogin());
-		Label salle = new Label("Salle");
+		Label salle = new Label(c.getSalle().getNom());
 		Label typeCours = new Label(c.getType().toString());
 
 		Label[] labels = {nom,prof,salle,typeCours};
