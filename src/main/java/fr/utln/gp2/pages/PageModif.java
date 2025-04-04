@@ -2,6 +2,7 @@ package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.UE;
+import fr.utln.gp2.entites.Cours.TypeC;
 import fr.utln.gp2.utils.Outils;
 
 import java.util.HashMap;
@@ -59,6 +60,11 @@ public class PageModif {
             }
         });
 
+        ComboBox<TypeC> typeMenuDeroulant = new ComboBox<>();
+        typeMenuDeroulant.getItems().addAll(TypeC.CM,TypeC.TD,TypeC.TP);
+
+        ComboBox<Integer> dureeMenuDeroulant = new ComboBox<>();
+        dureeMenuDeroulant.getItems().addAll(1,2,3,4);
   
         Button validerButton = new Button("Valider");
         validerButton.setOnAction(event -> {
@@ -71,7 +77,7 @@ public class PageModif {
         });
 
         
-        VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
+        VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant, validerButton);
         Pane pane = new Pane();
         pane.getChildren().add(layout);
         Scene scene = new Scene(pane);
