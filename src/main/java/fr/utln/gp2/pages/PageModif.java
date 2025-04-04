@@ -46,11 +46,13 @@ public class PageModif {
         for (UE ue : Outils.getAllUE().join()){
             ueComboBox.getItems().add(ue.getNom());
         }
+        ueComboBox.setValue("UE");
         
         
         
         ComboBox<String> profComboBox = new ComboBox<>();
         profComboBox.setDisable(true); // Désactivé au début
+        profComboBox.setValue("Professeur");
 
         ueComboBox.setOnAction(event -> {
             String ueChoisie = ueComboBox.getValue();
@@ -60,12 +62,14 @@ public class PageModif {
             }
         });
 
-        ComboBox<TypeC> typeMenuDeroulant = new ComboBox<>();
-        typeMenuDeroulant.getItems().addAll(TypeC.CM,TypeC.TD,TypeC.TP);
+        ComboBox<String> typeMenuDeroulant = new ComboBox<>();
+        typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
+        typeMenuDeroulant.setValue("Type de Cours");
 
-        ComboBox<Integer> dureeMenuDeroulant = new ComboBox<>();
-        dureeMenuDeroulant.getItems().addAll(1,2,3,4);
-  
+        ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
+        dureeMenuDeroulant.getItems().addAll("1","2","3","4");
+        dureeMenuDeroulant.setValue("Durée du cours");
+
         Button validerButton = new Button("Valider");
         validerButton.setOnAction(event -> {
             String ueChoisie = ueComboBox.getValue();
