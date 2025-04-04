@@ -1,6 +1,7 @@
 package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.utils.Outils;
 
 import java.util.HashMap;
@@ -18,74 +19,77 @@ import javafx.stage.Stage;
 
 public class PageModif {
 
-    private Stage stage;
-    private Personne p;
-    private Map<Integer, List<Cours>> cours;
-    private int numSemaine;
+	private Stage stage;
+	private Personne p;
+	private List<Cours> cours;
+	private List<UE> ues;
+	private int numSemaine;
 
-    public PageModif(Personne p, Map<Integer, List<Cours>> cours){
-        stage = new Stage();
-        this.p = p;
-        this.cours = cours;
-    }
+	public PageModif(Personne p, List<Cours> cours,int numSemaine){
+		stage = new Stage();
+		this.p = p;
+		this.cours = cours;
+		this.numSemaine=numSemaine;
+	}
 
-    public void show(){
-        stage.setTitle("Page de modification");
+	public void show(){
+		stage.setTitle("Page de modification");
 		stage.setMaximized(false);
 
-
-
-        stage.setScene(generePage());
+		ues = Outils.getAllUE().join();
+		stage.setScene(generePage());
 		stage.show();
-    }
+	}
 
-    private Scene generePage(){
-        ComboBox<String> ueComboBox = new ComboBox<>();
-        ueComboBox.getItems().addAll();
+	private Scene generePage(){
+		ComboBox<String> ueComboBox = new ComboBox<>();
+		for (UE ue : ues){
+			ueComboBox.getItems().add(ue.getNom());
+		}
+		
+		
+		ComboBox<String> profComboBox = new ComboBox<>();
+		profComboBox.setDisable(true); // Désactivé au début
 
-        // 📌 Liste des profs (associée aux UE)
-        Map<String, List<String>> profsParUE = new HashMap<>();
-        profsParUE.put("Mathématiques", List.of("Prof. Dupont", "Prof. Martin"));
-        profsParUE.put("Informatique", List.of("Prof. Durand", "Prof. Petit"));
-        profsParUE.put("Physique", List.of("Prof. Leroy", "Prof. Bernard"));
+		ueComboBox.setOnAction(event -> {
+			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
+			UE ueChoisie = ues.get(indiceUeChoisie);
+			if (ueChoisie != null) {
+				profComboBox.getItems().setAll(ueChoisie.getIntervenantsLogin());
+				profComboBox.setDisable(false);
+			}
+		});
 
-        // 📌 ComboBox pour les professeurs
-        ComboBox<String> profComboBox = new ComboBox<>();
-        profComboBox.setDisable(true); // Désactivé au début
 
-        // 📌 Événement : Mettre à jour les profs en fonction de l'UE choisie
-        ueComboBox.setOnAction(event -> {
-            String ueChoisie = ueComboBox.getValue();
-            if (ueChoisie != null) {
-                profComboBox.getItems().setAll(profsParUE.get(ueChoisie));
-                profComboBox.setDisable(false);
-            }
-        });
+		Button validerButton = new Button("Valider");
+		validerButton.setOnAction(event -> {
+			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
+			UE ueChoisie = ues.get(indiceUeChoisie);
+			String profChoisi = profComboBox.getValue();
+			if (ueChoisie != null && profChoisi != null){
+				System.out.println("UE sélectionnée : " + ueChoisie.getNom());
+				System.out.println("Professeur sélectionné : " + profChoisi);
+			}
+		});
 
-        // 📌 Bouton pour valider le choix
-        Button validerButton = new Button("Valider");
-        validerButton.setOnAction(event -> {
-            String ueChoisie = ueComboBox.getValue();
-            String profChoisi = profComboBox.getValue();
-            if (ueChoisie != null && profChoisi != null) {
-                System.out.println("UE sélectionnée : " + ueChoisie);
-                System.out.println("Professeur sélectionné : " + profChoisi);
-            }
-        });
+		
+		VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
+		Pane pane = new Pane();
+		pane.getChildren().add(layout);
+		Scene scene = new Scene(pane);
+		return scene;
+	}
 
-        // 📌 Mise en page
-        VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
-        Pane pane = new Pane();
-        pane.getChildren().add(layout);
-        Scene scene = new Scene(pane);
-        return scene;
-    }
+	private void ajouteUnCours(UE ue, String intervenant ){
+		Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
+		for (Cours c : cours){
 
-    private void ajouteUnCours(String intervenant){
-        Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
-        for (Cours c : coursIntervenant.get(numSemaine)){
-            
-        }
-        Cours c = new Cours()
-    }
+		}
+
+		for (Cours c : coursIntervenant.get(numSemaine)){
+			
+		}
+		// Cours c = new Cours(null, null, null, numSemaine, numSemaine, null, null);
+		// Outils.persistence(c);
+	}
 }

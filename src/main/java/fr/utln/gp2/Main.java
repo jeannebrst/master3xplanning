@@ -26,7 +26,7 @@ import fr.utln.gp2.entites.Cours.TypeC;
 public class Main{
 	public static void main(String[] args){
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", null, "spelerin", null);
-		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlabit",null);
+		Promotion l1info = new Promotion(Type.LICENCE,1,"Informatique",null,"qlavit",null);
 		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
 
 		UE optimisation = UE.builder()
@@ -49,11 +49,11 @@ public class Main{
 		// Salle s1 = new Salle("U001", null, 32, "Salle info tah les ouf");
 
 		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
-		Personne p2 = new Personne("virgule", "labit", "Quentin", Role.ETUDIANT);
+		Personne p2 = new Personne("virgule", "lavit", "Quentin", Role.ETUDIANT);
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info));
 		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR, Arrays.asList(m1info));
-		Personne p5 = new Personne("0","Viagra","Thierry",Role.GESTIONNAIRE);
+		Personne p5 = new Personne("0","Via","Thierry",Role.GESTIONNAIRE);
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 
 		Outils.persistence(p1);
