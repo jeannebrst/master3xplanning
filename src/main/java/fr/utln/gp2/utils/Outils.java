@@ -286,31 +286,31 @@ public class Outils{
 		}
 
 		Calendar calChoix = Calendar.getInstance();
-	calChoix.setTime(date);
-	int jour = calChoix.get(Calendar.DAY_OF_MONTH);
-	int mois = calChoix.get(Calendar.MONTH);
-	int annee = calChoix.get(Calendar.YEAR);
+		calChoix.setTime(date);
+		int jour = calChoix.get(Calendar.DAY_OF_MONTH);
+		int mois = calChoix.get(Calendar.MONTH);
+		int annee = calChoix.get(Calendar.YEAR);
 
-	return coursSemaine.stream()
-		.filter(cours -> {
-			Calendar calCours = Calendar.getInstance();
-			calCours.setTime(cours.getJour());
+		return coursSemaine.stream()
+			.filter(cours -> {
+				Calendar calCours = Calendar.getInstance();
+				calCours.setTime(cours.getJour());
 
-			boolean memeJour = calCours.get(Calendar.DAY_OF_MONTH) == jour &&
-							calCours.get(Calendar.MONTH) == mois &&
-							calCours.get(Calendar.YEAR) == annee;
+				boolean memeJour = calCours.get(Calendar.DAY_OF_MONTH) == jour &&
+								calCours.get(Calendar.MONTH) == mois &&
+								calCours.get(Calendar.YEAR) == annee;
 
-			if (!memeJour) return false;
+				if (!memeJour) return false;
 
-			int debutCours = cours.getHeureDebut();
-			int finCours = debutCours + cours.getDuree();
-			int finChoix = heureDebut + duree;
+				int debutCours = cours.getHeureDebut();
+				int finCours = debutCours + cours.getDuree();
+				int finChoix = heureDebut + duree;
 
-			return !(finCours <= heureDebut || debutCours >= finChoix);
-		})
-		.map(Cours::getSalle)
-		.distinct()
-		.collect(Collectors.toList());
+				return !(finCours <= heureDebut || debutCours >= finChoix);
+			})
+			.map(Cours::getSalle)
+			.distinct()
+			.collect(Collectors.toList());
 	}
 
 	public static void supprimerCoursById(Long id){

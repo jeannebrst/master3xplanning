@@ -1,6 +1,7 @@
 package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.entites.Cours.TypeC;
 import fr.utln.gp2.utils.Outils;
@@ -8,6 +9,8 @@ import fr.utln.gp2.utils.Outils;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.Date;
 
 import fr.utln.gp2.entites.Cours;
 import javafx.scene.Scene;
@@ -17,6 +20,10 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.DayOfWeek;
+import java.time.temporal.IsoFields;
 
 public class PageModif {
 
@@ -25,12 +32,18 @@ public class PageModif {
 	private List<Cours> cours;
 	private List<UE> ues;
 	private int numSemaine;
+    private int heureDebut;
+    private int jour;
+    private Promotion promo;
 
-	public PageModif(Personne p, List<Cours> cours,int numSemaine){
+	public PageModif(Personne p, List<Cours> cours,int numSemaine,int heureDebut,int jour,Promotion promo){
 		stage = new Stage();
 		this.p = p;
 		this.cours = cours;
 		this.numSemaine=numSemaine;
+        this.heureDebut=heureDebut;
+        this.jour=jour;
+        this.promo = promo;
 	}
 
 	public void show(){
@@ -75,10 +88,14 @@ public class PageModif {
 			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
 			UE ueChoisie = ues.get(indiceUeChoisie);
 			String profChoisi = profComboBox.getValue();
+            int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
+            TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
 			if (ueChoisie != null && profChoisi != null){
-				System.out.println("UE sélectionnée : " + ueChoisie.getNom());
-				System.out.println("Professeur sélectionné : " + profChoisi);
+				ajouteUnCours(ueChoisie, profChoisi, dureeChosie, typeChoisi);
+                //System.out.println(Outils.getCoursByPromo(promo.getPromoId()).join());
+                stage.close();
 			}
+            
 		});
 		
 		VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant, validerButton);
@@ -87,17 +104,32 @@ public class PageModif {
 		return new Scene(pane);
 	}
 
-	private void ajouteUnCours(UE ue, String intervenant){
-		Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
-		for (Cours c : cours){
+	private void ajouteUnCours(UE ue, String intervenant,int duree,TypeC type){
+        DayOfWeek jourDate = DayOfWeek.of(jour);
+        LocalDate date = LocalDate
+            .of(2025, 1, 1)
+            .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, numSemaine)
+            .with(DayOfWeek.MONDAY) // Commencer par le lundi
+            .with(jourDate);  
+            Cours c = new Cours(ue,Arrays.asList(promo),intervenant,heureDebut,duree,Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),type);
+            Outils.persistence(c);
 
-		}
 
-		for (Cours c : coursIntervenant.get(numSemaine)){
+
+		// Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
+		// for (Cours c : cours){
+
+		// }
+
+		// for (Cours c : coursIntervenant.get(numSemaine)){
 			
-		}
+		// }
 
 		// Cours c = new Cours(null, null, null, numSemaine, numSemaine, null, null);
 		// Outils.persistence(c);
 	}
+    
+    public Stage getStage() {
+        return stage;
+    }
 }
