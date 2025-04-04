@@ -2,6 +2,7 @@ package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.UE;
+import fr.utln.gp2.entites.Cours.TypeC;
 import fr.utln.gp2.utils.Outils;
 
 import java.util.HashMap;
@@ -47,7 +48,6 @@ public class PageModif {
 			ueComboBox.getItems().add(ue.getNom());
 		}
 		
-		
 		ComboBox<String> profComboBox = new ComboBox<>();
 		profComboBox.setDisable(true); // Désactivé au début
 
@@ -60,6 +60,11 @@ public class PageModif {
 			}
 		});
 
+		ComboBox<TypeC> typeMenuDeroulant = new ComboBox<>();
+		typeMenuDeroulant.getItems().addAll(TypeC.CM,TypeC.TD,TypeC.TP);
+
+		ComboBox<Integer> dureeMenuDeroulant = new ComboBox<>();
+		dureeMenuDeroulant.getItems().addAll(1,2,3,4);
 
 		Button validerButton = new Button("Valider");
 		validerButton.setOnAction(event -> {
@@ -71,16 +76,14 @@ public class PageModif {
 				System.out.println("Professeur sélectionné : " + profChoisi);
 			}
 		});
-
 		
-		VBox layout = new VBox(10, ueComboBox, profComboBox, validerButton);
+		VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant, validerButton);
 		Pane pane = new Pane();
 		pane.getChildren().add(layout);
-		Scene scene = new Scene(pane);
-		return scene;
+		return new Scene(pane);
 	}
 
-	private void ajouteUnCours(UE ue, String intervenant ){
+	private void ajouteUnCours(UE ue, String intervenant){
 		Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
 		for (Cours c : cours){
 
@@ -89,6 +92,7 @@ public class PageModif {
 		for (Cours c : coursIntervenant.get(numSemaine)){
 			
 		}
+
 		// Cours c = new Cours(null, null, null, numSemaine, numSemaine, null, null);
 		// Outils.persistence(c);
 	}

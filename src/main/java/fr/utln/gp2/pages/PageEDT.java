@@ -121,14 +121,15 @@ public class PageEDT {
 
 		});
 		boiteBtn.getChildren().addAll(cours,infos);
-		if (p.getRole().equals(Role.GESTIONNAIRE)){
-			texteEdition.setVisible(false);
-			boiteBtn.getChildren().addAll(genereBoutonGestionnaire(),texteEdition);
-		}
+		
 		return boiteBtn;
 	}
 
 	private StackPane genereSceneEDT(){
+		HBox boiteMenuBtnEdition = new HBox(10);
+		if(p.getRole().equals(Role.GESTIONNAIRE)){
+			boiteMenuBtnEdition.getChildren().add(genereBoutonGestionnaire());
+		}
 		ComboBox<String> menuPromo = new ComboBox<>();
 		for (Promotion p : p.getPromos() ){
 			PromotionId pTemporaire = p.getPromoId();
@@ -139,7 +140,7 @@ public class PageEDT {
 			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
 			majEDT();
 		});//Metre la fonction de Sh<3wn
-		
+		boiteMenuBtnEdition.getChildren().add(menuPromo);
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
 		Button btnNextWeek = new Button(">");
@@ -183,13 +184,13 @@ public class PageEDT {
 		GridPane.setHalignment(cellBouton, HPos.CENTER);
 		GridPane.setValignment(cellBouton, VPos.CENTER);
 		
-		HBox boiteBtn = new HBox(genereBoutonHaut()); 
+		HBox boiteBtn = genereBoutonHaut(); 
 
 
 
 		pageComplete.getChildren().add(boiteBtn);
 		if (!p.getRole().equals(Role.PROFESSEUR)){
-			pageComplete.getChildren().add(menuPromo);
+			pageComplete.getChildren().add(boiteMenuBtnEdition);
 		}
 		
 		pageComplete.getChildren().addAll(grilleEdt,semainesBox);
@@ -200,6 +201,7 @@ public class PageEDT {
 		// scene1.setMinSize(480, 270);
 		//scene1.setPrefSize(1920, 1080);
 		// scene1.setMaxSize(1920, 1080);
+		
 		scene1.getChildren().add(pageComplete);
 		return scene1;
 	}
@@ -413,7 +415,13 @@ public class PageEDT {
 		Button boutonModif = new Button("Modifier l'EDT");
 		boutonModif.setOnAction(e -> {
 			modeEdition=!modeEdition;
-			texteEdition.setVisible(modeEdition);
+			if(modeEdition){
+				stage.setTitle("MODE EDITION ACTIVEEE !!!!");
+			}
+			else{
+				stage.setTitle("Page d'accueil");
+			}
+			
 			
 		});
 		return boutonModif;
