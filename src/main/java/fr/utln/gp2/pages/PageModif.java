@@ -1,6 +1,7 @@
 package fr.utln.gp2.pages;
 
 import fr.utln.gp2.entites.Personne;
+import fr.utln.gp2.utils.Outils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +17,11 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class PageModif {
-    
+
     private Stage stage;
     private Personne p;
     private Map<Integer, List<Cours>> cours;
+    private int numSemaine;
 
     public PageModif(Personne p, Map<Integer, List<Cours>> cours){
         stage = new Stage();
@@ -79,7 +81,11 @@ public class PageModif {
         return scene;
     }
 
-    private void ajouteUnCours(){
-        // Cours c = new Cours()
+    private void ajouteUnCours(String intervenant){
+        Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
+        for (Cours c : coursIntervenant.get(numSemaine)){
+            
+        }
+        Cours c = new Cours()
     }
 }
