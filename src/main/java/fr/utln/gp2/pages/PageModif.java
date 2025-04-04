@@ -32,18 +32,18 @@ public class PageModif {
 	private List<Cours> cours;
 	private List<UE> ues;
 	private int numSemaine;
-    private int heureDebut;
-    private int jour;
-    private Promotion promo;
+	private int heureDebut;
+	private int jour;
+	private Promotion promo;
 
 	public PageModif(Personne p, List<Cours> cours,int numSemaine,int heureDebut,int jour,Promotion promo){
 		stage = new Stage();
 		this.p = p;
 		this.cours = cours;
 		this.numSemaine=numSemaine;
-        this.heureDebut=heureDebut;
-        this.jour=jour;
-        this.promo = promo;
+		this.heureDebut=heureDebut;
+		this.jour=jour;
+		this.promo = promo;
 	}
 
 	public void show(){
@@ -60,11 +60,11 @@ public class PageModif {
 		for (UE ue : ues){
 			ueComboBox.getItems().add(ue.getNom());
 		}
-        ueComboBox.setValue("UE");
+		ueComboBox.setValue("UE");
 		
 		ComboBox<String> profComboBox = new ComboBox<>();
 		profComboBox.setDisable(true); // Désactivé au début
-        profComboBox.setValue("Professeur");
+		profComboBox.setValue("Professeur");
 
 		ueComboBox.setOnAction(event -> {
 			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
@@ -75,27 +75,27 @@ public class PageModif {
 			}
 		});
 
-        ComboBox<String> typeMenuDeroulant = new ComboBox<>();
-        typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
-        typeMenuDeroulant.setValue("Type de Cours");
+		ComboBox<String> typeMenuDeroulant = new ComboBox<>();
+		typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
+		typeMenuDeroulant.setValue("Type de Cours");
 
-        ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
-        dureeMenuDeroulant.getItems().addAll("1","2","3","4");
-        dureeMenuDeroulant.setValue("Durée du cours");
+		ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
+		dureeMenuDeroulant.getItems().addAll("1","2","3","4");
+		dureeMenuDeroulant.setValue("Durée du cours");
 
 		Button validerButton = new Button("Valider");
 		validerButton.setOnAction(event -> {
 			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
 			UE ueChoisie = ues.get(indiceUeChoisie);
 			String profChoisi = profComboBox.getValue();
-            int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
-            TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
+			int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
+			TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
 			if (ueChoisie != null && profChoisi != null){
 				ajouteUnCours(ueChoisie, profChoisi, dureeChosie, typeChoisi);
-                //System.out.println(Outils.getCoursByPromo(promo.getPromoId()).join());
-                stage.close();
+				//System.out.println(Outils.getCoursByPromo(promo.getPromoId()).join());
+				stage.close();
 			}
-            
+			
 		});
 		
 		VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant, validerButton);
@@ -105,14 +105,14 @@ public class PageModif {
 	}
 
 	private void ajouteUnCours(UE ue, String intervenant,int duree,TypeC type){
-        DayOfWeek jourDate = DayOfWeek.of(jour);
-        LocalDate date = LocalDate
-            .of(2025, 1, 1)
-            .with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, numSemaine)
-            .with(DayOfWeek.MONDAY) // Commencer par le lundi
-            .with(jourDate);  
-            Cours c = new Cours(ue,Arrays.asList(promo),intervenant,heureDebut,duree,Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),type);
-            Outils.persistence(c);
+		DayOfWeek jourDate = DayOfWeek.of(jour);
+		LocalDate date = LocalDate
+			.of(2025, 1, 1)
+			.with(IsoFields.WEEK_OF_WEEK_BASED_YEAR, numSemaine)
+			.with(DayOfWeek.MONDAY) // Commencer par le lundi
+			.with(jourDate);
+			// Cours c = new Cours(ue,Arrays.asList(promo),intervenant,heureDebut,duree,Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),type);
+			// Outils.persistence(c);
 
 
 
@@ -128,8 +128,8 @@ public class PageModif {
 		// Cours c = new Cours(null, null, null, numSemaine, numSemaine, null, null);
 		// Outils.persistence(c);
 	}
-    
-    public Stage getStage() {
-        return stage;
-    }
+	
+	public Stage getStage() {
+		return stage;
+	}
 }

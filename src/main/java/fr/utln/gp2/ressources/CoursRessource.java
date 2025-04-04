@@ -80,10 +80,8 @@ public class CoursRessource {
 
 		final String ueNom = cours.getUe().getNom();
 
-		// Récupérer l'UE dans la base de données en utilisant le nom
 		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUe().getNom());
 
-		// Vérification si l'UE existe, sinon retour d'une erreur
 		UE ue = optionalUe.orElseThrow(() -> new IllegalArgumentException(
 				"L'UE avec le nom " + ueNom + " n'existe pas."
 		));
@@ -99,10 +97,9 @@ public class CoursRessource {
 		cours.setSalle(salle);
 
 		if (ue != null) {
-			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
+			ue.getCours().add(cours);
 		}
 
-		// Vérification et persistance de l'UE
 		if (!ueRepository.isPersistent(ue)) {
 			ueRepository.persist(ue);
 		}
