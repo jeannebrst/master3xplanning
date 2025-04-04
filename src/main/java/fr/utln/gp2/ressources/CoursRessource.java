@@ -1,15 +1,8 @@
 package fr.utln.gp2.ressources;
 
-import fr.utln.gp2.entites.Cours;
+import fr.utln.gp2.entites.*;
 
-import fr.utln.gp2.entites.Personne;
-import fr.utln.gp2.entites.Promotion;
-
-import fr.utln.gp2.entites.UE;
-import fr.utln.gp2.repositories.CoursRepository;
-import fr.utln.gp2.repositories.PersonneRepository;
-import fr.utln.gp2.repositories.PromotionRepository;
-import fr.utln.gp2.repositories.UERepository;
+import fr.utln.gp2.repositories.*;
 import fr.utln.gp2.utils.PromotionId;
 import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
@@ -43,6 +36,9 @@ public class CoursRessource {
 
 	@Inject
 	UERepository ueRepository;
+
+	@Inject
+	SalleRepository salleRepository;
 
 	@GET
 	public List<Cours> getAllCours() {
@@ -84,22 +80,26 @@ public class CoursRessource {
 
 		final String ueNom = cours.getUe().getNom();
 
-		// Récupérer l'UE dans la base de données en utilisant le nom
 		Optional<UE> optionalUe = ueRepository.findByNom(cours.getUe().getNom());
 
-		// Vérification si l'UE existe, sinon retour d'une erreur
 		UE ue = optionalUe.orElseThrow(() -> new IllegalArgumentException(
 				"L'UE avec le nom " + ueNom + " n'existe pas."
 		));
 
-		// Associer l'UE au cours
 		cours.setUe(ue);
 
+		Optional<Salle> optionalSalle = salleRepository.findByNom(cours.getSalle().getNom());
+
+		Salle salle = optionalSalle.orElseThrow(() -> new IllegalArgumentException(
+				"La salle avec ce nom n'existe pas."
+		));
+
+		cours.setSalle(salle);
+
 		if (ue != null) {
-			ue.getCours().add(cours); // Ajouter le cours à la liste des cours de l'UE
+			ue.getCours().add(cours);
 		}
 
-		// Vérification et persistance de l'UE
 		if (!ueRepository.isPersistent(ue)) {
 			ueRepository.persist(ue);
 		}
