@@ -1,5 +1,7 @@
 package fr.utln.gp2.entites;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.*;
 import java.util.*;
@@ -18,13 +20,15 @@ public class Note {
     @SequenceGenerator(name = "notes_seq", sequenceName = "notes_id_seq", allocationSize = 10)
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(hidden = true)
-    private Long notes_id;
+    private Long noteId;
 
     @ManyToOne
     @JoinColumn(name = "etudiant_id")
+    @JsonIgnoreProperties({"promos", "ues", "notes", "hashMdp", "nom", "prenom", "mail", "role"})
     private Personne etudiant;
 
     @ManyToOne
+    @JsonIgnoreProperties({"notes", "cours","ueId", "intervenantsLogin", "responsableLogin", "nbHeures"})
     private UE ue;
 
 
@@ -39,5 +43,14 @@ public class Note {
         this.date = date;
     }
 
-
+    @Override
+    public String toString() {
+        return "Note{" +
+                "noteId=" + noteId +
+                ", etudiant=" + etudiant +
+                ", ue=" + ue.getNom() +
+                ", note=" + note +
+                ", date=" + date +
+                '}';
+    }
 }

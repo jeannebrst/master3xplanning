@@ -43,9 +43,9 @@ public class PageModif {
 		this.p = p;
 		this.cours = cours;
 		this.numSemaine=numSemaine;
-        this.heureDebut=heureDebut;
-        this.jour=jour;
-        this.promo = promo;
+		this.heureDebut=heureDebut;
+		this.jour=jour;
+		this.promo = promo;
 	}
 
 	public void show(){
@@ -63,11 +63,11 @@ public class PageModif {
 		for (UE ue : ues){
 			ueComboBox.getItems().add(ue.getNom());
 		}
-        ueComboBox.setValue("UE");
+		ueComboBox.setValue("UE");
 		
 		ComboBox<String> profComboBox = new ComboBox<>();
 		profComboBox.setDisable(true); // Désactivé au début
-        profComboBox.setValue("Professeur");
+		profComboBox.setValue("Professeur");
 
 		ueComboBox.setOnAction(event -> {
 			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
@@ -78,13 +78,13 @@ public class PageModif {
 			}
 		});
 
-        ComboBox<String> typeMenuDeroulant = new ComboBox<>();
-        typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
-        typeMenuDeroulant.setValue("Type de Cours");
+		ComboBox<String> typeMenuDeroulant = new ComboBox<>();
+		typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
+		typeMenuDeroulant.setValue("Type de Cours");
 
-        ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
-        dureeMenuDeroulant.getItems().addAll("1","2","3","4");
-        dureeMenuDeroulant.setValue("Durée du cours");
+		ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
+		dureeMenuDeroulant.getItems().addAll("1","2","3","4");
+		dureeMenuDeroulant.setValue("Durée du cours");
 
         ComboBox<String> salleMenuDeroulant = new ComboBox<>();
         for(Salle s : salles){
@@ -105,7 +105,7 @@ public class PageModif {
                 //System.out.println(Outils.getCoursByPromo(promo.getPromoId()).join());
                 stage.close();
 			}
-            
+			
 		});
 		
 		VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant,salleMenuDeroulant, validerButton);

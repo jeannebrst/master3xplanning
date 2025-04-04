@@ -68,12 +68,7 @@ public class Personne {
 	@JsonIgnore
 	private List<UE> ues = new ArrayList<>();
 
-	@ManyToMany
-	@JoinTable(
-			name = "personne_note",
-			joinColumns = @JoinColumn(name = "personne_id"),
-			inverseJoinColumns = @JoinColumn(name = "note_id")
-	)
+	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JsonIgnore
 	private List<Note> notes = new ArrayList<>();
 
