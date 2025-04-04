@@ -94,4 +94,17 @@ public class Cours {
 		return "Cours [coursId=" + coursId + ", ue=" + ues + ", promos=" + promosIds + ", intervenantLogin=" + intervenantLogin
 				+ ", heureDebut=" + heureDebut + ", duree=" + duree + ", jour=" + jour + ", type=" + type + "]";
 	}
+
+	public static TypeC stringToTypeC(String s){
+		if (s.equals("TD")){
+			return TypeC.TD;
+		}
+		else if(s.equals("TP")){
+			return TypeC.TP;
+		}
+		else{
+			return TypeC.CM;
+		}
+		
+	}
 }
