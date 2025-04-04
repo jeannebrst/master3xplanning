@@ -2,6 +2,7 @@ package fr.utln.gp2;
 
 import fr.utln.gp2.entites.*;
 import fr.utln.gp2.pages.PageLogin;
+import fr.utln.gp2.utils.NoteDTO;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
 import javafx.application.Application;
@@ -53,7 +54,7 @@ public class Main{
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 		Personne p7 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
 
-		Note n1 = new Note(p7, optimisation, 20, new Date());
+
 
 		Outils.persistence(p1);
 		Outils.persistence(optimisation);
@@ -78,6 +79,7 @@ public class Main{
 
 
 		Outils.persistence(p7);
+		//NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
 		Outils.persistence(s1);
 		//Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);

@@ -6,6 +6,7 @@ import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.repositories.NoteRepository;
 import fr.utln.gp2.repositories.PersonneRepository;
 import fr.utln.gp2.repositories.UERepository;
+import fr.utln.gp2.utils.NoteDTO;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -22,7 +23,7 @@ import java.util.Optional;
 public class NoteRessource {
 
     @Inject
-    NoteRepository notesRepository;
+    NoteRepository noteRepository;
 
     @Inject
     PersonneRepository personneRepository;
@@ -30,13 +31,19 @@ public class NoteRessource {
     @Inject
     UERepository ueRepository;
 
+    @GET
+    public List<Note> getAllNotes() {
+        return noteRepository.listAll();
+    }
+
+
     /**
      * GET - Récupérer toutes les notes d'un étudiant via son login
      */
     @GET
     @Path("/{login}")
     public Response getNotesByLogin(@PathParam("login") String login) {
-        List<Note> notes = notesRepository.findByLogin(login);
+        List<Note> notes = noteRepository.findByLogin(login);
         if (notes.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Aucune note trouvée pour l'étudiant avec le login : " + login)
@@ -50,28 +57,26 @@ public class NoteRessource {
      */
     @POST
     @Transactional
-    public Response createNote(Note note) {
+    public Response createNote(NoteDTO note) {
         // Vérifier si l'étudiant existe
-        Optional<Personne> etudiantOpt = personneRepository.find("login", note.getEtudiant().getLogin()).firstResultOptional();
+        Optional<Personne> etudiantOpt = personneRepository.findByLogin(note.getLogin());
         if (etudiantOpt.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
-                    .entity("Étudiant avec le login " + note.getEtudiant().getLogin() + " introuvable.")
+                    .entity("Étudiant avec le login " + note.getLogin() + " introuvable.")
                     .build();
         }
 
         // Vérifier si l'UE existe
-        Optional<UE> ueOpt = ueRepository.findByIdOptional(note.getUe().getUeId());
+        Optional<UE> ueOpt = ueRepository.findByNom(note.getUe());
         if (ueOpt.isEmpty()) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("UE " + ueOpt.get().getNom() + " introuvable.")
                     .build();
         }
-
-        ;
-
-        notesRepository.persist(note);
+        Note notePersist = new Note(etudiantOpt.get(), ueOpt.get(), note.getNote(), note.getDate());
+        noteRepository.persist(notePersist);
         return Response.status(Response.Status.CREATED)
-                .entity("Note ajoutée avec succès pour l'étudiant " + note.getEtudiant().getLogin())
+                .entity("Note ajoutée avec succès pour l'étudiant " + note.getLogin())
                 .build();
     }
 
@@ -82,7 +87,7 @@ public class NoteRessource {
     @Path("/{id}")
     @Transactional
     public Response deleteNote(@PathParam("id") Long id) {
-        boolean deleted = notesRepository.deleteById(id);
+        boolean deleted = noteRepository.deleteById(id);
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND)
                     .entity("Note avec l'ID " + id + " introuvable.")
