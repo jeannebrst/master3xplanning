@@ -5,10 +5,8 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.time.temporal.WeekFields;
 import java.util.Calendar;
 import java.util.Date;
@@ -18,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -27,10 +24,24 @@ import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.UE;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
+/** 
+ * Ensemble de méthode pour intéragir avec la BDR
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Outils{
 	private static final HttpClient client = HttpClient.newHttpClient();
+	private static final String HEADER_NAME = "Content-Type";
+	private static final String HEADER_VALUE = "application/json";
 
+	/**
+	 * Persiste une entité dans la BDR de façon générique.
+	 * Requête HTTP POST vers l'API.
+	 * 
+	 * @param obj objet ,de classe T, à persister dans la BDR
+	 */
 	public static <T> void persistence(T obj){
 		String classeNom = obj.getClass().getSimpleName();
 		
@@ -48,7 +59,7 @@ public class Outils{
 			String s = new ObjectMapper().writeValueAsString(obj);
 			HttpRequest request = HttpRequest.newBuilder()
 				.uri(URI.create("http://localhost:8080/api/v1/" + classeNom))
-				.header("Content-Type", "application/json")
+				.header(HEADER_NAME, HEADER_VALUE)
 				.POST(HttpRequest.BodyPublishers.ofString(s))
 				.build();
 
@@ -59,11 +70,18 @@ public class Outils{
 		}
 	}
 
+	/**
+	 * Récupère une personne par son login.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @param login login de la personne à récupérer
+	 * @return CompletableFuture d'une Personne
+	 */
 	public static CompletableFuture<Personne> getPersonneInfo(String login) {
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:8080/api/v1/personnes/" + login))
 			.GET()
-			.header("Content-Type", "application/json")
+			.header(HEADER_NAME, HEADER_VALUE)
 			.build();
 
 		// Retourner un CompletableFuture
@@ -85,11 +103,18 @@ public class Outils{
 			});
 	}
 
+	/**
+	 * Récupère les cours d'une promotion, groupés par semaine de l'année.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @param promoId id de la promotion dont on récupère les cours
+	 * @return CompletableFuture de map où la clef est le numéro de semaine et la valeur est la liste des cours correspondants
+	 */
 	public static CompletableFuture<Map<Integer, List<Cours>>> getCoursByPromo(PromotionId promoId){
 		HttpRequest request = HttpRequest.newBuilder()
 		.uri(URI.create("http://localhost:8080/api/v1/cours/by-promo?promoId=" + promoId.toString()))
 		.GET()
-		.header("Content-Type", "application/json")
+		.header(HEADER_NAME, HEADER_VALUE)
 		.build();
 
 		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = new CompletableFuture<>();
@@ -126,11 +151,18 @@ public class Outils{
 		return futureCoursMap;
 	}
 
+	/**
+	 * Récupère les cours d'un intervenant, groupés par semaine de l'année.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @param intervenantLogin login de l'intervenant dont on récupère les cours
+	 * @return CompletableFuture de map où la clef est le numéro de semaine et la valeur est la liste des cours correspondants
+	 */
 	public static CompletableFuture<Map<Integer, List<Cours>>> getCoursByIntervenant(String intervenantLogin){
 		HttpRequest request = HttpRequest.newBuilder()
 		.uri(URI.create("http://localhost:8080/api/v1/cours/by-intervenant?intervenantLogin=" + intervenantLogin))
 		.GET()
-		.header("Content-Type", "application/json")
+		.header(HEADER_NAME, HEADER_VALUE)
 		.build();
 
 		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = new CompletableFuture<>();
@@ -167,11 +199,17 @@ public class Outils{
 		return futureCoursMap;
 	}
 
+	/**
+	 * Récupère toutes les promotions.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @return CompletableFuture de la liste de toute les promotions
+	 */
 	public static CompletableFuture<List<Promotion>> getAllPromo() {
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:8080/api/v1/promotions"))
 			.GET()
-			.header("Content-Type", "application/json")
+			.header(HEADER_NAME, HEADER_VALUE)
 			.build();
 
 		// Retourner un CompletableFuture
@@ -193,11 +231,17 @@ public class Outils{
 			});
 	}
 
+	/**
+	 * Récupère toutes les UEs.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @return CompletableFuture de la liste de toute les UEs
+	 */
 	public static CompletableFuture<List<UE>> getAllUE(){
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:8080/api/v1/ues"))
 			.GET()
-			.header("Content-Type", "application/json")
+			.header(HEADER_NAME, HEADER_VALUE)
 			.build();
 
 		// Retourner un CompletableFuture
@@ -218,11 +262,17 @@ public class Outils{
 			});
 	}
 
+	/**
+	 * Récupère toutes les salles.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @return CompletableFuture de la liste de toute les salles
+	 */
 	public static CompletableFuture<List<Salle>> getAllSalle(){
 		HttpRequest request = HttpRequest.newBuilder()
 			.uri(URI.create("http://localhost:8080/api/v1/salles"))
 			.GET()
-			.header("Content-Type", "application/json")
+			.header(HEADER_NAME, HEADER_VALUE)
 			.build();
 
 		// Retourner un CompletableFuture
@@ -243,11 +293,17 @@ public class Outils{
 			});
 	}
 
+	/**
+	 * Récupère tous les cours.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @return CompletableFuture de la liste de toute les promotions
+	 */
 	public static CompletableFuture<Map<Integer, List<Cours>>> getAllCours(){
 		HttpRequest request = HttpRequest.newBuilder()
 		.uri(URI.create("http://localhost:8080/api/v1/cours"))
 		.GET()
-		.header("Content-Type", "application/json")
+		.header(HEADER_NAME, HEADER_VALUE)
 		.build();
 
 		CompletableFuture<Map<Integer, List<Cours>>> futureCoursMap = new CompletableFuture<>();
@@ -283,7 +339,15 @@ public class Outils{
 		return futureCoursMap;
 	}
 
-
+	/**
+	 * Récupère les salles occupées pendant le créneau d'heure choisi
+	 * 
+	 * @param numSemaine numéro de la semaine du créneau
+	 * @param date jour du créneau
+	 * @param heureDebut heure de début du créneau
+	 * @param duree durée du créneau
+	 * @return Liste de salles
+	 */
 	public static List<Salle> getSalleByHeure(int numSemaine, Date date, int heureDebut, int duree){
 		List<Cours> coursSemaine = getAllCours().join().get(numSemaine);
 		if (coursSemaine == null || coursSemaine.isEmpty()) {
@@ -318,6 +382,12 @@ public class Outils{
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 * Supprime un cours de la BDR.
+	 * Requête HTTP DELETE vers l'API.
+	 * 
+	 * @param id du cours à supprimer
+	 */
 	public static void supprimerCoursById(Long id){
 		String idString = String.valueOf(id);
 		try {
