@@ -83,7 +83,7 @@ public class Main{
 		// Outils.persistence(s1);
 
 		Outils.persistence(p7);
-		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
+		NoteDTO n1 = new NoteDTO("spelerin", optimisation.getNom(), 20f, new Date());
 		Outils.persistence(s1);
 
 		Outils.persistence(n1);
