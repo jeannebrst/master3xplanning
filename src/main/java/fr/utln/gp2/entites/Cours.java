@@ -45,7 +45,8 @@ public class Cours {
 
 	@ManyToOne
 	@JoinColumn(name = "salle_id")
-	@JsonIgnoreProperties({"cours"})
+	//@JsonIgnoreProperties({"cours"})
+	@JsonBackReference
 	private Salle salle;
 
 
@@ -108,5 +109,9 @@ public class Cours {
 			return TypeC.CM;
 		}
 		
+	}
+
+	public Salle getSalle(){
+		return this.salle;
 	}
 }

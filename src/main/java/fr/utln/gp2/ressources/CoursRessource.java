@@ -3,10 +3,12 @@ package fr.utln.gp2.ressources;
 import fr.utln.gp2.entites.*;
 
 import fr.utln.gp2.repositories.*;
+import fr.utln.gp2.utils.CoursDTO;
 import fr.utln.gp2.utils.PromotionId;
 import fr.utln.gp2.utils.PromotionId.Type;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -40,6 +42,9 @@ public class CoursRessource {
 	@Inject
 	SalleRepository salleRepository;
 
+	@Inject
+	EntityManager entityManager;
+
 	@GET
 	public List<Cours> getAllCours() {
 		return coursRepository.listAll();
@@ -49,6 +54,59 @@ public class CoursRessource {
 	@Path("/{id}")
 	public Cours getCoursById(@PathParam("id") Long id) {
 		return coursRepository.findByCoursId(id).orElseThrow(() -> new NotFoundException("Cours non trouvé"));
+	}
+
+	@PUT
+	@Path("/{id}")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	@Transactional
+	public Response updateCours(@PathParam("id") Long id, CoursDTO dto) {
+		Cours cours = coursRepository.findById(id);
+		if (cours == null) {
+			return Response.status(Response.Status.NOT_FOUND).build();
+		}
+
+		// Récupérer l'UE
+		UE ue = entityManager.find(UE.class, dto.ueId);
+		if (ue == null) {
+			return Response.status(Response.Status.BAD_REQUEST).entity("UE non trouvée").build();
+		}
+
+		// Récupérer la Salle (si spécifiée)
+		Salle salle = null;
+		if (dto.salleId != null) {
+			salle = salleRepository.findBySalleId(dto.salleId);
+			if (salle == null) {
+				return Response.status(Response.Status.BAD_REQUEST).entity("Salle non trouvée").build();
+			}
+		}
+
+		// Récupérer les Promotions
+		List<Promotion> promotions = new ArrayList<>();
+		for (PromotionId pid : dto.promos) {
+			Promotion promo = entityManager.find(Promotion.class, pid);
+			if (promo != null) {
+				promotions.add(promo);
+			} else {
+				return Response.status(Response.Status.BAD_REQUEST)
+					.entity("Promotion non trouvée : " + pid).build();
+			}
+		}
+
+		// Mise à jour des champs du Cours
+		cours.setUe(ue);
+		cours.setSalle(salle);
+		System.out.println("Salle du cours modifié : "+salle);
+		cours.setPromos(promotions);
+		cours.setIntervenantLogin(dto.intervenantLogin);
+		cours.setHeureDebut(dto.heureDebut);
+		cours.setDuree(dto.duree);
+		cours.setJour(dto.jour);
+		cours.setType(Cours.stringToTypeC(dto.type));
+
+		// Sauvegarder et renvoyer la réponse
+		return Response.ok(CoursDTO.fromCours(cours)).build();
 	}
 
 	@POST

@@ -74,21 +74,22 @@ public class Main{
 		Outils.persistence(p5);
 		Outils.persistence(p2);
 		Outils.persistence(c1);
-		Outils.persistence(c2);
-		Outils.persistence(c3);
-		Outils.persistence(c4);
-		Outils.persistence(c5);
-		Outils.persistence(c6);
-		Outils.persistence(c7);
-		Outils.persistence(c8);
-		Outils.persistence(c9);
+		// Outils.persistence(c2);
+		// Outils.persistence(c3);
+		// Outils.persistence(c4);
+		// Outils.persistence(c5);
+		// Outils.persistence(c6);
+		// Outils.persistence(c7);
+		// Outils.persistence(c8);
+		// Outils.persistence(c9);
 		// Outils.persistence(s1);
 
 		Outils.persistence(p7);
-		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
-		Outils.persistence(s1);
-
-		Outils.persistence(n1);
+		//NoteDTO n1 = new NoteDTO("yhaouas", optimisation.getNom(), 20f, new Date());
+		Outils.persistence(s2);
+		Outils.persistence(s3);
+		System.out.println("Id salle 1 "+s1.getSalle_id());
+		//Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);
 	}
 

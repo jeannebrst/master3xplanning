@@ -320,9 +320,7 @@ public class PageEDT {
 		ContextMenu menuModifSupp = new ContextMenu();
 
 		MenuItem modifier = new MenuItem("Modifier");
-		modifier.setOnAction(event -> {
-			if(modeEdition){ouvrirPageModif(jourSemaine, c.getHeureDebut() - 7);}
-		});
+		modifier.setOnAction(event -> {if(modeEdition){ouvrirPageModifCours(c);}});
 
 		MenuItem supprimer = new MenuItem("Supprimer");
 		supprimer.setOnAction(event -> {
@@ -465,6 +463,20 @@ public class PageEDT {
 			PageModif pageModif = new PageModif(p,coursMap.get(numSemaine),numSemaine,i+7,j,promo);
 			pageModif.show();
 			pageModif.getStage().setOnHidden(e -> {
+				getCoursOfPromo(promoIndex);
+				majEDT();
+			});
+		});
+
+	}
+
+	private void ouvrirPageModifCours(Cours c){
+		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
+		
+		Platform.runLater(()-> {
+			PageModifCours pageModifCours = new PageModifCours(c.getCoursId());
+			pageModifCours.show();
+			pageModifCours.getStage().setOnHidden(e -> {
 				getCoursOfPromo(promoIndex);
 				majEDT();
 			});
