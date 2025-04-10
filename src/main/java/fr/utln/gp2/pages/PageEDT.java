@@ -79,6 +79,7 @@ public class PageEDT {
 		}
 
 		stage = new Stage();
+		
 	}
 	
 	public void show(){
@@ -452,9 +453,7 @@ public class PageEDT {
 		return boutonModif;
 	}
 
-	private void supprimerCours(long id){
 
-	}
 
 	private void ouvrirPageModif(int i,int j){
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
@@ -474,7 +473,7 @@ public class PageEDT {
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
 		
 		Platform.runLater(()-> {
-			PageModifCours pageModifCours = new PageModifCours(c.getCoursId());
+			PageModifCours pageModifCours = new PageModifCours(c);
 			pageModifCours.show();
 			pageModifCours.getStage().setOnHidden(e -> {
 				getCoursOfPromo(promoIndex);

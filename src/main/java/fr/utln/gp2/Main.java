@@ -88,8 +88,9 @@ public class Main{
 		//NoteDTO n1 = new NoteDTO("yhaouas", optimisation.getNom(), 20f, new Date());
 		Outils.persistence(s2);
 		Outils.persistence(s3);
-		System.out.println("Id salle 1 "+s1.getSalle_id());
+		
 		//Outils.persistence(n1);
+		System.out.println("PRISM: " + System.getProperty("prism.order"));
 		Application.launch(PageLogin.class, args);
 	}
 

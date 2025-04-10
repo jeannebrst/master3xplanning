@@ -24,7 +24,7 @@ public class Salle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
 	@SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	//@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
 	private Long salle_id;
 
@@ -32,8 +32,8 @@ public class Salle {
 
 	@OneToMany(mappedBy = "salle", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
 	@Builder.Default
-	//@JsonIgnoreProperties({"salle"})
-	@JsonManagedReference
+	@JsonIgnoreProperties({"salle"})
+	//@JsonManagedReference
 	private List<Cours> cours = new ArrayList<>();
 
 	private int capacite;
@@ -56,7 +56,7 @@ public class Salle {
 			coursIds.add(c.getCoursId());
 		}
 
-		return "Salle [nom=" + nom + ", cours=" + coursIds + ", capacite=" + capacite
+		return "Salle [id = "+salle_id+"nom=" + nom + ", cours=" + coursIds + ", capacite=" + capacite
 				+ ", description=" + description + "]";
 	}
 

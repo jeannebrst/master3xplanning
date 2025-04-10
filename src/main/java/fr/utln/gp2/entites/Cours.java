@@ -45,8 +45,8 @@ public class Cours {
 
 	@ManyToOne
 	@JoinColumn(name = "salle_id")
-	//@JsonIgnoreProperties({"cours"})
-	@JsonBackReference
+	@JsonIgnoreProperties({"cours"})
+	//@JsonBackReference
 	private Salle salle;
 
 

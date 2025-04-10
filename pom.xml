@@ -175,5 +175,23 @@
 				<quarkus.native.enabled>true</quarkus.native.enabled>
 			</properties>
 		</profile>
+		<profile>
+			<id>javafx</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.openjfx</groupId>
+						<artifactId>javafx-maven-plugin</artifactId>
+						<version>0.0.8</version>
+						<configuration>
+							<mainClass>fr.utln.gp2.Main</mainClass> <!-- Remplace par ta classe ! -->
+							<options>
+								<option>-Dprism.order=sw</option>
+							</options>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
