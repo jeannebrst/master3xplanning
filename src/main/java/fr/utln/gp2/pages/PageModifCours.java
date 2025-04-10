@@ -15,11 +15,12 @@ import javafx.stage.Stage;
 
 public class PageModifCours {
 
-    private Stage stage;
+    private Stage stage = new Stage();
     private List<UE> ues;
+	private Cours c;
 
     public PageModifCours(Cours c){
-
+		this.c = c;
     }
 
     public void show(){
@@ -36,28 +37,39 @@ public class PageModifCours {
 		for (UE ue : ues){
 			ueComboBox.getItems().add(ue.getNom());
 		}
-        ueComboBox.setValue("UE");
-		
+		ueComboBox.setValue(c.getUe().getNom());
+
 		ComboBox<String> profComboBox = new ComboBox<>();
-		profComboBox.setDisable(true); // Désactivé au début
-        profComboBox.setValue("Professeur");
+
+		// Initialiser les profs en fonction de l’UE actuelle
+		UE ueInitiale = ues.stream()
+			.filter(ue -> ue.getNom().equals(c.getUe().getNom()))
+			.findFirst()
+			.orElse(null);
+
+		if (ueInitiale != null) {
+			profComboBox.getItems().addAll(ueInitiale.getIntervenantsLogin());
+			profComboBox.setValue(c.getIntervenantLogin());
+		}
 
 		ueComboBox.setOnAction(event -> {
 			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
-			UE ueChoisie = ues.get(indiceUeChoisie);
-			if (ueChoisie != null) {
-				profComboBox.getItems().setAll(ueChoisie.getIntervenantsLogin());
-				profComboBox.setDisable(false);
+			if (indiceUeChoisie >= 0) {
+				UE ueChoisie = ues.get(indiceUeChoisie);
+				System.out.println(ueChoisie);
+				if (ueChoisie != null && ueChoisie.getIntervenantsLogin() != null) {
+					profComboBox.getItems().setAll(ueChoisie.getIntervenantsLogin());
+				}
 			}
 		});
 
         ComboBox<String> typeMenuDeroulant = new ComboBox<>();
         typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
-        typeMenuDeroulant.setValue("Type de Cours");
+        typeMenuDeroulant.setValue(c.getType().toString());
 
         ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
         dureeMenuDeroulant.getItems().addAll("1","2","3","4");
-        dureeMenuDeroulant.setValue("Durée du cours");
+        dureeMenuDeroulant.setValue(String.valueOf(c.getDuree()));
 
 		Button validerButton = new Button("Valider");
 		validerButton.setOnAction(event -> {
@@ -80,4 +92,7 @@ public class PageModifCours {
 		return new Scene(pane);
 	}
 
+	public Stage getStage(){
+		return this.stage;
+	}
 }
