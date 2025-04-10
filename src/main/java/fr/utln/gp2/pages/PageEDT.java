@@ -79,6 +79,7 @@ public class PageEDT {
 		}
 
 		stage = new Stage();
+		
 	}
 	
 	public void show(){
@@ -320,8 +321,9 @@ public class PageEDT {
 		ContextMenu menuModifSupp = new ContextMenu();
 
 		MenuItem modifier = new MenuItem("Modifier");
+
 		modifier.setOnAction(event -> {
-			if(modeEdition){ouvrirPageModifCours(c);;}
+			if(modeEdition){ouvrirPageModifCours(c);}
 		});
 
 		MenuItem supprimer = new MenuItem("Supprimer");
@@ -454,9 +456,7 @@ public class PageEDT {
 		return boutonModif;
 	}
 
-	private void supprimerCours(long id){
 
-	}
 
 	private void ouvrirPageModif(int i,int j){
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();

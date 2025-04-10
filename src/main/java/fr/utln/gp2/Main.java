@@ -87,6 +87,7 @@ public class Main{
 
 		Outils.persistence(n1);
 
+		System.out.println("PRISM: " + System.getProperty("prism.order"));
 		Application.launch(PageLogin.class, args);
 	}
 
