@@ -66,16 +66,7 @@ public class PersonneRessource {
 				promotion.getPersonnes().add(personne);
 			}
 		}
-		String hashMdp = DigestUtils.sha256Hex(personne.getHashMdp());
-		personne.setHashMdp(hashMdp);
-		personne.setMail(personne.getPrenom().toLowerCase()+"."+personne.getNom().toLowerCase()+"@master.com");
-		if (personne.getNom().length()<7) {
-			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase();
-			personne.setLogin(login);
-		} else {
-			String login = personne.getPrenom().toLowerCase().charAt(0)+personne.getNom().toLowerCase().substring(0,7);
-			personne.setLogin(login);
-		}
+
 		if (personneRepository.isPersistent(personne)) {
 			personne = personneRepository.getEntityManager().merge(personne);
 		} else {
