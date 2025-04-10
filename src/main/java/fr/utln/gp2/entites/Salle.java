@@ -22,9 +22,9 @@ public class Salle {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
 	@SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
-	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	private Long salle_id;
+	@Column(name = "salle_id")
+	private Long salleId;
 
 	private String nom;
 
