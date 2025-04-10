@@ -1,5 +1,8 @@
 package fr.utln.gp2.pages;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import fr.utln.gp2.entites.Cours;
@@ -10,6 +13,7 @@ import fr.utln.gp2.utils.Outils;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -25,7 +29,7 @@ public class PageModifCours {
 	//private Long coursId;
 	private List<Salle> salles;
 	private Cours cours;
-
+	private LocalDate dateChoisie;
 
     public PageModifCours(Cours c){
 		stage = new Stage();
@@ -88,6 +92,17 @@ public class PageModifCours {
 				salleMenuDeroulant.getItems().add(s.getNom());
 			}
 			salleMenuDeroulant.setValue(cours.getSalle().getNom());
+
+			Label dateLabel = new Label("Date du cours");
+			DatePicker dateChoix = new DatePicker();
+			// Définir une date par défaut (optionnel)
+			dateChoix.setValue(LocalDate.now()); // La date actuelle par défaut
+
+			// Ajout de l'action de sélection de la date
+			dateChoix.setOnAction(event -> {
+				dateChoisie = dateChoix.getValue();  // Récupérer la date choisie sous forme de LocalDate
+				System.out.println("Date sélectionnée : " + dateChoisie);
+			});
 		
 			// Bouton de validation
 			Button validerButton = new Button("Valider");
@@ -99,9 +114,10 @@ public class PageModifCours {
 				TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
 				int heureChoisie = Integer.parseInt(heureDebutMenuDeroulant.getValue());
 				Salle salleChoisie = salles.get(salleMenuDeroulant.getSelectionModel().getSelectedIndex());
+				
 				if (ueChoisie != null && profChoisi != null) {
 					Cours c = cours;
-					modifierCours(c, ueChoisie, profChoisi, dureeChosie, typeChoisi, salleChoisie, heureChoisie);
+					modifierCours(c, ueChoisie, profChoisi, dureeChosie, typeChoisi, salleChoisie, heureChoisie,dateChoisie);
 					System.out.println("Id de la salle après modif " + c.getSalle());
 					Outils.modifierCours(c);
 					stage.close();
@@ -110,8 +126,8 @@ public class PageModifCours {
 		
 			HBox layout = new HBox(10);
 			layout.getChildren().addAll(
-				new VBox(20, ueLabel, profLabel,dureeLabel,heureDebutLabel,typeLabel,salleLabel),
-				new VBox(10, ueComboBox, profComboBox,dureeMenuDeroulant,heureDebutMenuDeroulant,typeMenuDeroulant,salleMenuDeroulant,validerButton)
+				new VBox(20, ueLabel, profLabel,dureeLabel,heureDebutLabel,typeLabel,salleLabel,dateLabel),
+				new VBox(10, ueComboBox, profComboBox,dureeMenuDeroulant,heureDebutMenuDeroulant,typeMenuDeroulant,salleMenuDeroulant,dateChoix,validerButton)
 				
 			);
 			layout.setPadding(new Insets(20));
@@ -123,13 +139,14 @@ public class PageModifCours {
 		
 	}
 
-	private void modifierCours(Cours c,UE ue, String intervenant,int duree,TypeC type,Salle salle,int heure){
+	private void modifierCours(Cours c,UE ue, String intervenant,int duree,TypeC type,Salle salle,int heure,LocalDate jour){
 		c.setUe(ue);
 		c.setIntervenantLogin(intervenant);
 		c.setDuree(duree);
 		c.setSalle(salle);
 		c.setType(type);
 		c.setHeureDebut(heure);
+		c.setJour(Date.from(dateChoisie.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 	}
 	public Stage getStage() {
         return stage;
