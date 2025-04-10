@@ -24,7 +24,7 @@ public class CoursDTO {
         CoursDTO dto = new CoursDTO();
         dto.coursId = cours.getCoursId();
         dto.ueId = cours.getUe() != null ? cours.getUe().getUeId() : null;  // Seulement l'ID de l'UE
-        dto.salleId = cours.getSalle().getSalle_id();
+        dto.salleId = cours.getSalle().getSalleId();
         dto.promos = cours.getPromos().stream()
                           .map(Promotion::getPromoId)
                           .collect(Collectors.toList());  // ID des promotions uniquement

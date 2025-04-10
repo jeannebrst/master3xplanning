@@ -5,11 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-<<<<<<< HEAD
-=======
 import java.text.SimpleDateFormat;
-import java.time.Instant;
->>>>>>> ec8493fc3ab62b8063df2f133f4b3b816505d354
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;

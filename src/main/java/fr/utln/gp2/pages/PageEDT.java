@@ -462,7 +462,7 @@ public class PageEDT {
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
 		Promotion promo = p.getPromos().get(promoIndex);
 		Platform.runLater(()-> {
-			PageModif pageModif = new PageModif(p,coursMap.get(numSemaine),numSemaine,i+7,j,promo);
+			PageCreationCours pageModif = new PageCreationCours(p,coursMap.get(numSemaine),numSemaine,i+7,j,promo);
 			pageModif.show();
 			pageModif.getStage().setOnHidden(e -> {
 				getCoursOfPromo(promoIndex);

@@ -10,7 +10,7 @@ import java.util.Optional;
 @ApplicationScoped
 public class SalleRepository implements PanacheRepository<Salle> {
     public Salle findBySalleId(Long id) {
-        return find("salle_id", id).firstResult();
+        return find("salleId", id).firstResult();
     }
     public Optional<Salle> findByNom(String nom) {
         return find("nom", nom).firstResultOptional();
