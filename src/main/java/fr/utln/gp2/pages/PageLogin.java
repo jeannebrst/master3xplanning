@@ -48,29 +48,29 @@ public class PageLogin extends Application {
 		erreur.setVisible(false);
 
 
-		Text texte1 = new Text("Bienvenue ");
+		Text texte1 = new Text("Bienvenue sur MasterMasterMasterPlanning");
 		texte1.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte1.setFill(Color.RED);
-		Text texte6 = new Text("sur ");
-		texte6.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte6.setFill(Color.ORANGE);
-		Text texte2 = new Text("Master");
-		texte2.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte2.setFill(Color.YELLOW);
-		Text texte3 = new Text("Master");
-		texte3.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte3.setFill(Color.GREEN);
-		Text texte4 = new Text("Master");
-		texte4.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte4.setFill(Color.INDIGO);
-		Text texte5 = new Text("Planning");
-		texte5.setFont(Font.font(font,FontWeight.BOLD,30));
-		texte5.setFill(Color.PURPLE);
-		TextFlow titre = new TextFlow(texte1,texte6,texte2,texte3,texte4,texte5);
+		texte1.setFill(Color.LIGHTBLUE);
+//		Text texte6 = new Text("sur ");
+//		texte6.setFont(Font.font(font,FontWeight.BOLD,30));
+//		texte6.setFill(Color.WHEAT);
+//		Text texte2 = new Text("Master");
+//		texte2.setFont(Font.font(font,FontWeight.BOLD,30));
+//		texte2.setFill(Color.WHEAT);
+//		Text texte3 = new Text("Master");
+//		texte3.setFont(Font.font(font,FontWeight.BOLD,30));
+//		texte3.setFill(Color.WHEAT);
+//		Text texte4 = new Text("Master");
+//		texte4.setFont(Font.font(font,FontWeight.BOLD,30));
+//		texte4.setFill(Color.WHEAT);
+//		Text texte5 = new Text("Planning");
+//		texte5.setFont(Font.font(font,FontWeight.BOLD,30));
+//		texte5.setFill(Color.WHEAT);
+		TextFlow titre = new TextFlow(texte1);
 		titre.setTextAlignment(TextAlignment.CENTER);
 		Label service = new Label("Service d'authentification");
 		service.setFont(Font.font(font,FontWeight.BOLD,25));
-		service.setTextFill(Color.WHITE);
+		service.setTextFill(Color.LIGHTBLUE);
 
 		//Conteneur de l'app
 		StackPane conteneurFond = new StackPane();
