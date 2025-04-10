@@ -18,17 +18,16 @@ public class Absence {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "absences_seq")
     @SequenceGenerator(name = "absences_seq", sequenceName = "absences_id_seq", allocationSize = 10)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(hidden = true)
     private Long absenceId;
 
     @ManyToOne
     @JoinColumn(name = "etudiant_id")
-    @JsonIgnoreProperties({"promos", "ues", "notes", "hashMdp", "nom", "prenom", "mail", "role"})
+    @JsonIgnoreProperties({"promos", "ues", "notes", "hashMdp", "nom", "prenom", "mail", "role", "absences"})
     private Personne etudiant;
 
     @ManyToOne
-    @JsonIgnoreProperties({"notes", "cours","ueId", "intervenantsLogin", "responsableLogin", "nbHeures"})
+    @JsonIgnoreProperties({"notes", "cours","ueId", "intervenantsLogin", "responsableLogin", "nbHeures", "promos", "ue", "intervenantLogin", "absences", "salle", "jour"})
     private Cours cours;
 
     private Date dateAbsence;
@@ -43,7 +42,7 @@ public class Absence {
     public String toString() {
         return "Absence{" +
                 "absenceId=" + absenceId +
-                ", etudiant=" + etudiant +
+                ", etudiant=" + etudiant.getLogin() +
                 ", cours=" + cours.getUe().getNom() +
                 ", dateAbsence=" + dateAbsence +
                 '}';

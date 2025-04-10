@@ -2,6 +2,7 @@ package fr.utln.gp2;
 
 import fr.utln.gp2.entites.*;
 import fr.utln.gp2.pages.PageLogin;
+import fr.utln.gp2.utils.AbsenceDTO;
 import fr.utln.gp2.utils.NoteDTO;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
@@ -85,6 +86,11 @@ public class Main{
 		Outils.persistence(p7);
 		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
 		Outils.persistence(s1);
+
+		AbsenceDTO a1 = new AbsenceDTO(p7.getLogin(), 1L);
+		Outils.persistence(a1);
+
+
 
 		Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);

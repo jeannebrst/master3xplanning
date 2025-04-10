@@ -74,7 +74,6 @@ public class Personne {
 	private List<Note> notes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnore
 	private List<Absence> absences = new ArrayList<>();
 
 

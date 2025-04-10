@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
-@Path("/api/v1/absence")
+@Path("/api/v1/absences")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AbsenceRessource {
@@ -69,8 +69,6 @@ public class AbsenceRessource {
                     .entity("Cours avec l'ID " + absence.getCoursId() + " introuvable.")
                     .build();
         }
-
-
         Absence absencePersist = new Absence(etudiantOpt.get(), coursOpt.get());
         absenceRepository.persist(absencePersist);
         return Response.status(Response.Status.CREATED)
