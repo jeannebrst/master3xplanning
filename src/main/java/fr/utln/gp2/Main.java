@@ -70,6 +70,8 @@ public class Main{
 		Outils.persistence(m2glotin);
 		Outils.persistence(l1info);
 		Outils.persistence(s1);
+		Outils.persistence(s2);
+		Outils.persistence(s3);
 		Outils.persistence(p3);
 		Outils.persistence(p5);
 		Outils.persistence(p2);
@@ -82,11 +84,9 @@ public class Main{
 		Outils.persistence(c7);
 		Outils.persistence(c8);
 		Outils.persistence(c9);
-		// Outils.persistence(s1);
 
 		Outils.persistence(p7);
-		NoteDTO n1 = new NoteDTO("spelerin", optimisation.getNom(), 20f, new Date());
-		Outils.persistence(s1);
+		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
 
 		Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);
