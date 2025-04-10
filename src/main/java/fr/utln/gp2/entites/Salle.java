@@ -23,6 +23,7 @@ public class Salle {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "salle_seq")
 	@SequenceGenerator(name = "salle_seq", sequenceName = "salle_id_seq", allocationSize = 10)
 	@Schema(hidden = true)
+	@Column(name = "salle_id")
 	private Long salleId;
 
 	private String nom;
