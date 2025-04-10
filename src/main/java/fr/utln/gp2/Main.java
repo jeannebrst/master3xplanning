@@ -6,6 +6,7 @@ import fr.utln.gp2.utils.AbsenceDTO;
 import fr.utln.gp2.utils.NoteDTO;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
+import fr.utln.gp2.utils.RetardDTO;
 import javafx.application.Application;
 
 import java.time.LocalDate;
@@ -90,7 +91,8 @@ public class Main{
 		AbsenceDTO a1 = new AbsenceDTO(p7.getLogin(), 1L);
 		Outils.persistence(a1);
 
-
+		RetardDTO r1 = new RetardDTO(p7.getLogin(), 2L, 2);
+		Outils.persistence(r1);
 
 		Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);

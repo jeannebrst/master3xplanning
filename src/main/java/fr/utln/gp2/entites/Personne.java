@@ -76,6 +76,9 @@ public class Personne {
 	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Absence> absences = new ArrayList<>();
 
+	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Retard> retards = new ArrayList<>();
+
 
 	public Personne(String mdp, String nom, String prenom, Role role){
 		this.hashMdp = DigestUtils.sha256Hex(mdp);
