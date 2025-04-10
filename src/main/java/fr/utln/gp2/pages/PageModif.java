@@ -26,7 +26,7 @@ import java.time.ZoneId;
 import java.time.DayOfWeek;
 import java.time.temporal.IsoFields;
 
-public class PageModif {
+public class PageModif{
 
 	private Stage stage;
 	private Personne p;

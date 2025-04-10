@@ -130,9 +130,6 @@ public class PageLogin extends Application {
 		primaryStage.setTitle("Page de login");
 		primaryStage.setScene(scene1);
 
-
-		// primaryStage.setWidth(1920);
-		// primaryStage.setHeight(1080);
 		primaryStage.setMaximized(false);
 		primaryStage.show();
 	}

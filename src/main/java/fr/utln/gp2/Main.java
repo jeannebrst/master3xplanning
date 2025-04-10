@@ -49,7 +49,7 @@ public class Main{
 
 
 //		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT, Arrays.asList(m1info, m2glotin));
-		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
+		Personne p1 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT, Arrays.asList(m1info));
 		Personne p2 = new Personne("virgule", "lavit", "Quentin", Role.ETUDIANT);
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info));
@@ -82,13 +82,10 @@ public class Main{
 		Outils.persistence(c7);
 		Outils.persistence(c8);
 		Outils.persistence(c9);
-		// Outils.persistence(s1);
 
 		Outils.persistence(p7);
-		NoteDTO n1 = new NoteDTO("spelerin", optimisation.getNom(), 20f, new Date());
 		Outils.persistence(s1);
 
-		Outils.persistence(n1);
 		Application.launch(PageLogin.class, args);
 	}
 

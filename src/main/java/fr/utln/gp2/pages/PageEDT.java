@@ -112,18 +112,24 @@ public class PageEDT {
 		HBox boiteBtn = new HBox(10);
 		Button cours = new Button("Cours");
 		Button infos = new Button("Informations Personnelles");
+		Button notes = new Button("Notes");
 		
 		infos.setOnAction(e -> {
 			stage.setScene(sceneInfos);
-			
-
 		});
+
 		cours.setOnAction(e -> {
 			stage.setScene(sceneEDT);
-			
-
 		});
+
+		notes.setOnAction(e -> {
+			ouvrirPageNotes();
+		});
+
 		boiteBtn.getChildren().addAll(cours,infos);
+		if(p.getRole().equals(Role.PROFESSEUR)){
+			boiteBtn.getChildren().add(notes);
+		}
 		
 		return boiteBtn;
 	}
@@ -267,8 +273,6 @@ public class PageEDT {
 				StackPane cell = new StackPane();
 				cell.setBackground(new Background(new BackgroundFill(Color.WHITESMOKE,new CornerRadii(0), new Insets(1))));
 				cell.setOnMouseClicked(event -> {if(modeEdition){ouvrirPageModif(indiceHeure,indiceJour);}});
-					
-				;
 				grilleEdt.add(cell, j, i);
 			}
 		}
@@ -454,10 +458,6 @@ public class PageEDT {
 		return boutonModif;
 	}
 
-	private void supprimerCours(long id){
-
-	}
-
 	private void ouvrirPageModif(int i,int j){
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
 		Promotion promo = p.getPromos().get(promoIndex);
@@ -468,6 +468,14 @@ public class PageEDT {
 				getCoursOfPromo(promoIndex);
 				majEDT();
 			});
+		});
+
+	}
+
+	private void ouvrirPageNotes(){
+		Platform.runLater(()-> {
+			PageNotes pageNotes = new PageNotes(p.getPromos());
+			pageNotes.show();
 		});
 
 	}

@@ -31,7 +31,6 @@ public class Note {
     @JsonIgnoreProperties({"notes", "cours","ueId", "intervenantsLogin", "responsableLogin", "nbHeures"})
     private UE ue;
 
-
     private float note;
 
     private Date date;

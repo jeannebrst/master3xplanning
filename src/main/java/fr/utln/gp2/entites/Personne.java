@@ -56,7 +56,7 @@ public class Personne {
 	private Role role;
 
 	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonIgnoreProperties({"personnes","cours"})//Pour eviter maxi redondance
+	@JsonIgnoreProperties({"promos","personneId","hashMdp","cours"})//Pour eviter maxi redondance
 	private List<Promotion> promos = new ArrayList<>();
 
 	@ManyToMany

@@ -19,7 +19,6 @@ public class PageModifCours {
     private List<UE> ues;
 
     public PageModifCours(Cours c){
-
     }
 
     public void show(){
@@ -39,7 +38,7 @@ public class PageModifCours {
         ueComboBox.setValue("UE");
 		
 		ComboBox<String> profComboBox = new ComboBox<>();
-		profComboBox.setDisable(true); // Désactivé au début
+		profComboBox.setDisable(true); //Désactivé au début
         profComboBox.setValue("Professeur");
 
 		ueComboBox.setOnAction(event -> {
