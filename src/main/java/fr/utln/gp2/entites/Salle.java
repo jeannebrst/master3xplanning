@@ -45,4 +45,17 @@ public class Salle {
 		this.capacite = capacite;
 		this.description = description;
 	}
+
+	@Override
+	public String toString() {
+		List<Long> coursIds = new ArrayList<>();
+		for (Cours c : cours){
+			coursIds.add(c.getCoursId());
+		}
+
+		return "Salle [nom=" + nom + ", cours=" + coursIds + ", capacite=" + capacite
+				+ ", description=" + description + "]";
+	}
+
+	
 }
