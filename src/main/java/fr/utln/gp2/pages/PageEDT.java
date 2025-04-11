@@ -58,6 +58,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
+import lombok.val;
 
 
 public class PageEDT {
@@ -158,7 +159,8 @@ public class PageEDT {
 		menuPromo.setOnAction(e -> {
 			getCoursOfPromo(menuPromo.getSelectionModel().getSelectedIndex());
 			majEDT();
-		});//Metre la fonction de Sh<3wn
+		});
+
 		boiteMenuBtnEdition.getChildren().add(menuPromo);
 		VBox pageComplete = new VBox(10);
 		Button btnPreviousWeek = new Button("<");
@@ -464,14 +466,15 @@ public class PageEDT {
 
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM");
 
-		notesTriees.forEach((n) -> {
+		notesTriees.forEach(n -> {
 			HBox noteHBox = new HBox(); //Contient tout
 			VBox infoNote = new VBox(); //Nom de l'ue + Date
 
 			Label ueLabel = new Label(n.getUe().getNom());
 			String dateFormatee = format.format(n.getDate());
 			Label dateLabel = new Label(dateFormatee);
-			Label noteLabel = new Label(String.valueOf(n.getNote()));
+			Float valeur = n.getNote();
+			Label noteLabel = new Label((valeur % 1 == 0) ? String.format("%.0f", valeur) : Float.toString(valeur));
 
 			infoNote.getChildren().addAll(ueLabel, dateLabel);
 			noteHBox.getChildren().addAll(infoNote, noteLabel);

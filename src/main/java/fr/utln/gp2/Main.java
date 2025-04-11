@@ -85,8 +85,8 @@ public class Main{
 		Outils.persistence(p7);
 		
 		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
-		NoteDTO n2 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 14f, new Date());
-		NoteDTO n3 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 6f, new Date());
+		NoteDTO n2 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 14.65f, new Date());
+		NoteDTO n3 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 6.5f, new Date());
 		Outils.persistence(s1);
 
 		AbsenceDTO a1 = new AbsenceDTO(p7.getLogin(), 1L);
