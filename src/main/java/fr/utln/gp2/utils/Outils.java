@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
@@ -420,5 +421,76 @@ public class Outils{
 		} catch (IllegalArgumentException e) {
 			System.err.println("URL invalide : " + e.getMessage());
 		}
+	}
+
+	public static void modifierCours(Cours cours) {
+		ObjectMapper objectMapper = new ObjectMapper();
+		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd")); // Format clair pour la date
+		try {
+			// Conversion de l'entité Cours en DTO
+			CoursDTO coursDTO = CoursDTO.fromCours(cours);
+			String jsonBody = objectMapper.writeValueAsString(coursDTO);
+			System.out.println("Payload envoyé : " + jsonBody);
+	
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("http://localhost:8080/api/v1/cours/" + cours.getCoursId()))
+					.PUT(HttpRequest.BodyPublishers.ofString(jsonBody))
+					.header("Content-Type", "application/json")
+					.build();
+	
+			HttpClient client = HttpClient.newHttpClient();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	
+			int status = response.statusCode();
+			System.out.println("Status code: " + status);
+			System.out.println("Response body: " + response.body());
+	
+			if (status == 200) {
+				System.out.println("Cours modifié avec succès !");
+			} else if (status == 404) {
+				System.out.println("Cours non trouvé.");
+			} else {
+				System.out.println("Erreur lors de la modification du cours.");
+			}
+		} catch (IOException e) {
+			System.err.println("Erreur réseau ou de sérialisation JSON : " + e.getMessage());
+		} catch (InterruptedException e) {
+			System.err.println("La requête a été interrompue : " + e.getMessage());
+			Thread.currentThread().interrupt();
+		} catch (IllegalArgumentException e) {
+			System.err.println("URL invalide : " + e.getMessage());
+		}
+	}
+
+
+	public static CompletableFuture<Cours> getCoursById(Long id) {
+		HttpRequest request = HttpRequest.newBuilder()
+			.uri(URI.create("http://localhost:8080/api/v1/cours/" + id))
+			.GET()
+			.header("Content-Type", "application/json")
+			.build();
+	
+		CompletableFuture<Cours> futureCours = new CompletableFuture<>();
+	
+		client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenAccept(response -> {
+				System.out.println("GetCoursById: " + response + "\n");
+				try {
+					ObjectMapper mapper = new ObjectMapper();
+					Cours cours = mapper.readValue(response, Cours.class);
+					futureCours.complete(cours);
+				} catch (Exception e) {
+					e.printStackTrace();
+					futureCours.completeExceptionally(e);
+				}
+			})
+			.exceptionally(e -> {
+				e.printStackTrace();
+				futureCours.completeExceptionally(e);
+				return null;
+			});
+	
+		return futureCours;
 	}
 }

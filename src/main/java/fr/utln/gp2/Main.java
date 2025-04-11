@@ -59,10 +59,6 @@ public class Main{
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 		Personne p7 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
 
-
-//		Note n1 = new Note(p7, optimisation, 20, new Date());
-
-
 		Outils.persistence(p4);
 		Outils.persistence(p6);
 		Outils.persistence(p1);
@@ -71,6 +67,8 @@ public class Main{
 		Outils.persistence(m2glotin);
 		Outils.persistence(l1info);
 		Outils.persistence(s1);
+		Outils.persistence(s2);
+		Outils.persistence(s3);
 		Outils.persistence(p3);
 		Outils.persistence(p5);
 		Outils.persistence(p2);
@@ -93,6 +91,8 @@ public class Main{
 		Outils.persistence(a1);
 
 		Outils.persistence(n1);
+
+		System.out.println("PRISM: " + System.getProperty("prism.order"));
 		Application.launch(PageLogin.class, args);
 	}
 

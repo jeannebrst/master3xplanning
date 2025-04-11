@@ -1,82 +1,155 @@
 package fr.utln.gp2.pages;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.List;
 
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Cours.TypeC;
+import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.utils.Outils;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 public class PageModifCours {
 
-    private Stage stage;
+    private Stage stage = new Stage();
     private List<UE> ues;
 
+	//private Long coursId;
+	private List<Salle> salles;
+	private Cours cours;
+	private LocalDate dateChoisie;
+
     public PageModifCours(Cours c){
+		stage = new Stage();
+		this.cours = c;
     }
 
     public void show(){
         stage.setTitle("Page de modification");
 		stage.setMaximized(false);
-
+		//cours = Outils.getCoursById(coursId).join();
 		ues = Outils.getAllUE().join();
+		salles = Outils.getAllSalle().join();
 		stage.setScene(generePage());
+		stage.setMinWidth(400);
+		stage.setMinHeight(350);
 		stage.show();
     }
 
     private Scene generePage(){
-		ComboBox<String> ueComboBox = new ComboBox<>();
-		for (UE ue : ues){
-			ueComboBox.getItems().add(ue.getNom());
-		}
-        ueComboBox.setValue("UE");
-		
-		ComboBox<String> profComboBox = new ComboBox<>();
-		profComboBox.setDisable(true); //Désactivé au début
-        profComboBox.setValue("Professeur");
-
-		ueComboBox.setOnAction(event -> {
-			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
-			UE ueChoisie = ues.get(indiceUeChoisie);
-			if (ueChoisie != null) {
-				profComboBox.getItems().setAll(ueChoisie.getIntervenantsLogin());
-				profComboBox.setDisable(false);
+			// Création des ComboBox et des Labels
+			ComboBox<String> ueComboBox = new ComboBox<>();
+			for (UE ue : ues){
+				ueComboBox.getItems().add(ue.getNom());
 			}
-		});
-
-        ComboBox<String> typeMenuDeroulant = new ComboBox<>();
-        typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(),TypeC.TD.toString(),TypeC.TP.toString());
-        typeMenuDeroulant.setValue("Type de Cours");
-
-        ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
-        dureeMenuDeroulant.getItems().addAll("1","2","3","4");
-        dureeMenuDeroulant.setValue("Durée du cours");
-
-		Button validerButton = new Button("Valider");
-		validerButton.setOnAction(event -> {
-			int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
-			UE ueChoisie = ues.get(indiceUeChoisie);
-			String profChoisi = profComboBox.getValue();
-            int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
-            TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
-			if (ueChoisie != null && profChoisi != null){
-				//ajouteUnCours(ueChoisie, profChoisi, dureeChosie, typeChoisi);
-                //System.out.println(Outils.getCoursByPromo(promo.getPromoId()).join());
-                stage.close();
-			}
-            
-		});
+			ueComboBox.setValue(cours.getUe().getNom());
 		
-		VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant, validerButton);
-		Pane pane = new Pane();
-		pane.getChildren().add(layout);
-		return new Scene(pane);
+			ComboBox<String> profComboBox = new ComboBox<>();
+			UE ueInitiale = ues.stream()
+				.filter(ue -> ue.getNom().equals(cours.getUe().getNom()))
+				.findFirst()
+				.orElse(null);
+		
+			if (ueInitiale != null) {
+				profComboBox.getItems().addAll(ueInitiale.getIntervenantsLogin());
+				profComboBox.setValue(cours.getIntervenantLogin());
+			}
+		
+			// Liste des labels et des ComboBox
+			Label ueLabel = new Label("UE:");
+			Label profLabel = new Label("Intervenant:");
+			Label typeLabel = new Label("Type de Cours:");
+			Label dureeLabel = new Label("Durée:");
+			Label heureDebutLabel = new Label("Heure de début:");
+			Label salleLabel = new Label("Salle:");
+		
+			ComboBox<String> typeMenuDeroulant = new ComboBox<>();
+			typeMenuDeroulant.getItems().addAll(TypeC.CM.toString(), TypeC.TD.toString(), TypeC.TP.toString());
+			typeMenuDeroulant.setValue(cours.getType().toString());
+		
+			ComboBox<String> dureeMenuDeroulant = new ComboBox<>();
+			dureeMenuDeroulant.getItems().addAll("1", "2", "3", "4");
+			dureeMenuDeroulant.setValue(String.valueOf(cours.getDuree()));
+		
+			ComboBox<String> heureDebutMenuDeroulant = new ComboBox<>();
+			heureDebutMenuDeroulant.getItems().addAll("8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18");
+			heureDebutMenuDeroulant.setValue(String.valueOf(cours.getHeureDebut()));
+		
+			ComboBox<String> salleMenuDeroulant = new ComboBox<>();
+			for (Salle s : salles) {
+				salleMenuDeroulant.getItems().add(s.getNom());
+			}
+			salleMenuDeroulant.setValue(cours.getSalle().getNom());
+
+			Label dateLabel = new Label("Date du cours");
+			DatePicker dateChoix = new DatePicker();
+			// Définir une date par défaut (optionnel)
+			dateChoix.setValue(LocalDate.now()); // La date actuelle par défaut
+
+			// Ajout de l'action de sélection de la date
+			dateChoix.setOnAction(event -> {
+				dateChoisie = dateChoix.getValue();  // Récupérer la date choisie sous forme de LocalDate
+				System.out.println("Date sélectionnée : " + dateChoisie);
+			});
+		
+			// Bouton de validation
+			Button validerButton = new Button("Valider");
+			validerButton.setOnAction(event -> {
+				int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
+				UE ueChoisie = ues.get(indiceUeChoisie);
+				String profChoisi = profComboBox.getValue();
+				int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
+				TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
+				int heureChoisie = Integer.parseInt(heureDebutMenuDeroulant.getValue());
+				Salle salleChoisie = salles.get(salleMenuDeroulant.getSelectionModel().getSelectedIndex());
+				
+				if (ueChoisie != null && profChoisi != null) {
+					Cours c = cours;
+					modifierCours(c, ueChoisie, profChoisi, dureeChosie, typeChoisi, salleChoisie, heureChoisie,dateChoisie);
+					System.out.println("Id de la salle après modif " + c.getSalle());
+					Outils.modifierCours(c);
+					stage.close();
+				}
+			});
+		
+			HBox layout = new HBox(10);
+			layout.getChildren().addAll(
+				new VBox(20, ueLabel, profLabel,dureeLabel,heureDebutLabel,typeLabel,salleLabel,dateLabel),
+				new VBox(10, ueComboBox, profComboBox,dureeMenuDeroulant,heureDebutMenuDeroulant,typeMenuDeroulant,salleMenuDeroulant,dateChoix,validerButton)
+				
+			);
+			layout.setPadding(new Insets(20));
+			
+		
+		
+			return new Scene(layout, 700, 500);  // Tu peux ajuster la taille de la scène si nécessaire
+		
 	}
+
+	private void modifierCours(Cours c,UE ue, String intervenant,int duree,TypeC type,Salle salle,int heure,LocalDate jour){
+		c.setUe(ue);
+		c.setIntervenantLogin(intervenant);
+		c.setDuree(duree);
+		c.setSalle(salle);
+		c.setType(type);
+		c.setHeureDebut(heure);
+		c.setJour(Date.from(dateChoisie.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	}
+	public Stage getStage() {
+        return stage;
+    }
 
 }
