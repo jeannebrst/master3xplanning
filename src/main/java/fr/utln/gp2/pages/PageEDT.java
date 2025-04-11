@@ -392,7 +392,7 @@ public class PageEDT {
 
 
 	public Pane genereSceneInfos(){
-		HBox boiteBtn = new HBox(genereBoutonHaut()); 
+		HBox boiteBtn = new HBox(genereBoutonHaut());
 		Pane sceneInfos = new Pane();
 		VBox boitesPhotoNom = new VBox(15);
 		boitesPhotoNom.setAlignment(Pos.CENTER);
@@ -417,21 +417,19 @@ public class PageEDT {
 		boiteInfos.getChildren().addAll(login,email);
 		boiteInfos.setLayoutX(100);
 		boiteInfos.setLayoutY(500);
-		Label[] labels = {labelNom,login,email,new Label()};
-		if (p.getRole().equals(Role.GESTIONNAIRE)){
 
+		Label[] labels = {labelNom,login,email,new Label()};
+		if (!p.getRole().equals(Role.GESTIONNAIRE)){
+			String chainePromo = "";
+			for (Promotion promo : p.getPromos() ){
+				chainePromo+=promo.getPromoId().toString() + " | ";
+			}
+
+			Label promoLabel = new Label("Promotion(s) : " + chainePromo);
+			labels[3]=promoLabel;
+			boiteInfos.getChildren().add(promoLabel);
 		}
-		else{
-		String chainePromo = "";
-		for (Promotion promo : p.getPromos() ){
-			chainePromo+=promo.getPromoId().toString()+" | ";
-		}
-		Label promoLabel = new Label("Promotion(s) : "+chainePromo);
-		
-		labels[3]=promoLabel;
-		
-		boiteInfos.getChildren().add(promoLabel);
-		}
+
 		for(Label l : labels){
 			l.setFont(Font.font("Arial", FontWeight.BOLD, 25));
     		l.setTextFill(Color.BLACK);
