@@ -10,6 +10,7 @@ import fr.utln.gp2.utils.AbsenceDTO;
 import fr.utln.gp2.utils.NoteDTO;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId.Type;
+import fr.utln.gp2.utils.RetardDTO;
 import javafx.application.Application;
 
 import java.time.LocalDate;
@@ -91,27 +92,25 @@ public class Main{
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		UE electromagnetisme = UE.builder()
-		.nom("Electromagnétisme")
-		.responsableLogin("tbah")
-		.intervenantsLogin(Arrays.asList("ajacquet"))
-		.nbHeures(45)
-		.build();
+			.nom("Electromagnétisme")
+			.responsableLogin("tbah")
+			.intervenantsLogin(Arrays.asList("ajacquet"))
+			.nbHeures(45)
+			.build();
 		Outils.persistence(electromagnetisme);
 
-
 		UE droitCivil = UE.builder()
-							.nom("Droit Civil")
-							.responsableLogin("nrogers")
-							.nbHeures(60)
-							.build();
+			.nom("Droit Civil")
+			.responsableLogin("nrogers")
+			.nbHeures(60)
+			.build();
 		Outils.persistence(droitCivil);
 
-
 		UE droitConstitutionel = UE.builder()
-					.nom("Droit Constitutionnel")
-					.responsableLogin("tbah")
-					.nbHeures(50)
-					.build();
+			.nom("Droit Constitutionnel")
+			.responsableLogin("tbah")
+			.nbHeures(50)
+			.build();
 		Outils.persistence(droitConstitutionel);
 
 		// UE basesDeDonnees = UE.builder()
@@ -140,23 +139,49 @@ public class Main{
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(m1info, l3phys), "ajacquet", 12, 2, Date.from(LocalDate.of(2025, 4, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(droitCivil, Arrays.asList(m1eco), "nrogers", 14, 3, Date.from(LocalDate.of(2025, 4, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(m1info), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 2, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(droitCivil, Arrays.asList(m1info), "nrogers", 12, 3, Date.from(LocalDate.of(2025, 3, 7).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1));
-		Outils.persistence(new Cours(droitConstitutionel, Arrays.asList(m1info), "tbah", 16, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(m1info), "ajacquet", 18, 2, Date.from(LocalDate.of(2025, 5, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2));
-		Outils.persistence(new Cours(droitConstitutionel, Arrays.asList(l1info), "tbah", 16, 2, Date.from(LocalDate.of(2025, 3, 5).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(l1info), "ajacquet", 12, 2, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2));
-		Outils.persistence(new Cours(droitCivil, Arrays.asList(l1info), "nrogers", 18, 2, Date.from(LocalDate.of(2025, 4, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(l1info), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 5, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 3, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
-		Outils.persistence(new Cours(droitCivil, Arrays.asList(l3phys), "nrogers", 12, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2));
-		Outils.persistence(new Cours(droitConstitutionel, Arrays.asList(l3phys), "tbah", 14, 2, Date.from(LocalDate.of(2025, 4, 14).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1));
-		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 16, 2, Date.from(LocalDate.of(2025, 6, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2));
-		Outils.persistence(new Cours(electromagnetisme,Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp),"tbah",15,2,Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),TypeC.CM,s1));
+		Cours c1 = new Cours(electromagnetisme, Arrays.asList(m1info, l3phys), "ajacquet", 12, 2, Date.from(LocalDate.of(2025, 4, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c2 = new Cours(droitCivil, Arrays.asList(m1eco), "nrogers", 14, 3, Date.from(LocalDate.of(2025, 4, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2);
+		Cours c3 = new Cours(electromagnetisme, Arrays.asList(m1info), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 2, 28).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c4 = new Cours(droitCivil, Arrays.asList(m1info), "nrogers", 12, 3, Date.from(LocalDate.of(2025, 3, 7).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c5 = new Cours(droitConstitutionel, Arrays.asList(m1info), "tbah", 16, 2, Date.from(LocalDate.of(2025, 3, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2);
+		Cours c6 = new Cours(electromagnetisme, Arrays.asList(m1info), "ajacquet", 18, 2, Date.from(LocalDate.of(2025, 5, 15).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2);
+		Cours c7 = new Cours(droitConstitutionel, Arrays.asList(l1info), "tbah", 16, 2, Date.from(LocalDate.of(2025, 3, 5).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c8 = new Cours(electromagnetisme, Arrays.asList(l1info), "ajacquet", 12, 2, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2);
+		Cours c9 = new Cours(droitCivil, Arrays.asList(l1info), "nrogers", 18, 2, Date.from(LocalDate.of(2025, 4, 9).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c10 = new Cours(electromagnetisme, Arrays.asList(l1info), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 5, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c11 = new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 14, 2, Date.from(LocalDate.of(2025, 3, 3).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
+		Cours c12 = (new Cours(droitCivil, Arrays.asList(l3phys), "nrogers", 12, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2));
+		Cours c13 = new Cours(droitConstitutionel, Arrays.asList(l3phys), "tbah", 14, 2, Date.from(LocalDate.of(2025, 4, 14).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
+		Cours c14 = new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 16, 2, Date.from(LocalDate.of(2025, 6, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2);
+		Cours c15 = new Cours(electromagnetisme,Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp),"tbah",15,2,Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),TypeC.CM,s1);
+		for(Cours c : List.of(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15)){
+			Outils.persistence(c);
+		}
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------
+		
+
+		Personne e1 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT);
+		Personne e2 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
+		Personne e3 = new Personne("virgule", "Lavit", "Quentin", Role.ETUDIANT);
+		Personne e4 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
+		Personne e5 = new Personne("tre5246", "Nguyen", "JB", Role.ETUDIANT);
+		for(Personne e : List.of(e1, e2, e3, e4, e5)){
+			Outils.persistence(e);
+		}
+
+		
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		
+
+		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
+		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
+		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
+		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
+		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
+		
 		Application.launch(PageLogin.class, args);
 	}
 

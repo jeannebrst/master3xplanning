@@ -52,11 +52,11 @@ public class Outils{
 		public static <T> void persistence(T obj){
 			String classeNom = obj.getClass().getSimpleName();
 			
-			if (classeNom.endsWith("DTO")) {
+			if(classeNom.endsWith("DTO")){
 				classeNom = classeNom.substring(0, classeNom.length() - 3); // Enlève "DTO"
 			}
 			classeNom = classeNom.toLowerCase();
-			if (classeNom.charAt(classeNom.length()-1) != 's'){
+			if(classeNom.charAt(classeNom.length()-1) != 's'){
 				classeNom += "s";
 			}
 
