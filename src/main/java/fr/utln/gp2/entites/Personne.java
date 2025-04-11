@@ -71,7 +71,7 @@ public class Personne {
 	private List<UE> ues = new ArrayList<>();
 
 	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnore
+	@JsonIgnoreProperties({"etudiant"})
 	private List<Note> notes = new ArrayList<>();
 
 	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -114,6 +114,6 @@ public class Personne {
 		}
 
 		return "Personne [personneId=" + personneId + ", login=" + login + ", nom=" + nom + ", prenom=" + prenom
-				+ ", mail=" + mail + ", role=" + role + ", promos=" + promosIds + "]";
+				+ ", mail=" + mail + ", role=" + role + ", promos=" + promosIds + ", notes=" + notes + "]";
 	}
 }

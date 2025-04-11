@@ -83,6 +83,7 @@ public class Promotion {
 
 		public Promotion(Type type, int annee, String categorie, String responsable_login) {
 			this.promoId = new PromotionId(type, annee, categorie);
+			this.responsableLogin = responsable_login;
 	}
 
 	@Override

@@ -62,14 +62,15 @@ public class Main{
 		
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
+		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
+		Outils.persistence(m2glotin);
 		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", "tbah");
 		Outils.persistence(m1info);
 		Promotion l1info = new Promotion(Type.LICENCE, 1, "Informatique", "tbah");
 		Outils.persistence(l1info);
 		Promotion m2info = new Promotion(Type.MASTER, 2, "Informatique", "tbah");
 		Outils.persistence(m2info);
-		Promotion l1proDroit = new Promotion(Type.LICENCE_PROFESSIONNELLE, 1, "Activités Juridiques", "tbah");
+		Promotion l1proDroit = new Promotion(Type.DOCTORAT, 1, "ActivitesJuridiques", "tbah");
 		Outils.persistence(l1proDroit);
 		Promotion l3info = new Promotion(Type.LICENCE, 3, "Informatique", "tbah");
 		Outils.persistence(l3info);
@@ -79,13 +80,13 @@ public class Main{
 		Outils.persistence(l3phys);
 		Promotion m1eco = new Promotion(Type.MASTER, 1, "Économie", "jsorel");
 		Outils.persistence(m1eco);
-		Promotion m2ai = new Promotion(Type.MASTER, 2, "Intelligence Artificielle", "nrogers");
+		Promotion m2ai = new Promotion(Type.MASTER, 2, "IntelligenceArtificielle", "nrogers");
 		Outils.persistence(m2ai);
 		Promotion l3chimie = new Promotion(Type.LICENCE, 3, "Chimie", "cperez");
 		Outils.persistence(l3chimie);
 		Promotion l1eco = new Promotion(Type.LICENCE, 1, "Économie", "acamus");
 		Outils.persistence(l1eco);
-		Promotion m2mathapp = new Promotion(Type.MASTER, 2, "Maths Appliquées", "thardy");
+		Promotion m2mathapp = new Promotion(Type.MASTER, 2, "MathsAppliquees", "thardy");
 		Outils.persistence(m2mathapp);
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -154,7 +155,7 @@ public class Main{
 		Outils.persistence(new Cours(droitCivil, Arrays.asList(l3phys), "nrogers", 12, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2));
 		Outils.persistence(new Cours(droitConstitutionel, Arrays.asList(l3phys), "tbah", 14, 2, Date.from(LocalDate.of(2025, 4, 14).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1));
 		Outils.persistence(new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 16, 2, Date.from(LocalDate.of(2025, 6, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2));
-		
+		Outils.persistence(new Cours(electromagnetisme,Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp),"tbah",15,2,Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),TypeC.CM,s1));
 
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 		Application.launch(PageLogin.class, args);

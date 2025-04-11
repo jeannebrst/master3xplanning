@@ -18,7 +18,7 @@ public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notes_seq")
     @SequenceGenerator(name = "notes_seq", sequenceName = "notes_id_seq", allocationSize = 10)
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    // @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Schema(hidden = true)
     private Long noteId;
 
@@ -44,10 +44,15 @@ public class Note {
 
     @Override
     public String toString() {
+        
         return "Note{" +
                 "noteId=" + noteId +
-                ", etudiant=" + etudiant +
-                ", ue=" + ue.getNom() +
+                ", etudiant=" + Optional.ofNullable(etudiant)
+                .map(Personne::getLogin)
+                .orElse("null") +
+                ", ue=" + Optional.ofNullable(ue)
+                .map(UE::getNom)
+                .orElse("null") +
                 ", note=" + note +
                 ", date=" + date +
                 '}';
