@@ -80,9 +80,7 @@ public class PageNotes{
 
 		
 		VBox layout = new VBox(10, promoComboBox, eleveComboBox);
-		Pane pane = new Pane();
-		pane.getChildren().add(layout);
-		return new Scene(pane);
+		return new Scene(layout);
 	}
 
 	public Stage getStage() {

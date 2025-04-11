@@ -38,6 +38,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -398,11 +399,17 @@ public class PageEDT {
 
 	public Pane genereSceneInfos(){
 		VBox boiteInfo = new VBox();
-		HBox boitePage = new HBox();
+		HBox boitePage = new HBox(50);
 		VBox boiteNotes = new VBox();
 		VBox boiteAbsences = new VBox();
 		HBox boiteBtn = new HBox(genereBoutonHaut());
 		Pane sceneInfos = new Pane();
+
+		ScrollPane scrollNotes = new ScrollPane(boiteNotes);
+		scrollNotes.setFitToWidth(true);
+		scrollNotes.setPrefHeight(500);
+		scrollNotes.setMaxHeight(500);
+		scrollNotes.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 
 		VBox boitesPhotoNom = new VBox(15);
 		boitesPhotoNom.setAlignment(Pos.CENTER);
@@ -451,6 +458,8 @@ public class PageEDT {
 		boitesPhotoNom.setLayoutX(800);
 		boitesPhotoNom.setLayoutY(50);
 
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM");
+		if(p.getRole().equals(Role.ETUDIANT)){
 		boiteNotes.setLayoutY(200);
 		Label notes = new Label("Notes");
 		notes.setFont(Font.font("Arial", FontWeight.BOLD, 25));
@@ -466,7 +475,7 @@ public class PageEDT {
 			.sorted(Comparator.comparing(Note::getDate).reversed())
 			.collect(Collectors.toList());
 
-		SimpleDateFormat format = new SimpleDateFormat("dd/MM");
+		
 
 		notesTriees.forEach(n -> {
 			HBox noteHBox = new HBox(30); // Contient tout
@@ -518,7 +527,7 @@ public class PageEDT {
 			noteHBox.getChildren().addAll(infoNote, spacer, valeurNote);
 			noteHBox.setPadding(new Insets(5));
 			boiteNotes.getChildren().add(noteHBox);
-		});
+		});}
 
 		// Pour trier les absences mais plus tard
 		// List<Absence> absencesTriees = p.getAbsences().stream()
@@ -539,7 +548,7 @@ public class PageEDT {
 		});
 
 		boiteInfo.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);
-		boitePage.getChildren().addAll(boiteInfo,boiteNotes);
+		boitePage.getChildren().addAll(boiteInfo,scrollNotes);
 		sceneInfos.getChildren().addAll(boitePage);
 		
 		return sceneInfos;

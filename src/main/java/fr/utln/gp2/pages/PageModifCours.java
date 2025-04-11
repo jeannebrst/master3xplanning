@@ -50,8 +50,8 @@ public class PageModifCours {
 		ues = Outils.getAllUE().join();
 		salles = Outils.getAllSalle().join();
 		stage.setScene(generePage());
-		stage.setMinWidth(400);
-		stage.setMinHeight(350);
+		stage.setMinWidth(600);
+		stage.setMinHeight(500);
 		stage.show();
     }
 
@@ -106,9 +106,13 @@ public class PageModifCours {
 				dateChoisie = dateChoix.getValue();
 				System.out.println("Date sélectionnée : " + dateChoisie);
 			});
+
+			Label messageErreur = new Label(); // Label pour afficher les messages d'erreur
+    		messageErreur.setStyle("-fx-text-fill: red;");
 		
 			Button validerButton = new Button("Valider");
 			validerButton.setOnAction(event -> {
+				try{
 				int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
 				UE ueChoisie = ues.get(indiceUeChoisie);
 				String profChoisi = profComboBox.getValue();
@@ -123,13 +127,14 @@ public class PageModifCours {
 					System.out.println("Id de la salle après modif " + c.getSalle());
 					Outils.modifierCours(c);
 					stage.close();
-				}
+				}}
+				catch(Exception e){messageErreur.setText("Erreur : " + e.getMessage());}
 			});
 		
 			HBox layout = new HBox(10);
 			layout.getChildren().addAll(
 				new VBox(20, ueLabel, profLabel,dureeLabel,heureDebutLabel,typeLabel,salleLabel,dateLabel),
-				new VBox(10, ueComboBox, profComboBox,dureeMenuDeroulant,heureDebutMenuDeroulant,typeMenuDeroulant,salleMenuDeroulant,dateChoix,validerButton)
+				new VBox(10, ueComboBox, profComboBox,dureeMenuDeroulant,heureDebutMenuDeroulant,typeMenuDeroulant,salleMenuDeroulant,dateChoix,validerButton,messageErreur)
 				
 			);
 			layout.setPadding(new Insets(20));

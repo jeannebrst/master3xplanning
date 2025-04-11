@@ -174,7 +174,18 @@ public class Main{
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 14, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 9, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), droitCivil.getNom(), 2, new Date()));
-
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 19, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 7, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 8, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), droitCivil.getNom(), 6, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 14, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 9, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), droitCivil.getNom(), 2, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 19, new Date()));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 7, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 8, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
+		Outils.persistence(new NoteDTO(e4.getLogin(), droitCivil.getNom(), 6, new Date()));
 		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
 		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
 		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
