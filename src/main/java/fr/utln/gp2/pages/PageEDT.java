@@ -177,14 +177,12 @@ public class PageEDT {
 		cellBouton.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
 		
 		HBox boite = new HBox(10);
-		boite.setAlignment(Pos.CENTER);  // Aligner le contenu de la HBox au centre
+		boite.setAlignment(Pos.CENTER);
 		boite.getChildren().addAll(btnPreviousWeek, semaine, btnNextWeek);
 		cellBouton.getChildren().add(boite);
 		
-		// Ajouter la cellule dans la grille
 		grilleEdt.add(cellBouton, 0, 0);
 		
-		// Centrer la cellule dans la grille
 		GridPane.setHalignment(cellBouton, HPos.CENTER);
 		GridPane.setValignment(cellBouton, VPos.CENTER);
 		
@@ -200,7 +198,6 @@ public class PageEDT {
 		pageComplete.getChildren().addAll(grilleEdt,semainesBox);
 		VBox.setVgrow(grilleEdt, Priority.ALWAYS);
 
-		// Créer un layout pour les boutons et la grille
 		StackPane scene1 = new StackPane();
 		// scene1.setMinSize(480, 270);
 		//scene1.setPrefSize(1920, 1080);
@@ -213,9 +210,8 @@ public class PageEDT {
 	private void genereEDT(){
 		String[] horaires = {"8h","9h","10h","11h","12h","13h","14h","15h","16h","17h","18h"};
 
-		grilleEdt.setGridLinesVisible(true);  // Affiche les lignes de la grille
+		grilleEdt.setGridLinesVisible(true);
 		
-		// Définir les contraintes de ligne et de colonne pour avoir la même taille
 		for (int i = 0; i < 12; i++) {
 			RowConstraints row = new RowConstraints();
 			row.setPercentHeight(100 / 10f);  
@@ -228,7 +224,6 @@ public class PageEDT {
 			grilleEdt.getColumnConstraints().add(column);
 		}
 
-		// Ajouter des labels dans chaque cellule de la grille
 		for (int i = 0; i < 5; i++) {
 			LocalDate jourDate = lundi.plusDays(i);
 			String jourNom = jourDate.getDayOfWeek().getDisplayName(TextStyle.FULL, Locale.FRANCE);
@@ -285,7 +280,7 @@ public class PageEDT {
 			String moisNom = jourDate.getMonth().getDisplayName(TextStyle.FULL, Locale.FRANCE);
 			
 			StackPane jourCell = (StackPane) grilleEdt.getChildren().get(i + 1);
-			Label jourLabel = (Label) jourCell.getChildren().get(0); // Le Label est le premier enfant du StackPane
+			Label jourLabel = (Label) jourCell.getChildren().get(0);
 			jourLabel.setText(jourNom + " " + jourDate.getDayOfMonth() + " " + moisNom);
 		}
 
@@ -338,7 +333,6 @@ public class PageEDT {
 		menuModifSupp.getItems().addAll(modifier, supprimer);
 
 
-		// Crée un StackPane pour centrer le label dans la cellule
 		StackPane cell = new StackPane();
 		cell.getChildren().add(boiteVbox);
 		cell.setOnMouseClicked(event -> {});
@@ -346,7 +340,6 @@ public class PageEDT {
 		cell.setAlignment(Pos.CENTER);  
 		cell.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);  
 		cell.setBackground(new Background(new BackgroundFill(couleurCours.get(c.getType()), new CornerRadii(0), new Insets(1))));
-		// Ajouter la cellule dans la grille
 
 		cell.setOnContextMenuRequested(event -> {if(modeEdition){menuModifSupp.show(cell, event.getScreenX(), event.getScreenY());};});
         
@@ -354,8 +347,7 @@ public class PageEDT {
 		GridPane.setRowSpan(cell, c.getDuree());
 		GridPane.setColumnSpan(cell, 1);  
 
-		// Centrer le StackPane dans la cellule de la grille
-		GridPane.setHalignment(cell, HPos.CENTER);  
+		GridPane.setHalignment(cell, HPos.CENTER);
 		GridPane.setValignment(cell, VPos.CENTER);
 		coursCells.add(cell);
 	}
@@ -474,8 +466,9 @@ public class PageEDT {
 
 	private void ouvrirPageModifCours(Cours c){
 		int promoIndex = menuPromo.getSelectionModel().getSelectedIndex();
+		Promotion promo = p.getPromos().get(promoIndex);
 		Platform.runLater(()-> {
-			PageModifCours pageModifCours = new PageModifCours(c);
+			PageModifCours pageModifCours = new PageModifCours(c,promo);
 			pageModifCours.show();
 			pageModifCours.getStage().setOnHidden(e -> {
 				getCoursOfPromo(promoIndex);

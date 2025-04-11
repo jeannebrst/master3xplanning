@@ -2,11 +2,15 @@ package fr.utln.gp2.pages;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.temporal.WeekFields;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Cours.TypeC;
+import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.UE;
 import fr.utln.gp2.utils.Outils;
@@ -31,10 +35,12 @@ public class PageModifCours {
 	private List<Salle> salles;
 	private Cours cours;
 	private LocalDate dateChoisie;
+	private Promotion promo;
 
-    public PageModifCours(Cours c){
+    public PageModifCours(Cours c, Promotion promo){
 		stage = new Stage();
 		this.cours = c;
+		this.promo = promo;
     }
 
     public void show(){
@@ -50,7 +56,6 @@ public class PageModifCours {
     }
 
     private Scene generePage(){
-			// Création des ComboBox et des Labels
 			ComboBox<String> ueComboBox = new ComboBox<>();
 			for (UE ue : ues){
 				ueComboBox.getItems().add(ue.getNom());
@@ -68,7 +73,6 @@ public class PageModifCours {
 				profComboBox.setValue(cours.getIntervenantLogin());
 			}
 		
-			// Liste des labels et des ComboBox
 			Label ueLabel = new Label("UE:");
 			Label profLabel = new Label("Intervenant:");
 			Label typeLabel = new Label("Type de Cours:");
@@ -96,16 +100,13 @@ public class PageModifCours {
 
 			Label dateLabel = new Label("Date du cours");
 			DatePicker dateChoix = new DatePicker();
-			// Définir une date par défaut (optionnel)
-			dateChoix.setValue(LocalDate.now()); // La date actuelle par défaut
+			dateChoix.setValue(LocalDate.now());
 
-			// Ajout de l'action de sélection de la date
 			dateChoix.setOnAction(event -> {
-				dateChoisie = dateChoix.getValue();  // Récupérer la date choisie sous forme de LocalDate
+				dateChoisie = dateChoix.getValue();
 				System.out.println("Date sélectionnée : " + dateChoisie);
 			});
 		
-			// Bouton de validation
 			Button validerButton = new Button("Valider");
 			validerButton.setOnAction(event -> {
 				int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
@@ -135,18 +136,74 @@ public class PageModifCours {
 			
 		
 		
-			return new Scene(layout, 700, 500);  // Tu peux ajuster la taille de la scène si nécessaire
-		
+			return new Scene(layout, 700, 500);
 	}
 
-	private void modifierCours(Cours c,UE ue, String intervenant,int duree,TypeC type,Salle salle,int heure,LocalDate jour){
-		c.setUe(ue);
-		c.setIntervenantLogin(intervenant);
-		c.setDuree(duree);
-		c.setSalle(salle);
-		c.setType(type);
-		c.setHeureDebut(heure);
-		c.setJour(Date.from(dateChoisie.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+	private void modifierCours(Cours cours,UE ue, String intervenant,int duree,TypeC type,Salle salle,int heure,LocalDate jour){
+		cours.setUe(ue);
+
+		//Vérification intervenant libre sur ce créneau
+		int numSemaine = jour.get(WeekFields.of(Locale.FRANCE).weekOfWeekBasedYear());
+		int heureFin = heure + duree;
+		Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
+		if (!coursIntervenant.isEmpty()) {
+			for (Cours c : coursIntervenant.get(numSemaine)) {
+				Date dateIteration = c.getJour();
+				LocalDate localDate = dateIteration.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate();
+				if (localDate.equals(jour)) {
+					int heureFinExistant = c.getHeureDebut() + c.getDuree();
+					if (c.getHeureDebut() < heure && heure < heureFinExistant) {
+						throw new IllegalArgumentException("L'intervenant enseigne déjà sur ce créneau");
+					} else if (c.getHeureDebut() < heureFin && heureFin < heureFinExistant) {
+						throw new IllegalArgumentException("L'intervenant enseigne déjà sur ce créneau");
+					} else if (heure <= c.getHeureDebut() && heureFin >= heureFinExistant) {
+						throw new IllegalArgumentException("L'intervenant enseigne déjà sur ce créneau");
+					}
+				}
+			}
+		}
+		cours.setIntervenantLogin(intervenant);
+
+		//Vérification que la promo n'ait pas déjà un cours sur cette horaire (tous types de chevauchements)
+		Map<Integer, List<Cours>> coursExistants = Outils.getCoursByPromo(promo.getPromoId()).join();
+		if (!coursExistants.isEmpty()) {
+			for (Cours c : coursExistants.get(numSemaine)) {
+				Date dateIteration = c.getJour();
+				LocalDate localDate = dateIteration.toInstant()
+						.atZone(ZoneId.systemDefault())
+						.toLocalDate();
+				if (localDate.equals(jour)) {
+					int heureFinExistant = c.getHeureDebut() + c.getDuree();
+					if (c.getHeureDebut() < heure && heure < heureFinExistant) {
+						throw new IllegalArgumentException("Le début du cours choisi entre en conflit avec un autre cours");
+					} else if (c.getHeureDebut() < heureFin && heureFin < heureFinExistant) {
+						throw new IllegalArgumentException("La fin du cours choisi entre en conflit avec un autre cours");
+					} else if (heure <= c.getHeureDebut() && heureFin >= heureFinExistant) {
+						throw new IllegalArgumentException("Le cours choisi chevauche un autre cours");
+					}
+				}
+			}
+		}
+		cours.setJour(Date.from(dateChoisie.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+		cours.setDuree(duree);
+		cours.setHeureDebut(heure);
+
+		//Vérification salle libre sur ce créneau
+		Date dateChoisieEnDate = Date.from(jour.atStartOfDay(ZoneId.systemDefault()).toInstant());
+		List<Salle> sallesOccupees = Outils.getSalleByHeure(numSemaine, dateChoisieEnDate, heure,duree);
+		System.out.println(sallesOccupees);
+		if (!sallesOccupees.isEmpty()) {
+			for (Salle s : sallesOccupees) {
+				if (salle.getSalleId().equals(s.getSalleId())) {
+					throw new IllegalArgumentException("Salle déjà occupée sur ce créneau");
+				}
+			}
+		}
+		cours.setSalle(salle);
+
+		cours.setType(type);
 	}
 	public Stage getStage() {
         return stage;

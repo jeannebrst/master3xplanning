@@ -54,7 +54,7 @@ public class Main{
 		p2.getPromos().add(m1info);
 		Personne p3 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info));
 		Personne p4 = new Personne("123", "Bah", "Tot", Role.PROFESSEUR);
-		Personne p5 = new Personne("0","Viagra","Thierry",Role.GESTIONNAIRE);
+		Personne p5 = new Personne("0","Via","Thierry",Role.GESTIONNAIRE);
 		Personne p6 = new Personne("baleine","Glotin","Hervé",Role.PROFESSEUR);
 		Personne p7 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
 
