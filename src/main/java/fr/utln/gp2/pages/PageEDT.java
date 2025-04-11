@@ -9,6 +9,7 @@ import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -127,8 +128,8 @@ public class PageEDT {
 		});
 
 		boiteBtn.getChildren().addAll(cours,infos);
-		if(p.getRole().equals(Role.PROFESSEUR)){
-			boiteBtn.getChildren().add(notes);
+		if(EnumSet.of(Role.PROFESSEUR, Role.ETUDIANT).contains(p.getRole())){
+			// boiteBtn.getChildren().add(notes);
 		}
 		
 		return boiteBtn;

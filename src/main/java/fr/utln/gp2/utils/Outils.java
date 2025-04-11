@@ -93,7 +93,7 @@ public class Outils{
 					// Convertit la réponse JSON en objet Personne
 					return objectMapper.readValue(response, Personne.class);
 				} catch (Exception e) {
-					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n");
+					System.err.println("Erreur lors de la conversion JSON: " + e.getMessage()+ "\n" + response + "\n");
 					return null;
 				}
 			})

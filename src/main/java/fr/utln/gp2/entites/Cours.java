@@ -48,6 +48,11 @@ public class Cours {
 	@JsonIgnoreProperties({"cours"})
 	private Salle salle;
 
+	@OneToMany
+	@JoinColumn(name = "cours_id")
+	@JsonIgnoreProperties({"cours"})
+	private List<Absence> absences = new ArrayList<>();
+
 
 	private int heureDebut;
 

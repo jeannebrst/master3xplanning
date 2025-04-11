@@ -7,6 +7,7 @@ import fr.utln.gp2.utils.PromotionId;
 import jakarta.persistence.*;
 import lombok.*;
 
+import org.apache.commons.codec.digest.DigestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,8 @@ public class Personne {
 	private Role role;
 
 	@ManyToMany(mappedBy = "personnes", fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-	@JsonIgnoreProperties({"promos","personneId","hashMdp","cours"})//Pour eviter maxi redondance
+	@JsonIgnoreProperties({"promos","personnes","cours"}) //Pour eviter maxi redondance
+	// @Builder.Default
 	private List<Promotion> promos = new ArrayList<>();
 
 	@ManyToMany
@@ -72,20 +74,36 @@ public class Personne {
 	@JsonIgnore
 	private List<Note> notes = new ArrayList<>();
 
+	@OneToMany(mappedBy = "etudiant", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	private List<Absence> absences = new ArrayList<>();
 
-	public Personne(String hashMdp, String nom, String prenom, Role role){
-		this.hashMdp = hashMdp;
+
+	public Personne(String mdp, String nom, String prenom, Role role){
+		this.hashMdp = DigestUtils.sha256Hex(mdp);
 		this.nom = nom;
 		this.prenom = prenom;
 		this.role = role;
+		this.mail = prenom.toLowerCase()+"."+nom.toLowerCase()+"@master.com";
+		if (nom.length()<7) {
+			this.login = prenom.toLowerCase().charAt(0) + nom.toLowerCase();
+		} else {
+			this.login = prenom.toLowerCase().charAt(0) + nom.toLowerCase().substring(0,7);
+		}
 	}
 
-	public Personne(String hashMdp, String nom, String prenom, Role role, List<Promotion> promos) {
-		this.hashMdp = hashMdp;
+	public Personne(String mdp, String nom, String prenom, Role role, List<Promotion> promos) {
+		this.hashMdp =  DigestUtils.sha256Hex(mdp);
 		this.nom = nom;
 		this.prenom = prenom;
 		this.role = role;
 		this.promos = promos;
+		this.mail = prenom.toLowerCase()+"."+nom.toLowerCase()+"@master.com";
+		if (nom.length()<7) {
+			this.login = prenom.toLowerCase().charAt(0) + nom.toLowerCase();
+		} else {
+			this.login = prenom.toLowerCase().charAt(0) + nom.toLowerCase().substring(0,7);
+		}
+
 	}
 
 	@Override

@@ -45,9 +45,9 @@ public class Promotion {
 	)
 	@Column(name = "cours")
 	// @JsonManagedReference
-	 @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-	@JsonIgnoreProperties({"promos"})
-	 @Schema(hidden = true)
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	@JsonIgnoreProperties({"promos","absences"})
+	@Schema(hidden = true)
 	@Builder.Default
 	private List<Cours> cours = new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class Promotion {
 	@Column(name = "personnes")
 	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	@JsonIgnoreProperties({"personneId","hashMdp","nom","prenom","mail","promos"})
+	@JsonIgnoreProperties({"personneId","hashMdp","nom","prenom","mail","promos","absences"})
 	private List<Personne> personnes = new ArrayList<>();
 
 	protected Promotion() {}
