@@ -18,6 +18,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.utln.gp2.entites.Absence;
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Note;
 import fr.utln.gp2.entites.Cours.TypeC;
@@ -69,7 +70,7 @@ public class PageEDT {
 	private LocalDate lundi;
 	private Label semaine;
 	private int numSemaine;
-	private Label texteEdition = new Label("MODE EDITION ACTIVEEE !!!!");
+	// private Label texteEdition = new Label("MODE EDITION ACTIVEEE !!!!");
 	private Scene sceneEDT; 
 	private Scene sceneInfos; 
 	private Stage stage;
@@ -399,6 +400,7 @@ public class PageEDT {
 		VBox boiteInfo = new VBox();
 		HBox boitePage = new HBox();
 		VBox boiteNotes = new VBox();
+		VBox boiteAbsences = new VBox();
 		HBox boiteBtn = new HBox(genereBoutonHaut());
 		Pane sceneInfos = new Pane();
 
@@ -518,6 +520,24 @@ public class PageEDT {
 			boiteNotes.getChildren().add(noteHBox);
 		});
 
+		// Pour trier les absences mais plus tard
+		// List<Absence> absencesTriees = p.getAbsences().stream()
+		// .sorted(Comparator.comparing((Absence abs) -> abs.getCours().getDate(), Comparator.reverseOrder()))
+		// .collect(Collectors.toList());
+
+		Label absenceLabel = new Label("Absences");
+		boiteAbsences.getChildren().addAll(absenceLabel);
+		p.getAbsences().forEach(abs -> {
+			VBox absenceVBox = new VBox(); //Nom de l'ue + Date
+			Cours coursAbsence = abs.getCours();
+			Label ueLabel = new Label(coursAbsence.getUe().getNom());
+			String dateFormatee = format.format(coursAbsence.getJour());
+			Label dateLabel = new Label(dateFormatee);
+
+			absenceVBox.getChildren().addAll(ueLabel, dateLabel);
+			boiteAbsences.getChildren().addAll(absenceVBox);
+		});
+
 		boiteInfo.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);
 		boitePage.getChildren().addAll(boiteInfo,boiteNotes);
 		sceneInfos.getChildren().addAll(boitePage);
@@ -535,8 +555,6 @@ public class PageEDT {
 			else{
 				stage.setTitle("Page d'accueil");
 			}
-			
-			
 		});
 		return boutonModif;
 	}

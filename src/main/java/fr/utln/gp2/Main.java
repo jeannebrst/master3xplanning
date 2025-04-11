@@ -170,7 +170,6 @@ public class Main{
 			Outils.persistence(e);
 		}
 
-		
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, new Date()));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 14, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 9, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));

@@ -27,15 +27,12 @@ public class Absence {
     private Personne etudiant;
 
     @ManyToOne
-    @JsonIgnoreProperties({"notes", "cours","ueId", "intervenantsLogin", "responsableLogin", "nbHeures", "promos", "ue", "intervenantLogin", "absences", "salle", "jour"})
+    @JsonIgnoreProperties({"notes", "cours", "intervenantsLogin", "responsableLogin", "nbHeures", "promos", "absences", "salle", "intervenantsLogin"})
     private Cours cours;
-
-    private Date dateAbsence;
 
     public Absence(Personne personne, Cours cours) {
         this.etudiant = personne;
         this.cours = cours;
-        this.dateAbsence = cours.getJour();
     }
 
     @Override
@@ -44,7 +41,6 @@ public class Absence {
                 "absenceId=" + absenceId +
                 ", etudiant=" + etudiant.getLogin() +
                 ", cours=" + cours.getUe().getNom() +
-                ", dateAbsence=" + dateAbsence +
                 '}';
     }
 }

@@ -106,7 +106,6 @@ public class Personne {
 		} else {
 			this.login = prenom.toLowerCase().charAt(0) + nom.toLowerCase().substring(0,7);
 		}
-
 	}
 
 	@Override
