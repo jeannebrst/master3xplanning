@@ -32,7 +32,6 @@ public class Main{
 
 		Faker faker = new Faker(new Locale("fr"));
 
-
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		Personne prof1 = new Personne("mdp", "Martin", "Michel", Role.PROFESSEUR);
 		Outils.persistence(prof1);

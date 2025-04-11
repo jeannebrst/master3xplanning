@@ -64,7 +64,7 @@ public class PageCreationCours {
 		ueComboBox.setValue("UE");
 		
 		ComboBox<String> profComboBox = new ComboBox<>();
-		profComboBox.setDisable(true); // Désactivé au début
+		profComboBox.setDisable(true);
 		profComboBox.setValue("Professeur");
 
 		ueComboBox.setOnAction(event -> {
