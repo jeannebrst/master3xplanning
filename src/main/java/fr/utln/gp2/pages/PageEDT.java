@@ -312,7 +312,8 @@ public class PageEDT {
 		VBox boiteLabelUE_SALLE = new VBox(1+c.getDuree()*5);
 		VBox boiteLabelProf_TYpe = new VBox(1+c.getDuree()*5);
 		Label nom = new Label(c.getUe().getNom());
-		Label prof = new Label(c.getIntervenantLogin());
+		String chaine = c.getIntervenantLogin().toUpperCase().charAt(0)+"."+c.getIntervenantLogin().toUpperCase().charAt(1)+c.getIntervenantLogin().substring(2);
+		Label prof = new Label(chaine);
 		Label salle = new Label(c.getSalle().getNom());
 		Label typeCours = new Label(c.getType().toString());
 

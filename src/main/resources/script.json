@@ -1,0 +1,40 @@
+[
+  {
+    "hashMdp": "pokimane",  
+    "nom": "Dupont",
+    "prenom": "Alice",
+    "mail": "alice.dupont@master.com",
+    "role": "ETUDIANT",
+    "promos": [
+      {
+        "annee": 2024,
+        "nom": "M1INFO"
+      }
+    ],
+    "absences": [
+      {
+        "date": "2025-03-15",
+        "motif": "Maladie",
+        "justifiee": true
+      }
+    ]
+  },
+  {
+    "hashMdp": "2c1743a391305fbf367df8e4f069f9f9bceb6a60a1f4b6663c52f3ca4f45596d",
+    "nom": "Martin",
+    "prenom": "Jean",
+    "mail": "jean.martin@master.com",
+    "role": "PROFESSEUR",
+    "promos": [
+      {
+        "annee": 2024,
+        "nom": "M1INFO"
+      },
+      {
+        "annee": 2025,
+        "nom": "M2INFO"
+      }
+    ],
+    "absences": []
+  }
+]

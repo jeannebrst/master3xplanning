@@ -25,6 +25,10 @@ import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.entites.Salle;
 import fr.utln.gp2.entites.UE;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
@@ -37,39 +41,45 @@ public class Outils{
 	private static final String HEADER_NAME = "Content-Type";
 	private static final String HEADER_VALUE = "application/json";
 
+	
+
 	/**
 	 * Persiste une entité dans la BDR de façon générique.
 	 * Requête HTTP POST vers l'API.
 	 * 
 	 * @param obj objet ,de classe T, à persister dans la BDR
 	 */
-	public static <T> void persistence(T obj){
-		String classeNom = obj.getClass().getSimpleName();
-		
-		if (classeNom.endsWith("DTO")) {
-			classeNom = classeNom.substring(0, classeNom.length() - 3); // Enlève "DTO"
-		}
-		classeNom = classeNom.toLowerCase();
-		if (classeNom.charAt(classeNom.length()-1) != 's'){
-			classeNom += "s";
+		public static <T> void persistence(T obj){
+			String classeNom = obj.getClass().getSimpleName();
+			
+			if (classeNom.endsWith("DTO")) {
+				classeNom = classeNom.substring(0, classeNom.length() - 3); // Enlève "DTO"
+			}
+			classeNom = classeNom.toLowerCase();
+			if (classeNom.charAt(classeNom.length()-1) != 's'){
+				classeNom += "s";
+			}
+
+			System.out.println("persistence :" + classeNom);
+
+			try{
+				String s = new ObjectMapper().writeValueAsString(obj);
+				
+				HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("http://localhost:8080/api/v1/" + classeNom))
+					.header(HEADER_NAME, HEADER_VALUE)
+					.POST(HttpRequest.BodyPublishers.ofString(s))
+					.build();
+
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				System.out.println("Réponse : " + response.body() + "\n");
+			}catch(IOException | InterruptedException e){
+				System.out.println("Erreur creation personne : " + e + "\n");
+			}
 		}
 
-		System.out.println("persistence :" + classeNom);
+	
 
-		try{
-			String s = new ObjectMapper().writeValueAsString(obj);
-			HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("http://localhost:8080/api/v1/" + classeNom))
-				.header(HEADER_NAME, HEADER_VALUE)
-				.POST(HttpRequest.BodyPublishers.ofString(s))
-				.build();
-
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("Réponse : " + response.body() + "\n");
-		}catch(IOException | InterruptedException e){
-			System.out.println("Erreur creation personne : " + e + "\n");
-		}
-	}
 
 	/**
 	 * Récupère une personne par son login.

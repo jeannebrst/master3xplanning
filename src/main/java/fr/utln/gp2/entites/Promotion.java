@@ -79,7 +79,11 @@ public class Promotion {
 		this.responsableLogin = responsable_login;
 		if(personnes != null){
 			this.personnes = personnes;
-		}
+		}}
+
+		public Promotion(Type type, int annee, String categorie, String responsable_login) {
+			this.promoId = new PromotionId(type, annee, categorie);
+			this.responsableLogin = responsable_login;
 	}
 
 	@Override
