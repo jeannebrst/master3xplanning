@@ -85,12 +85,16 @@ public class Main{
 		Outils.persistence(p7);
 		
 		NoteDTO n1 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 20f, new Date());
+		NoteDTO n2 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 14f, new Date());
+		NoteDTO n3 = new NoteDTO(p7.getLogin(), optimisation.getNom(), 6f, new Date());
 		Outils.persistence(s1);
 
 		AbsenceDTO a1 = new AbsenceDTO(p7.getLogin(), 1L);
 		Outils.persistence(a1);
 
 		Outils.persistence(n1);
+		Outils.persistence(n2);
+		Outils.persistence(n3);
 
 		System.out.println("PRISM: " + System.getProperty("prism.order"));
 		Application.launch(PageLogin.class, args);

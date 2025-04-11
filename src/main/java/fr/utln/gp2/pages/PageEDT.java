@@ -1,6 +1,7 @@
 package fr.utln.gp2.pages;
 
 import java.net.http.HttpClient;
+import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -8,14 +9,17 @@ import java.time.format.TextStyle;
 import java.time.temporal.IsoFields;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import fr.utln.gp2.entites.Cours;
+import fr.utln.gp2.entites.Note;
 import fr.utln.gp2.entites.Cours.TypeC;
 import fr.utln.gp2.entites.Personne;
 import fr.utln.gp2.entites.Personne.Role;
@@ -37,6 +41,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
@@ -321,7 +329,7 @@ public class PageEDT {
 		boiteVbox.getChildren().addAll(boiteLabelUE_SALLE,boiteLabelProf_TYpe);
 
 		LocalDate localDate = c.getJour().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        int jourSemaine = localDate.get(WeekFields.of(Locale.FRANCE).dayOfWeek());
+		int jourSemaine = localDate.get(WeekFields.of(Locale.FRANCE).dayOfWeek());
 
 		ContextMenu menuModifSupp = new ContextMenu();
 
@@ -354,7 +362,7 @@ public class PageEDT {
 		// Ajouter la cellule dans la grille
 
 		cell.setOnContextMenuRequested(event -> {if(modeEdition){menuModifSupp.show(cell, event.getScreenX(), event.getScreenY());};});
-        
+		
 		grilleEdt.add(cell, jourSemaine, c.getHeureDebut() - 7);//-7 car la grid commence à 8h
 		GridPane.setRowSpan(cell, c.getDuree());
 		GridPane.setColumnSpan(cell, 1);  
@@ -392,19 +400,24 @@ public class PageEDT {
 
 
 	public Pane genereSceneInfos(){
+		VBox boiteInfo = new VBox();
+		HBox boitePage = new HBox();
+		VBox boiteNotes = new VBox();
 		HBox boiteBtn = new HBox(genereBoutonHaut());
 		Pane sceneInfos = new Pane();
+
 		VBox boitesPhotoNom = new VBox(15);
 		boitesPhotoNom.setAlignment(Pos.CENTER);
+
 		VBox boiteInfos = new VBox(30);
 		boiteInfos.setAlignment(Pos.CENTER_LEFT);
 		
-		Label labelNom = new Label(p.getNom().toUpperCase()+" "+p.getPrenom());
-		labelNom.setFont(Font.font("Arial",FontWeight.BOLD,25));
+		Label labelNom = new Label(p.getNom().toUpperCase() + " " + p.getPrenom());
+		labelNom.setFont(Font.font("Arial", FontWeight.BOLD,25));
 		labelNom.setTextFill(Color.BLACK);
 		
 
-		Image imageRole = new Image("file:src/main/resources/"+p.getRole().toString()+".jpg");
+		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
 		ImageView imageview = new ImageView(imageRole);
 		imageview.setFitWidth(200);
 		imageview.setFitHeight(200);
@@ -432,13 +445,42 @@ public class PageEDT {
 
 		for(Label l : labels){
 			l.setFont(Font.font("Arial", FontWeight.BOLD, 25));
-    		l.setTextFill(Color.BLACK);
+			l.setTextFill(Color.BLACK);
 		}
 
 		boitesPhotoNom.setLayoutX(800);
 		boitesPhotoNom.setLayoutY(50);
-		sceneInfos.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);
+
+		boiteNotes.setLayoutY(200);
+		Label notes = new Label("Notes");
+		boiteNotes.getChildren().addAll(notes);
+		//Affichage bordure pour debug
+		boiteNotes.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(2))));
 		
+		//Notes de l'étudiant triées par date (plus récent au plus ancien)
+		List<Note> notesTriees = p.getNotes().stream()
+			.sorted(Comparator.comparing(Note::getDate).reversed())
+			.collect(Collectors.toList());
+
+		SimpleDateFormat format = new SimpleDateFormat("dd/MM");
+
+		notesTriees.forEach((n) -> {
+			HBox noteHBox = new HBox(); //Contient tout
+			VBox infoNote = new VBox(); //Nom de l'ue + Date
+
+			Label ueLabel = new Label(n.getUe().getNom());
+			String dateFormatee = format.format(n.getDate());
+			Label dateLabel = new Label(dateFormatee);
+			Label noteLabel = new Label(String.valueOf(n.getNote()));
+
+			infoNote.getChildren().addAll(ueLabel, dateLabel);
+			noteHBox.getChildren().addAll(infoNote, noteLabel);
+			boiteNotes.getChildren().addAll(noteHBox);
+		});
+
+		boiteInfo.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);
+		boitePage.getChildren().addAll(boiteInfo,boiteNotes);
+		sceneInfos.getChildren().addAll(boitePage);
 		
 		return sceneInfos;
 	}
