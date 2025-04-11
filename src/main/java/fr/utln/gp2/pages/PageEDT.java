@@ -51,6 +51,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -138,8 +139,8 @@ public class PageEDT {
 		});
 
 		boiteBtn.getChildren().addAll(cours,infos);
-		if(EnumSet.of(Role.PROFESSEUR, Role.ETUDIANT).contains(p.getRole())){
-			// boiteBtn.getChildren().add(notes);
+		if(p.getRole().equals(Role.PROFESSEUR)){
+			boiteBtn.getChildren().add(notes);
 		}
 		
 		return boiteBtn;
@@ -404,9 +405,11 @@ public class PageEDT {
 		VBox boitesPhotoNom = new VBox(15);
 		boitesPhotoNom.setAlignment(Pos.CENTER);
 
+
 		VBox boiteInfos = new VBox(30);
 		boiteInfos.setAlignment(Pos.CENTER_LEFT);
 		
+
 		Label labelNom = new Label(p.getNom().toUpperCase() + " " + p.getPrenom());
 		labelNom.setFont(Font.font("Arial", FontWeight.BOLD,25));
 		labelNom.setTextFill(Color.BLACK);
@@ -448,10 +451,14 @@ public class PageEDT {
 
 		boiteNotes.setLayoutY(200);
 		Label notes = new Label("Notes");
+		notes.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+		notes.setTextFill(Color.BLACK);
 		boiteNotes.getChildren().addAll(notes);
 		//Affichage bordure pour debug
-		boiteNotes.setBorder(new Border(new BorderStroke(Color.RED, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(2))));
-		
+		boiteNotes.setBorder(new Border(new BorderStroke(Color.LIGHTBLUE, BorderStrokeStyle.SOLID, new CornerRadii(5), new BorderWidths(5))));
+		boiteNotes.setPadding(new Insets(10, 15, 10, 15)); 
+		boiteNotes.setMinHeight(500);
+		boiteNotes.setMinWidth(150);
 		//Notes de l'étudiant triées par date (plus récent au plus ancien)
 		List<Note> notesTriees = p.getNotes().stream()
 			.sorted(Comparator.comparing(Note::getDate).reversed())
@@ -460,18 +467,55 @@ public class PageEDT {
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM");
 
 		notesTriees.forEach(n -> {
-			HBox noteHBox = new HBox(); //Contient tout
-			VBox infoNote = new VBox(); //Nom de l'ue + Date
-
+			HBox noteHBox = new HBox(30); // Contient tout
+			VBox infoNote = new VBox(5); // Nom de l'UE + Date
+			VBox valeurNote = new VBox();
+			Region spacer = new Region();
+		
 			Label ueLabel = new Label(n.getUe().getNom());
+			ueLabel.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+			ueLabel.setTextFill(Color.BLACK);
+		
 			String dateFormatee = format.format(n.getDate());
 			Label dateLabel = new Label(dateFormatee);
+			dateLabel.setFont(Font.font("Arial", 15));
+
+			infoNote.setAlignment(Pos.CENTER_LEFT);
+			infoNote.getChildren().addAll(ueLabel, dateLabel);
+		
 			Float valeur = n.getNote();
 			Label noteLabel = new Label((valeur % 1 == 0) ? String.format("%.0f", valeur) : Float.toString(valeur));
+			noteLabel.setFont(Font.font("Arial", FontWeight.BOLD, 16));
+			noteLabel.setTextFill(Color.WHITE);
+		
+			StackPane cell = new StackPane();
+			cell.setMinHeight(50);
+			cell.setMinWidth(50);
+			cell.setAlignment(Pos.CENTER); 
+		
+		
+			Color couleurFond;
+			if (valeur >= 15) {
+				couleurFond = Color.GREEN;
+			} else if (valeur >= 10) {
+				couleurFond = Color.LIGHTGREEN;
+			} else if (valeur >= 5) {
+				couleurFond = Color.ORANGE;
+			} else {
+				couleurFond = Color.RED;
+			}
+		
+			cell.setBackground(new Background(new BackgroundFill(couleurFond, new CornerRadii(10), new Insets(1))));
+			cell.getChildren().add(noteLabel);
 
-			infoNote.getChildren().addAll(ueLabel, dateLabel);
-			noteHBox.getChildren().addAll(infoNote, noteLabel);
-			boiteNotes.getChildren().addAll(noteHBox);
+			valeurNote.setAlignment(Pos.CENTER_RIGHT);
+			valeurNote.getChildren().add(cell);
+	
+			HBox.setHgrow(spacer, Priority.ALWAYS);
+		
+			noteHBox.getChildren().addAll(infoNote, spacer, valeurNote);
+			noteHBox.setPadding(new Insets(5));
+			boiteNotes.getChildren().add(noteHBox);
 		});
 
 		boiteInfo.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);

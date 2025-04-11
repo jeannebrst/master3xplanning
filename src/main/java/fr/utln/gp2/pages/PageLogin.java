@@ -48,7 +48,7 @@ public class PageLogin extends Application {
 		erreur.setVisible(false);
 
 
-		Text texte1 = new Text("Bienvenue sur MasterMasterMasterPlanning");
+		Text texte1 = new Text("Bienvenue sur Master³Planning");
 		texte1.setFont(Font.font(font,FontWeight.BOLD,30));
 		texte1.setFill(Color.LIGHTBLUE);
 //		Text texte6 = new Text("sur ");
