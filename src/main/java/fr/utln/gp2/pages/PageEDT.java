@@ -420,14 +420,14 @@ public class PageEDT {
 		
 
 		Label labelNom = new Label(p.getNom().toUpperCase() + " " + p.getPrenom());
-		labelNom.setFont(Font.font("Arial", FontWeight.BOLD,25));
+		labelNom.setFont(Font.font("Arial", FontWeight.BOLD,40));
 		labelNom.setTextFill(Color.BLACK);
 		
 
 		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
 		ImageView imageview = new ImageView(imageRole);
-		imageview.setFitWidth(200);
-		imageview.setFitHeight(200);
+		imageview.setFitWidth(400);
+		imageview.setFitHeight(400);
 
 
 		Label login = new Label("Login : "+p.getLogin());
@@ -435,7 +435,7 @@ public class PageEDT {
 
 		boitesPhotoNom.getChildren().addAll(imageview,labelNom);
 		boiteInfos.getChildren().addAll(login,email);
-		boiteInfos.setLayoutX(100);
+		boiteInfos.setLayoutX(200);
 		boiteInfos.setLayoutY(500);
 
 		Label[] labels = {labelNom,login,email,new Label()};
@@ -451,7 +451,7 @@ public class PageEDT {
 		}
 
 		for(Label l : labels){
-			l.setFont(Font.font("Arial", FontWeight.BOLD, 25));
+			l.setFont(Font.font("Arial", FontWeight.BOLD, 40));
 			l.setTextFill(Color.BLACK);
 		}
 

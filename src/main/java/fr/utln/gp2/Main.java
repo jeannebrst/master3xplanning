@@ -64,8 +64,7 @@ public class Main{
 
 		Promotion m2glotin = new Promotion(Type.MASTER,2,"Baleine",null,"hglotin",null);
 		Outils.persistence(m2glotin);
-		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", "tbah");
-		Outils.persistence(m1info);
+
 		Promotion l1info = new Promotion(Type.LICENCE, 1, "Informatique", "tbah");
 		Outils.persistence(l1info);
 		Promotion m2info = new Promotion(Type.MASTER, 2, "Informatique", "tbah");
@@ -99,6 +98,14 @@ public class Main{
 			.build();
 		Outils.persistence(electromagnetisme);
 
+		UE optimisation = UE.builder()
+			.nom("Optimisation")
+			.responsableLogin("tchampio")
+			.intervenantsLogin(Arrays.asList("ajacquet"))
+			.nbHeures(45)
+			.build();
+		Outils.persistence(optimisation);
+
 		UE droitCivil = UE.builder()
 			.nom("Droit Civil")
 			.responsableLogin("nrogers")
@@ -113,20 +120,22 @@ public class Main{
 			.build();
 		Outils.persistence(droitConstitutionel);
 
-		// UE basesDeDonnees = UE.builder()
-		// 						.nom("Bases de Données")
-		// 						.responsableLogin("kroger")
-		// 						.intervenantsLogin(Arrays.asList("mleclerc", "jluc"))
-		// 						.nbHeures(40)
-		// 						.build();
+		UE basesDeDonnees = UE.builder()
+								.nom("Bases de Données")
+								.responsableLogin("nrogers")
+								.intervenantsLogin(Arrays.asList("ajacquet", "jsorel","nrogers"))
+								.nbHeures(40)
+								.build();
 
-		// UE intelligenceArtificielle = UE.builder()
-		// 								.nom("Intelligence Artificielle")
-		// 								.responsableLogin("sroussel")
-		// 								.intervenantsLogin(Arrays.asList("hglotin", "crosier"))
-		// 								.nbHeures(55)
-		// 								.build();
+		Outils.persistence(basesDeDonnees);
 
+		UE intelligenceArtificielle = UE.builder()
+										.nom("Intelligence Artificielle")
+										.responsableLogin("tbah")
+										.intervenantsLogin(Arrays.asList("hglotin", "mmartin"))
+										.nbHeures(55)
+										.build();
+		Outils.persistence(intelligenceArtificielle);
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
@@ -137,6 +146,9 @@ public class Main{
 		Outils.persistence(s2);
 		Outils.persistence(s3);
 
+		Outils.persistence(new Personne("prof", "Mallofre", "Prof", Role.PROFESSEUR));
+		Promotion m1info = new Promotion(Type.MASTER, 1, "Informatique", "pmallofr");
+		Outils.persistence(m1info);
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		Cours c1 = new Cours(electromagnetisme, Arrays.asList(m1info, l3phys), "ajacquet", 12, 2, Date.from(LocalDate.of(2025, 4, 10).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1);
@@ -158,18 +170,31 @@ public class Main{
 			Outils.persistence(c);
 		}
 
+		Outils.persistence(new Cours(basesDeDonnees, Arrays.asList(m1info), "nrogers", 16, 2, Date.from(LocalDate.of(2025, 4, 22).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
+		Outils.persistence(new Cours(basesDeDonnees, Arrays.asList(m1info), "nrogers", 14, 2, Date.from(LocalDate.of(2025, 4, 22).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1));
+		Outils.persistence(new Cours(optimisation, Arrays.asList(m1info), "hglotin", 9, 3, Date.from(LocalDate.of(2025, 4, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s1));
+		Outils.persistence(new Cours(optimisation, Arrays.asList(m1info), "nrogers", 13, 4, Date.from(LocalDate.of(2025, 4, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1));
+		Outils.persistence(new Cours(optimisation, Arrays.asList(m1info), "tchampio", 10, 2, Date.from(LocalDate.of(2025, 4, 21).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TD, s1));
+		Outils.persistence(new Cours(optimisation, Arrays.asList(m1info), "tchampio", 13, 3, Date.from(LocalDate.of(2025, 4, 25).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1));
 		//--------------------------------------------------------------------------------------------------------------------------------------------------------------
 		
 
+
 		Personne e1 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT);
 		Personne e2 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
-		Personne e3 = new Personne("virgule", "Lavit", "Quentin", Role.ETUDIANT);
+		Personne e3 = new Personne("virgule", "Lavit", "Quentin", Role.ETUDIANT,Arrays.asList(m1info));
 		Personne e4 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
 		Personne e5 = new Personne("tre5246", "Nguyen", "JB", Role.ETUDIANT);
+
+
+
+		Outils.persistence(new Personne("eleve", "Mallofre", "Eleve", Role.ETUDIANT,Arrays.asList(m1info)));
+		
+		Outils.persistence(new Personne("gestionnaire", "Mallofre", "Gestionnaire", Role.GESTIONNAIRE));
 		for(Personne e : List.of(e1, e2, e3, e4, e5)){
 			Outils.persistence(e);
 		}
-
+		
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 20, new Date()));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 14, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 9, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
@@ -186,8 +211,8 @@ public class Main{
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 7, Date.from(LocalDate.of(2025, 4, 6).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), electromagnetisme.getNom(), 8, Date.from(LocalDate.of(2025, 3, 12).atStartOfDay(ZoneId.systemDefault()).toInstant())));
 		Outils.persistence(new NoteDTO(e4.getLogin(), droitCivil.getNom(), 6, new Date()));
-		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
-		// Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
+		Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
+		Outils.persistence(new RetardDTO(e4.getLogin(), 2L, 2));
 		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
 		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
 		// Outils.persistence(new RetardDTO(p7.getLogin(), 2L, 2));
