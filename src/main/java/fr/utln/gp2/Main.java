@@ -36,7 +36,7 @@ public class Main{
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		Personne prof1 = new Personne("mdp", "Martin", "Michel", Role.PROFESSEUR);
 		Outils.persistence(prof1);
-		Personne prof2 = new Personne("mdp", "Jacquet", "Aimé", Role.PROFESSEUR);
+		Personne prof2 = new Personne("mdp", "Jacquet", "Aime", Role.PROFESSEUR);
 		Outils.persistence(prof2);
 		Personne prof3 = new Personne("mdp", "Sorel", "Julien", Role.PROFESSEUR);
 		Outils.persistence(prof3);
@@ -46,7 +46,7 @@ public class Main{
 		Outils.persistence(prof5);
 		Personne prof6 = new Personne("mdp", "Camus", "Adrien", Role.PROFESSEUR);
 		Outils.persistence(prof6);
-		Personne prof7 = new Personne("mdp", "Hardy", "Théo", Role.PROFESSEUR);
+		Personne prof7 = new Personne("mdp", "Hardy", "Theo", Role.PROFESSEUR);
 		Outils.persistence(prof7);
 		Personne prof8 = new Personne("mdp", "Champion", "Thierry", Role.PROFESSEUR);
 		Outils.persistence(prof8);
@@ -58,7 +58,7 @@ public class Main{
 		Outils.persistence(gestionnaire1);
 		Personne prof10 = new Personne("mdp","Martin","Yves",Role.PROFESSEUR);
 		Outils.persistence(prof10);
-		Personne prof11 = new Personne("mdp","Glotin","Hervé",Role.PROFESSEUR);
+		Personne prof11 = new Personne("mdp","Glotin","Herve",Role.PROFESSEUR);
 		Outils.persistence(prof11);
 		
 		
@@ -75,17 +75,17 @@ public class Main{
 		Outils.persistence(l1proDroit);
 		Promotion l3info = new Promotion(Type.LICENCE, 3, "Informatique", "tbah");
 		Outils.persistence(l3info);
-		Promotion l2math = new Promotion(Type.LICENCE, 2, "Mathématiques", "mmartin");
+		Promotion l2math = new Promotion(Type.LICENCE, 2, "Mathematiques", "mmartin");
 		Outils.persistence(l2math);
 		Promotion l3phys = new Promotion(Type.LICENCE, 3, "Physique", "ajacquet");
 		Outils.persistence(l3phys);
-		Promotion m1eco = new Promotion(Type.MASTER, 1, "Économie", "jsorel");
+		Promotion m1eco = new Promotion(Type.MASTER, 1, "Economie", "jsorel");
 		Outils.persistence(m1eco);
 		Promotion m2ai = new Promotion(Type.MASTER, 2, "IntelligenceArtificielle", "nrogers");
 		Outils.persistence(m2ai);
 		Promotion l3chimie = new Promotion(Type.LICENCE, 3, "Chimie", "cperez");
 		Outils.persistence(l3chimie);
-		Promotion l1eco = new Promotion(Type.LICENCE, 1, "Économie", "acamus");
+		Promotion l1eco = new Promotion(Type.LICENCE, 1, "Economie", "acamus");
 		Outils.persistence(l1eco);
 		Promotion m2mathapp = new Promotion(Type.MASTER, 2, "MathsAppliquees", "thardy");
 		Outils.persistence(m2mathapp);
@@ -93,7 +93,7 @@ public class Main{
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 		UE electromagnetisme = UE.builder()
-			.nom("Electromagnétisme")
+			.nom("Electromagnetisme")
 			.responsableLogin("tbah")
 			.intervenantsLogin(Arrays.asList("ajacquet"))
 			.nbHeures(45)
@@ -123,7 +123,7 @@ public class Main{
 		Outils.persistence(droitConstitutionel);
 
 		UE basesDeDonnees = UE.builder()
-								.nom("Bases de Données")
+								.nom("Bases de Donnees")
 								.responsableLogin("nrogers")
 								.intervenantsLogin(Arrays.asList("ajacquet", "jsorel","nrogers"))
 								.nbHeures(40)
