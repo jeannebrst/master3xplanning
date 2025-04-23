@@ -52,12 +52,14 @@ public class Main{
 		Outils.persistence(prof8);
 		Personne prof9 = new Personne("mdp","Bah","Tot",Role.PROFESSEUR);
 		Outils.persistence(prof9);
-		Personne prof = genererPersonne(faker, Personne.Role.PROFESSEUR);
-		Outils.persistence(prof);
+		// Personne prof = genererPersonne(faker, Personne.Role.PROFESSEUR);
+		// Outils.persistence(prof);
 		Personne gestionnaire1 = new Personne("mdp", "Via", "Thierry", Role.GESTIONNAIRE);
 		Outils.persistence(gestionnaire1);
 		Personne prof10 = new Personne("mdp","Martin","Yves",Role.PROFESSEUR);
 		Outils.persistence(prof10);
+		Personne prof11 = new Personne("mdp","Glotin","Hervé",Role.PROFESSEUR);
+		Outils.persistence(prof11);
 		
 		
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -180,11 +182,11 @@ public class Main{
 		
 
 
-		Personne e1 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT);
-		Personne e2 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT);
+		Personne e1 = new Personne("toulon", "Pelerin", "Jeanne", Role.ETUDIANT, Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp));
+		Personne e2 = new Personne("MotDePasse", "Pelerin", "Shawn", Role.ETUDIANT, Arrays.asList(m1info));
 		Personne e3 = new Personne("virgule", "Lavit", "Quentin", Role.ETUDIANT,Arrays.asList(m1info));
 		Personne e4 = new Personne("neuil", "Haouas", "Yacine", Role.ETUDIANT, Arrays.asList(m1info));
-		Personne e5 = new Personne("tre5246", "Nguyen", "JB", Role.ETUDIANT);
+		Personne e5 = new Personne("tre5246", "Nguyen", "JB", Role.ETUDIANT, Arrays.asList(m1info));
 
 
 

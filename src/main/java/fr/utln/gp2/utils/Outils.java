@@ -78,8 +78,6 @@ public class Outils{
 			}
 		}
 
-	
-
 
 	/**
 	 * Récupère une personne par son login.
@@ -113,6 +111,7 @@ public class Outils{
 				return null;
 			});
 	}
+
 
 	/**
 	 * Récupère les cours d'une promotion, groupés par semaine de l'année.
@@ -161,6 +160,39 @@ public class Outils{
 
 		return futureCoursMap;
 	}
+
+
+	/**
+	 * Récupère une promotion.
+	 * Requête asynchrone HTTP GET vers l'API.
+	 * 
+	 * @param promoId id de la promotion qu'on récupère
+	 * @return CompletableFuture de Promotion
+	 */
+	public static CompletableFuture<Promotion> getPromoById(PromotionId promoId){
+		HttpRequest request = HttpRequest.newBuilder()
+		.uri(URI.create("http://localhost:8080/api/v1/promotions/" + promoId.toString()))
+		.GET()
+		.header(HEADER_NAME, HEADER_VALUE)
+		.build();
+
+		return client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
+			.thenApply(HttpResponse::body)
+			.thenApply(response -> {
+				try {
+					ObjectMapper objectMapper = new ObjectMapper();
+					return objectMapper.readValue(response, Promotion.class);
+				} catch (Exception e) {
+					System.err.println("Erreur récupération promo by id : " + e.getMessage()+ "\n" + response + "\n");
+					return null;
+				}
+			})
+			.exceptionally(e -> {
+				e.printStackTrace();
+				return null;
+			});
+	}
+
 
 	/**
 	 * Récupère les cours d'un intervenant, groupés par semaine de l'année.

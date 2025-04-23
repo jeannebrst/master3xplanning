@@ -17,6 +17,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import fr.utln.gp2.utils.PromotionId;
 import fr.utln.gp2.utils.PromotionId.Type;
@@ -66,7 +67,7 @@ public class Promotion {
 	@Column(name = "personnes")
 	// @JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	@Schema(hidden = true)
-	@JsonIgnoreProperties({"personneId","hashMdp","nom","prenom","mail","promos","absences"})
+	@JsonIgnoreProperties({"personneId","hashMdp","mail","promos","absences"})
 	private List<Personne> personnes = new ArrayList<>();
 
 	protected Promotion() {}
@@ -88,15 +89,19 @@ public class Promotion {
 
 	@Override
 	public String toString(){
-		List<Long> coursIds = new ArrayList<>();
-		for (Cours c : cours){
-			coursIds.add(c.getCoursId());
-		}
+		String coursIds = "vide";
+		if (cours != null && !cours.isEmpty()){
+        	coursIds = cours.stream()
+			.map(c -> String.valueOf(c.getCoursId()))
+			.collect(Collectors.joining(", "));
+    	}
 
-		List<String> personnesIds = new ArrayList<>();
-		for (Personne p : personnes){
-			personnesIds.add(p.getLogin());
-		}
+		String personnesIds = "vide";
+		if (personnes != null && !personnes.isEmpty()){
+        	personnesIds = personnes.stream()
+			.map(p -> p.getLogin())
+			.collect(Collectors.joining(", "));
+    	}
 
 		return "Promotion [promoId=" + promoId.toString() + ", cours=" + coursIds + ", responsableLogin=" + responsableLogin
 				+ ", personnes=" + personnesIds + "]";
