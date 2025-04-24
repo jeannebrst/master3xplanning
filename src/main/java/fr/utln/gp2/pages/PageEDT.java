@@ -127,6 +127,10 @@ public class PageEDT {
 		Button cours = new Button("Cours");
 		Button infos = new Button("Informations Personnelles");
 		Button notes = new Button("Notes");
+		Button deconnexion = new Button("Déconnexion");
+
+		Region spacer = new Region();
+		HBox.setHgrow(spacer, Priority.ALWAYS);
 		
 		infos.setOnAction(e -> {
 			stage.setScene(sceneInfos);
@@ -140,10 +144,15 @@ public class PageEDT {
 			ouvrirPageNotes();
 		});
 
+		deconnexion.setOnAction(e -> {
+			deconnect();
+		});
+
 		boiteBtn.getChildren().addAll(cours,infos);
 		if(p.getRole().equals(Role.PROFESSEUR)){
 			boiteBtn.getChildren().add(notes);
 		}
+		boiteBtn.getChildren().addAll(spacer,deconnexion);
 		
 		return boiteBtn;
 	}
@@ -424,7 +433,10 @@ public class PageEDT {
 		labelNom.setTextFill(Color.BLACK);
 		
 
-		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
+//		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
+		String imageName = "/" + p.getRole().toString() + ".jpg";
+		Image imageRole = new Image(getClass().getResource(imageName).toExternalForm());
+
 		ImageView imageview = new ImageView(imageRole);
 		imageview.setFitWidth(400);
 		imageview.setFitHeight(400);
@@ -602,6 +614,16 @@ public class PageEDT {
 			pageNotes.show();
 		});
 
+	}
+
+	private void deconnect() {
+		Platform.runLater(() -> {
+			stage.close(); //Ferme la fenêtre actuelle
+
+			//Ouvre la page EDT
+			PageLogin pageLogin = new PageLogin();
+			pageLogin.start(stage);
+		});
 	}
 
 }

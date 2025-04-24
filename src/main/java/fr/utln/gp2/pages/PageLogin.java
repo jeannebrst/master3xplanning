@@ -110,7 +110,8 @@ public class PageLogin extends Application {
 		bouton.setOnAction(e -> authentification(champLogin, champMdp, erreur, primaryStage));
 		
 		//Creation de l'image en fond
-		Image fond = new Image("file:src/main/resources/fond2.jpg");
+//		Image fond = new Image("file:src/main/resources/fond2.jpg");
+		Image fond = new Image(getClass().getResource("/fond2.jpg").toExternalForm());
 		ImageView imageview = new ImageView(fond);
 		imageview.setFitWidth(1920);
 		imageview.setFitHeight(1080);

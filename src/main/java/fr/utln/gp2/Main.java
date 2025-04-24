@@ -22,16 +22,12 @@ import java.util.Locale;
 import java.util.ArrayList;
 
 
-import com.github.javafaker.Faker;
-
 import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.entites.Cours;
 import fr.utln.gp2.entites.Cours.TypeC;
 
 public class Main{
 	public static void main(String[] args){
-
-		Faker faker = new Faker(new Locale("fr"));
 
 		//-------------------------------------------------------------------------------------------------------------------------------------------------------------
 		Personne prof1 = new Personne("mdp", "Martin", "Michel", Role.PROFESSEUR);
@@ -52,8 +48,6 @@ public class Main{
 		Outils.persistence(prof8);
 		Personne prof9 = new Personne("mdp","Bah","Tot",Role.PROFESSEUR);
 		Outils.persistence(prof9);
-		// Personne prof = genererPersonne(faker, Personne.Role.PROFESSEUR);
-		// Outils.persistence(prof);
 		Personne gestionnaire1 = new Personne("mdp", "Via", "Thierry", Role.GESTIONNAIRE);
 		Outils.persistence(gestionnaire1);
 		Personne prof10 = new Personne("mdp","Martin","Yves",Role.PROFESSEUR);
@@ -222,11 +216,11 @@ public class Main{
 		Application.launch(PageLogin.class, args);
 	}
 
-	public static Personne genererPersonne(Faker faker, Role role) {
-		String nom = faker.name().lastName();
-		String prenom = faker.name().firstName();
-		String mdp = "0";
-
-		return new Personne(mdp, nom, prenom, role);
-	}
+//	public static Personne genererPersonne(Faker faker, Role role) {
+//		String nom = faker.name().lastName();
+//		String prenom = faker.name().firstName();
+//		String mdp = "0";
+//
+//		return new Personne(mdp, nom, prenom, role);
+//	}
 }
