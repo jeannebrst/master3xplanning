@@ -7,9 +7,7 @@
 	import fr.utln.gp2.entites.Cours.TypeC;
 	import fr.utln.gp2.utils.Outils;
 
-	import java.util.List;
-	import java.util.Arrays;
-	import java.util.Date;
+	import java.util.*;
 
 	import fr.utln.gp2.entites.Cours;
 	import javafx.scene.Scene;
@@ -23,7 +21,6 @@ import javafx.scene.layout.Pane;
 	import java.time.ZoneId;
 	import java.time.DayOfWeek;
 	import java.time.temporal.IsoFields;
-	import java.util.Map;
 
 	public class PageCreationCours {
 
@@ -133,8 +130,8 @@ import javafx.scene.layout.Pane;
 			//Vérification que la promo n'ait pas déjà un cours sur cette horaire (tous types de chevauchements)
 			int heureFin = heureDebut + duree;
 			Map<Integer, List<Cours>> coursExistants = Outils.getCoursByPromo(promo.getPromoId()).join();
-			if (!coursExistants.isEmpty()) {
-				for (Cours c : coursExistants.get(numSemaine)) {
+			if (!coursExistants.isEmpty() && coursExistants != null) {
+				for (Cours c : coursExistants.getOrDefault(numSemaine, Collections.emptyList())) {
 					Date dateIteration = c.getJour();
 					LocalDate localDate = dateIteration.toInstant()
 							.atZone(ZoneId.systemDefault())
@@ -166,13 +163,17 @@ import javafx.scene.layout.Pane;
 
 			//Vérification intervenant libre sur ce créneau
 			Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
-			if (!coursIntervenant.isEmpty()) {
-				for (Cours c : coursIntervenant.get(numSemaine)) {
+			System.out.println("\n\n\nTEST 1 RETOUR LISTE" + coursIntervenant+"\n\n\n");
+			if (!coursIntervenant.isEmpty() && coursIntervenant != null) {
+				System.out.println("\n\n\nTEST 2 RETOUR LISTE" + coursIntervenant+"\n\n\n");
+				for (Cours c : coursIntervenant.getOrDefault(numSemaine, Collections.emptyList())) {
+					System.out.println("\n\n\nTEST 3 RETOUR LISTE" + coursIntervenant+"\n\n\n");
 					Date dateIteration = c.getJour();
 					LocalDate localDate = dateIteration.toInstant()
 							.atZone(ZoneId.systemDefault())
 							.toLocalDate();
 					if (localDate.equals(date)) {
+						System.out.println("\n\n\nTEST 4 RETOUR LISTE" + coursIntervenant+"\n\n\n");
 						int heureFinExistant = c.getHeureDebut() + c.getDuree();
 						if (c.getHeureDebut() < heureDebut && heureDebut < heureFinExistant) {
 							throw new IllegalArgumentException("L'intervenant enseigne déjà sur ce créneau");
@@ -181,10 +182,11 @@ import javafx.scene.layout.Pane;
 						} else if (heureDebut <= c.getHeureDebut() && heureFin >= heureFinExistant) {
 							throw new IllegalArgumentException("L'intervenant enseigne déjà sur ce créneau");
 						}
+						System.out.println("\n\n\nTEST 5 RETOUR LISTE" + coursIntervenant+"\n\n\n");
 					}
 				}
 			}
-
+			System.out.println("\n\n\nTEST 6 RETOUR LISTE" + coursIntervenant+"\n\n\n");
 			Cours coursValide = new Cours(ue,Arrays.asList(promo),intervenant,heureDebut,duree,Date.from(date.atStartOfDay(ZoneId.systemDefault()).toInstant()),type,salle);
 			Outils.persistence(coursValide);
 		}

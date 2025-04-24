@@ -433,7 +433,10 @@ public class PageEDT {
 		labelNom.setTextFill(Color.BLACK);
 		
 
-		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
+//		Image imageRole = new Image("file:src/main/resources/" + p.getRole().toString() + ".jpg");
+		String imageName = "/" + p.getRole().toString() + ".jpg";
+		Image imageRole = new Image(getClass().getResource(imageName).toExternalForm());
+
 		ImageView imageview = new ImageView(imageRole);
 		imageview.setFitWidth(400);
 		imageview.setFitHeight(400);
