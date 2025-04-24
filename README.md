@@ -10,6 +10,20 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 docker container run --rm --name my-postgres -e POSTGRES_USER=quarkus -e POSTGRES_PASSWORD=quarkus -e POSTGRES_DB=mydb -v db-data:/var/lib/postgresql/data -p 5432:5432 -d postgres
 ```
 
+## Repository to send
+
+Just send the repository `target/dist` with the script to start the container, and run in two seperate shells :
+
+```shell script
+java -jar dist/master3xplanning-1.0.0-SNAPSHOT-jar-with-dependencies.jar 
+```
+
+and
+
+```shell script
+java -jar dist/quarkus-run.jar 
+```
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
