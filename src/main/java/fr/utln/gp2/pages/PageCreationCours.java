@@ -9,7 +9,8 @@
 
 	import java.util.List;
 	import java.util.Arrays;
-	import java.util.Date;
+import java.util.Collections;
+import java.util.Date;
 
 	import fr.utln.gp2.entites.Cours;
 	import javafx.scene.Scene;
@@ -24,6 +25,8 @@ import javafx.scene.layout.Pane;
 	import java.time.DayOfWeek;
 	import java.time.temporal.IsoFields;
 	import java.util.Map;
+
+import com.arjuna.ats.internal.arjuna.objectstore.jdbc.drivers.postgres_driver;
 
 	public class PageCreationCours {
 
@@ -101,19 +104,22 @@ import javafx.scene.layout.Pane;
 			Button validerButton = new Button("Valider");
 			validerButton.setOnAction(event -> {
 				try{
-				int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
-				UE ueChoisie = ues.get(indiceUeChoisie);
-				String profChoisi = profComboBox.getValue();
-				int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
-				TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
-				Salle salleChoisie = salles.get(salleMenuDeroulant.getSelectionModel().getSelectedIndex());
-				if (ueChoisie != null && profChoisi != null){
-					ajouteUnCours(ueChoisie, profChoisi, dureeChosie, typeChoisi,salleChoisie);
-					stage.close();
+					int indiceUeChoisie = ueComboBox.getSelectionModel().getSelectedIndex();
+					UE ueChoisie = ues.get(indiceUeChoisie);
+					String profChoisi = profComboBox.getValue();
+					int dureeChosie = Integer.parseInt(dureeMenuDeroulant.getValue());
+					TypeC typeChoisi = Cours.stringToTypeC(typeMenuDeroulant.getValue());
+					Salle salleChoisie = salles.get(salleMenuDeroulant.getSelectionModel().getSelectedIndex());
+
+					if (ueChoisie != null && profChoisi != null){
+						ajouteUnCours(ueChoisie, profChoisi, dureeChosie, typeChoisi, salleChoisie);
+						stage.close();
+					}
 				}
-			}
-			catch(Exception e){messageErreur.setText("Erreur : " + e.getMessage());
-		}
+				catch(Exception e){
+					messageErreur.setText("Erreur : " + e.getMessage());
+					System.out.println(e);
+				}
 			});
 			
 			VBox layout = new VBox(10, ueComboBox, profComboBox,typeMenuDeroulant,dureeMenuDeroulant,salleMenuDeroulant, validerButton,messageErreur);
@@ -133,8 +139,8 @@ import javafx.scene.layout.Pane;
 			//Vérification que la promo n'ait pas déjà un cours sur cette horaire (tous types de chevauchements)
 			int heureFin = heureDebut + duree;
 			Map<Integer, List<Cours>> coursExistants = Outils.getCoursByPromo(promo.getPromoId()).join();
-			if (!coursExistants.isEmpty()) {
-				for (Cours c : coursExistants.get(numSemaine)) {
+			if (!coursExistants.isEmpty() && coursExistants != null) {
+				for (Cours c : coursExistants.getOrDefault(numSemaine, Collections.emptyList())) {
 					Date dateIteration = c.getJour();
 					LocalDate localDate = dateIteration.toInstant()
 							.atZone(ZoneId.systemDefault())
@@ -166,8 +172,8 @@ import javafx.scene.layout.Pane;
 
 			//Vérification intervenant libre sur ce créneau
 			Map<Integer, List<Cours>> coursIntervenant = Outils.getCoursByIntervenant(intervenant).join();
-			if (!coursIntervenant.isEmpty()) {
-				for (Cours c : coursIntervenant.get(numSemaine)) {
+			if (!coursIntervenant.isEmpty() && coursIntervenant != null) {
+				for (Cours c : coursIntervenant.getOrDefault(numSemaine, Collections.emptyList())) {
 					Date dateIteration = c.getJour();
 					LocalDate localDate = dateIteration.toInstant()
 							.atZone(ZoneId.systemDefault())
