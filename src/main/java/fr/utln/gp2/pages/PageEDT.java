@@ -406,13 +406,15 @@ public class PageEDT {
 	}
 
 
-	public Pane genereSceneInfos(){
+	public VBox genereSceneInfos(){
+		Region espace = new Region();
+		HBox.setHgrow(espace, Priority.ALWAYS);
 		VBox boiteInfo = new VBox();
 		VBox boitePage = new VBox(50);
 		VBox boiteNotes = new VBox();
 		HBox boiteBtn = genereBoutonHaut();
-		HBox boiteInfosNotes = new HBox(796);
-		Pane sceneInfos = new Pane();	
+		HBox boiteInfosNotes = new HBox(50);
+		VBox sceneInfos = new VBox();	
 		VBox boiteAbsences = new VBox();
 
 		ScrollPane scrollNotes = new ScrollPane(boiteNotes);
@@ -541,6 +543,7 @@ public class PageEDT {
 			noteHBox.getChildren().addAll(infoNote, spacer, valeurNote);
 			noteHBox.setPadding(new Insets(5));
 			boiteNotes.getChildren().add(noteHBox);
+			
 		});}
 
 		// Pour trier les absences mais plus tard
@@ -564,7 +567,7 @@ public class PageEDT {
 		boiteInfo.getChildren().addAll(boitesPhotoNom,boiteInfos);
 		HBox.setMargin(scrollNotes, new Insets(100, 0, 0, 0)); 
 		
-		boiteInfosNotes.getChildren().addAll(boiteInfo,scrollNotes);
+		boiteInfosNotes.getChildren().addAll(boiteInfo,espace,boiteNotes);
 		boitePage.getChildren().addAll(boiteBtn,boiteInfosNotes);
 		sceneInfos.getChildren().addAll(boitePage);
 		

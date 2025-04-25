@@ -13,6 +13,7 @@ import fr.utln.gp2.entites.Promotion;
 import fr.utln.gp2.entites.Personne.Role;
 import fr.utln.gp2.utils.Outils;
 import fr.utln.gp2.utils.PromotionId;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -42,7 +43,7 @@ public class PageNotes{
 	private List<Note> notesEleve = new ArrayList<>();
 
 	private Promotion promoChoisie;
-	private Personne eleveChoisi;
+	private Personne etudiant;
 	private SimpleDateFormat format;
 
 	public PageNotes(List<Promotion> promos){
@@ -117,25 +118,26 @@ public class PageNotes{
 			Optional<Personne> personneOpt = promoChoisie.getPersonnes().stream()
 				.filter(p -> p.getLogin().equals(loginEleve))
 				.findFirst();
-
+			
 			personneOpt.ifPresent(eleve -> {
 				notesEleve = eleve.getNotes();
-
+				etudiant =eleve;
 				boiteNotes.getChildren().clear();
-				if (notesEleve != null && !notesEleve.isEmpty()){
-					Button boutonSuppr = new Button("Ajouter note");
-					boutonSuppr.setOnAction(e -> {
-						//Faire une page ajout note
+			
+				Button boutonAdd = new Button("Ajouter note");
+					boutonAdd.setOnAction(e -> {
+						createNote();
 					});
-					boiteNotes.getChildren().addAll(boutonSuppr);
-				}
+					boiteNotes.getChildren().addAll(boutonAdd);
+					
 				notesEleve.forEach(n -> {
 					afficheNotes(n, boiteNotes);
 				});
 
 			});
+			
 		});
-
+		
 		return new Scene(boitePage);
 	}
 
@@ -208,5 +210,16 @@ public class PageNotes{
 	private void deleteNote(Note n){
 		Outils.supprimerNoteById(n.getNoteId());
 		System.out.println("Test");
+	}
+
+	private void createNote(){
+		Platform.runLater(()-> {
+			System.out.println(etudiant);
+			PageCreationNote pageNote = new PageCreationNote(etudiant);
+			pageNote.show();
+			pageNote.getStage().setOnHidden(e -> {
+					System.out.println(etudiant.getNotes());
+			});
+		});
 	}
 }
