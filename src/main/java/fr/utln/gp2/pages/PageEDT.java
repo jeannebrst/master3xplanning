@@ -408,17 +408,19 @@ public class PageEDT {
 
 	public Pane genereSceneInfos(){
 		VBox boiteInfo = new VBox();
-		HBox boitePage = new HBox(50);
+		VBox boitePage = new VBox(50);
 		VBox boiteNotes = new VBox();
+		HBox boiteBtn = genereBoutonHaut();
+		HBox boiteInfosNotes = new HBox(796);
+		Pane sceneInfos = new Pane();	
 		VBox boiteAbsences = new VBox();
-		HBox boiteBtn = new HBox(genereBoutonHaut());
-		Pane sceneInfos = new Pane();
 
 		ScrollPane scrollNotes = new ScrollPane(boiteNotes);
 		scrollNotes.setFitToWidth(true);
 		scrollNotes.setPrefHeight(500);
 		scrollNotes.setMaxHeight(500);
 		scrollNotes.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		
 
 		VBox boitesPhotoNom = new VBox(15);
 		boitesPhotoNom.setAlignment(Pos.CENTER);
@@ -558,9 +560,12 @@ public class PageEDT {
 			absenceVBox.getChildren().addAll(ueLabel, dateLabel);
 			boiteAbsences.getChildren().addAll(absenceVBox);
 		});
-
-		boiteInfo.getChildren().addAll(boiteBtn,boitesPhotoNom,boiteInfos);
-		boitePage.getChildren().addAll(boiteInfo,scrollNotes);
+		
+		boiteInfo.getChildren().addAll(boitesPhotoNom,boiteInfos);
+		HBox.setMargin(scrollNotes, new Insets(100, 0, 0, 0)); 
+		
+		boiteInfosNotes.getChildren().addAll(boiteInfo,scrollNotes);
+		boitePage.getChildren().addAll(boiteBtn,boiteInfosNotes);
 		sceneInfos.getChildren().addAll(boitePage);
 		
 		return sceneInfos;

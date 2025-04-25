@@ -161,7 +161,7 @@ public class Main{
 		Cours c12 = (new Cours(droitCivil, Arrays.asList(l3phys), "nrogers", 12, 2, Date.from(LocalDate.of(2025, 3, 24).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.CM, s2));
 		Cours c13 = new Cours(droitConstitutionel, Arrays.asList(l3phys), "tbah", 14, 2, Date.from(LocalDate.of(2025, 4, 14).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s1);
 		Cours c14 = new Cours(electromagnetisme, Arrays.asList(l3phys), "ajacquet", 16, 2, Date.from(LocalDate.of(2025, 6, 2).atStartOfDay(ZoneId.systemDefault()).toInstant()), TypeC.TP, s2);
-		Cours c15 = new Cours(electromagnetisme,Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp),"tbah",15,2,Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),TypeC.CM,s1);
+		Cours c15 = new Cours(electromagnetisme,Arrays.asList(m1info,l1info,m2info,l1proDroit,l3info,l2math,l3phys,m1eco,m2ai,l3chimie,l1eco,m2mathapp),"tbah",9,2,Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()),TypeC.CM,s1);
 		for(Cours c : List.of(c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14, c15)){
 			Outils.persistence(c);
 		}

@@ -48,6 +48,7 @@ public class PageNotes{
 	public PageNotes(List<Promotion> promos){
 		stage = new Stage();
 		this.promos = promos;
+		
 	}
 
 	public void show(){
@@ -205,6 +206,7 @@ public class PageNotes{
 	}
 
 	private void deleteNote(Note n){
-		//A remplir
+		Outils.supprimerNoteById(n.getNoteId());
+		System.out.println("Test");
 	}
 }

@@ -535,4 +535,39 @@ public class Outils{
 	
 		return futureCours;
 	}
+
+	public static void supprimerNoteById(Long noteId) {
+		String noteIdString = String.valueOf(noteId);
+	
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("http://localhost:8080/api/v1/notes/" + noteIdString))
+					.DELETE()
+					.build();
+	
+			HttpClient client = HttpClient.newHttpClient();
+	
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+	
+			int status = response.statusCode();
+			System.out.println("Status code: " + status);
+			System.out.println("Response body: " + response.body());
+	
+			if (status == 200 || status == 204) {
+				System.out.println("Note supprimée avec succès !");
+			} else if (status == 404) {
+				System.out.println("Note non trouvée.");
+			} else {
+				System.out.println("Erreur lors de la suppression de la note.");
+			}
+	
+		} catch (IOException e) {
+			System.err.println("Erreur réseau lors de la suppression de la note : " + e.getMessage());
+		} catch (InterruptedException e) {
+			System.err.println("La requête a été interrompue : " + e.getMessage());
+			Thread.currentThread().interrupt(); // bonne pratique
+		} catch (IllegalArgumentException e) {
+			System.err.println("URL invalide : " + e.getMessage());
+		}
+	}
 }
