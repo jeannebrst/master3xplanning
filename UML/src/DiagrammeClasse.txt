@@ -1,0 +1,156 @@
+@startuml
+left to right direction
+
+entity Personne {
+   * id : int
+   promotions : Liste de Promotion
+   absences : 
+   notes :
+   role : enum {ETUDIANT, PROFESSEUR, GESTIONNAIRE}
+}
+
+entity Promotion {
+   *type : enum {Licence, Licence_Pro, Master, Doctorat}
+   *annee : int
+   *categorie : String
+   cours : Liste de Cours
+   personnes : Liste de Personne
+}
+
+entity UE {
+   *id : int
+   responsable : Professeur
+   intervenants : Liste de Professeur
+   notes
+   cours
+}
+
+entity Cours {
+    *id : int
+    Ue : UE
+    promotions : Liste de Promotion
+}
+
+entity Note {
+    *id : int
+    unePersonne
+    uneUE
+}
+
+entity Retard {
+   *id : int
+   unEtudiant
+   unCours
+}
+
+entity Salle {
+    *id : int
+    cours : Liste de Cours
+}
+
+
+' === RELATIONS ===
+
+' Personne et ses liens
+Personne "0..*" -down- "0..*" Promotion : "appartient à"
+Personne "1" -down- "0..*" Note : "a des notes"
+Personne "1" -down- "0..*" Retard : "a des absences"
+
+' UE et ses liens avec Personne
+UE "1" -up- "1" Personne : "est responsable"
+UE "0..*" -down-"0..*" Personne : "intervient"
+
+' Cours et ses liens
+Cours "0..*"-down- "0..*" UE : "appartient à"
+Cours "0..*"-down- "0..*" Promotion : "suivi par"
+Cours "0..*"-down- "1" Salle : "se déroule dans"
+
+' Retard et Note
+Retard "0..*"-down- "1" Cours
+Note "0..*" -down- "1" UE
+
+@enduml
+
+@startuml
+left to right direction
+
+' === Entités ===
+entity Note {
+  * noteId : Long
+  note : float
+  date : Date
+}
+
+entity Absence {
+  * absenceId : Long
+  dateAbsence : Date
+}
+
+entity Cours {
+  * coursId : Long
+  intervenantLogin : String
+  heureDebut : int
+  duree : int
+  jour : Date
+}
+
+entity Personne {
+  * personneId : Long
+  login : String
+  hashMdp : String
+  nom : String
+  prenom : String
+  mail : String
+  role : enum {PROFESSEUR, ETUDIANT, SECRETARIAT, GESTIONNAIRE}
+}
+
+entity UE {
+  * ueId : Long
+  nom : String
+  responsableLogin : String
+  nbHeures : int
+  intervenantsLogin : List<String>
+}
+
+entity Promotion {
+  * type : enum {Licence, Licence_Professionelle, Master, Doctorat}
+  * annee : int
+  * categorie : String
+}
+
+entity Salle {
+  * salleId : Long
+  nom : String
+  capacite : int
+  description : String
+}
+
+' === Relations ===
+Note -- Personne : "étudiant"
+Note -- UE : "concerne"
+
+
+Absence - Cours : "concerne"
+
+Cours -- UE : "appartient à"
+Cours -- Promotion : "suivi par"
+Cours -- Salle : "a lieu dans"
+
+
+Personne -- Promotion : "appartient à"
+Personne -- UE : "participe à"
+Personne -- Note : "a des notes"
+Personne -- Absence : "a des absences"
+
+Promotion -- Cours : "contient des cours"
+Promotion -- Personne : "contient des étudiants / professeurs"
+
+Salle -- Cours : "accueille des cours"
+
+UE -- Cours : "contient des cours"
+UE -- Personne : "est responsable / intervient"
+UE -- Note : "contient des notes"
+
+@enduml
+
+

@@ -15,13 +15,14 @@ docker container run --rm --name my-postgres -e POSTGRES_USER=quarkus -e POSTGRE
 Just send the repository `target/dist` with the script to start the container, and run in two seperate shells :
 
 ```shell script
-java -jar dist/master3xplanning-1.0.0-SNAPSHOT-jar-with-dependencies.jar 
+java -jar dist/quarkus-run.jar 
 ```
 
 and
 
+
 ```shell script
-java -jar dist/quarkus-run.jar 
+java -jar dist/master3xplanning-1.0.0-SNAPSHOT-jar-with-dependencies.jar 
 ```
 
 ## Running the application in dev mode
